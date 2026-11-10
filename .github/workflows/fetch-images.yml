@@ -1,0 +1,25 @@
+name: Récupérer les images officielles
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Télécharger les images depuis static.ankama.com
+        run: |
+          rm -rf tools/official
+          ./tools/fetch_images.sh
+          ls tools/official | wc -l
+      - name: Enregistrer dans le dépôt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add tools/official
+          git commit -m "Images officielles des monstres (Dofus Touch)" || echo "rien de nouveau"
+          git push
