@@ -60,9 +60,43 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .row{display:flex;align-items:center;gap:11px;padding:9px 12px;border-bottom:1px solid #2f2518;cursor:pointer}
 .av{width:44px;height:44px;flex:none;border-radius:10px;background:#120d08 center/contain no-repeat;border:1px solid var(--line);position:relative;display:grid;place-items:center;color:var(--faint);font-weight:700;font-size:16px}
 .av img{width:40px;height:40px;object-fit:contain}
+.av .ck{position:absolute;z-index:2;right:-6px;top:-6px;width:20px;height:20px;border-radius:50%;background:var(--ok);color:#13200c;font-size:13px;font-weight:900;display:none;place-items:center;border:2px solid var(--panel)}
+.got .av .ck{display:grid}
+.qty{display:flex;align-items:center;flex:none;background:#120d08;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.qty button{width:30px;height:32px;background:none;border:0;font-size:18px;color:var(--mute);line-height:1}
+.qty button:active{background:#3a2a12}
+.qty span{min-width:22px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.qty.z span{color:var(--faint)}
+.qty.dup{border-color:#6a5590}.qty.dup span{color:var(--archi)}
+.stepbar{position:sticky;top:var(--hh,96px);z-index:4;display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;padding:14px 12px 12px;margin:0 -12px 6px;background:linear-gradient(var(--bg) 85%,transparent);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.stepbar::-webkit-scrollbar{display:none}
+.sc{flex:none;scroll-snap-align:center;width:72px;padding:8px 6px 7px;border-radius:14px;background:var(--panel);border:1px solid var(--line);text-align:center;position:relative;transition:transform .15s,background .15s}
+.sc .n{font-size:20px;font-weight:800;line-height:1.1}
+.sc .t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin:2px 0 5px}
+.sc .t.m{color:var(--ok)}.sc .t.b{color:var(--boss)}.sc .t.a{color:var(--archi)}
+.sc .bar{height:4px}
+.sc .c{font-size:11px;color:var(--mute);margin-top:4px;font-variant-numeric:tabular-nums}
+.sc.done{background:#1f2c18;border-color:#3f6230}
+.sc.done .n::after{content:' ✓';font-size:13px;color:var(--ok)}
+.sc.cur{border-color:var(--ocre)}
+.sc.cur::before{content:'EN COURS';white-space:nowrap;position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;background:var(--ocre);color:#24170a;padding:1px 5px;border-radius:5px;letter-spacing:.05em}
+.sc.sel{background:#4a3613;border-color:var(--ocre2);transform:translateY(-2px);box-shadow:0 4px 14px #0008}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;touch-action:pan-y}
+.ph{display:flex;align-items:center;gap:8px;padding:12px 10px;border-bottom:1px solid var(--line);background:#2a2015}
+.ph .nav{width:38px;height:38px;flex:none;border-radius:12px;background:var(--panel2);border:1px solid var(--line);font-size:20px}
+.ph .nav:disabled{opacity:.3}
+.ph .mid{flex:1;min-width:0;text-align:center}
+.ph .ti{font-size:18px;font-weight:800}
+.ph .su{font-size:12px;color:var(--mute);margin-top:1px}
+.ph .bar{height:6px;margin-top:7px}
+.slide-l{animation:sl .22s ease}.slide-r{animation:sr .22s ease}
+@keyframes sl{from{opacity:.2;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes sr{from{opacity:.2;transform:translateX(-40px)}to{opacity:1;transform:none}}
+.hint{font-size:11px;color:var(--faint);text-align:center;padding:6px 0 2px}
 .av .ab{position:absolute;right:-3px;bottom:-3px;font-size:9px;background:var(--archi);color:#1a1226;border-radius:5px;padding:0 3px;font-weight:800}
-.got .av{opacity:.45;filter:grayscale(.7)}
-.row .box{width:22px;height:22px}
+.got .av img{filter:grayscale(.6) brightness(.55)}
+.got .av{border-color:#4f7a37}
+
 .mapb{background:#2a2014;border:1px solid #5a4420;border-radius:9px;padding:6px 8px;font-size:15px;flex:none;line-height:1}
 #map{width:100%;height:58vh;min-height:300px;background:#8fa58a;border:1px solid var(--line);border-radius:14px;touch-action:none;display:block}
 .mapbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
@@ -80,7 +114,7 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .box{width:24px;height:24px;flex:none;border-radius:7px;border:2px solid #6b5a42;display:grid;place-items:center;font-size:15px;color:transparent;transition:.15s}
 .got .box{background:var(--ok);border-color:var(--ok);color:#13200c}
 .rt{flex:1;min-width:0}
-.nm{font-weight:550}
+.nm{font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meta{font-size:12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .meta b{color:var(--mute);font-weight:500}
 .sbadge{font-size:11px;color:var(--ocre2);background:#3a2a12;border-radius:6px;padding:1px 6px;margin-right:6px}
@@ -102,7 +136,7 @@ select.f{background:var(--panel);border:1px solid var(--line);border-radius:10px
 .prow:last-child{border-bottom:0}
 .prow .n{flex:1}
 textarea{width:100%;min-height:80px;background:#120d08;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:12px;font-family:ui-monospace,monospace}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
 .stat .v{font-size:18px;font-weight:700}
 .stat .l{font-size:11px;color:var(--mute)}
@@ -131,13 +165,15 @@ dialog label{font-size:13px;color:var(--mute)}
 
 <main>
   <section class="view on" id="v-steps">
-    <div class="current" id="curBox"></div>
+    <div class="stepbar" id="stepbar"></div>
     <div class="toolbar">
+      <button class="chip" id="chipCur">⟲ Étape en cours</button>
       <button class="chip" id="chipHide">Masquer les capturés</button>
       <button class="chip" id="chipDone">Masquer les étapes validées</button>
-      <button class="chip" id="chipEdit">✎ Mode édition</button>
+      <button class="chip" id="chipEdit">✎ Édition</button>
     </div>
     <div id="steps"></div>
+    <div class="hint">Glisse la liste vers la gauche ou la droite pour changer d'étape</div>
   </section>
 
   <section class="view" id="v-search">
@@ -239,13 +275,22 @@ function load(){
   if(raw){ try { return JSON.parse(raw); } catch(e){} }
   return {cur:'p1', ui:{hide:false, hideDone:false}, profiles:{p1:newProfile('Mon perso')}};
 }
-function newProfile(name){ return {name, caught:[], hidden:[], valid:[], custom:[], open:[]}; }
+function newProfile(name){ return {name, caught:[], qty:{}, hidden:[], valid:[], custom:[], open:[]}; }
+function fixProfile(p){
+  for(const k of ['caught','hidden','valid','custom','open']) if(!Array.isArray(p[k])) p[k] = [];
+  if(!p.qty || typeof p.qty !== 'object') p.qty = {};
+  for(const id of p.caught) if(!(p.qty[id] > 0)) p.qty[id] = 1;
+  p.caught = p.caught.filter(id => p.qty[id] > 0);
+  for(const [id,n] of Object.entries(p.qty)) if(n > 0){ const k = isNaN(id) ? id : Number(id); if(!p.caught.includes(k)) p.caught.push(k); } else delete p.qty[id];
+  return p;
+}
 function save(){
   const raw = JSON.stringify(S);
   try { localStorage.setItem(KEY, raw); } catch(e) { memStore = raw; }
 }
 let S = load();
 S.ui = S.ui || {hide:false, hideDone:false};
+Object.values(S.profiles).forEach(fixProfile);
 let editMode = false;
 
 const $ = s => document.querySelector(s);
@@ -307,8 +352,8 @@ function avatar(m){
   const local = m.img ? ((window.OCRE_IMG && OCRE_IMG[m.img]) || `img/${m.img}.webp`) : '';
   const off = (m.g && !window.OCRE_IMG) ? OFFICIAL_IMG(m.g) : '';
   const src = local || off;
-  if(!src) return `<div class="av">${init}</div>`;
-  return `<div class="av"><span style="position:absolute">${init}</span><img src="${src}" data-off="${local ? off : ''}" alt="" loading="lazy" style="position:relative;background:#120d08;border-radius:8px" onerror="avatarErr(this)"></div>`;
+  if(!src) return `<div class="av">${init}<span class="ck">✓</span></div>`;
+  return `<div class="av"><span class="ck">✓</span><span style="position:absolute">${init}</span><img src="${src}" data-off="${local ? off : ''}" alt="" loading="lazy" style="position:relative;background:#120d08;border-radius:8px" onerror="avatarErr(this)"></div>`;
 }
 function rowHTML(m, st, withStep){
   const got = st.caught.has(m.i), hid = st.hidden.has(m.i);
@@ -318,61 +363,94 @@ function rowHTML(m, st, withStep){
     if(String(m.i).startsWith('c')) extra += `<button class="mini" data-del="${m.i}">Suppr.</button>`;
   }
   const mapBtn = (m.sa && m.sa.length && !editMode) ? `<button class="mapb" data-map="${m.i}" aria-label="Voir sur la carte">🗺</button>` : '';
+  const q = qtyOf(m.i);
+  const qty = editMode ? '' : `<div class="qty ${q?'':'z'} ${q>1?'dup':''}"><button data-dec="${m.i}" aria-label="Retirer une âme">−</button><span>${q}</span><button data-inc="${m.i}" aria-label="Ajouter une âme">+</button></div>`;
   return `<div class="row ${got?'got':''} ${hid?'hid':''}" data-id="${m.i}">
-    <div class="box">✓</div>${avatar(m)}
-    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${mapBtn}${extra}</div>`;
+    ${avatar(m)}
+    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${qty}${mapBtn}${extra}</div>`;
 }
 
-function renderSteps(){
+let lastSel = null;
+function selStep(){
+  const p = P();
+  if(!(p.sel >= 1 && p.sel <= 35)) p.sel = currentStep() || 35;
+  return p.sel;
+}
+function visibleSteps(){
+  const v = new Set(P().valid), cur = currentStep();
+  const out = [];
+  for(let s=1; s<=35; s++) if(!(S.ui.hideDone && v.has(s) && s !== cur && s !== P().sel)) out.push(s);
+  return out;
+}
+function selectStep(s, dir){
+  if(!(s >= 1 && s <= 35)) return;
+  const prev = P().sel; P().sel = s; save();
+  renderSteps(dir || (s > prev ? 'l' : 'r'));
+}
+function stepBy(d){
+  const list = visibleSteps(); const i = list.indexOf(selStep());
+  const j = i < 0 ? 0 : i + d;
+  if(j >= 0 && j < list.length) selectStep(list[j], d > 0 ? 'l' : 'r');
+}
+function renderSteps(anim){
   const st = sets();
   const all = allMonsters();
   const groups = byStep(editMode ? all : all.filter(m => !st.hidden.has(m.i)));
   const cur = currentStep();
-  // Current step summary
-  const box = $('#curBox');
-  if(cur === null){
-    box.innerHTML = `<div class="k">Quête terminée</div><div class="v">🥚 Dofus Ocre obtenu !</div><div class="s">Toutes les étapes sont validées. Bravo !</div>`;
-  } else {
-    const list = (groups[cur]||[]).filter(m => !st.hidden.has(m.i));
-    const left = list.filter(m => !st.caught.has(m.i));
-    const lbl = cur === 35 ? 'Étape finale' : TYPE_LABEL[stepType(list)];
-    box.innerHTML = `<div class="k">Étape en cours</div><div class="v">Étape ${cur} · ${lbl}</div>
-      <div class="s">${left.length ? `Il te reste <b style="color:var(--ink)">${left.length}</b> âme${left.length>1?'s':''} à capturer : ${left.slice(0,4).map(m=>esc(m.n)).join(', ')}${left.length>4?'…':''}` : `Tout est capturé : retourne voir Otomaï en [-55,15] pour valider l'étape.`}</div>`;
+  const sel = selStep();
+  const qOf = id => P().qty[id] || 0;
+  // ---- gallery
+  let bar = '';
+  for(const s of visibleSteps()){
+    const vis = (groups[s] || []).filter(m => !st.hidden.has(m.i));
+    const n = vis.filter(m => st.caught.has(m.i)).length;
+    const pct = vis.length ? Math.round(n*100/vis.length) : 0;
+    const t = s === 35 ? 'b' : stepType(vis);
+    bar += `<button class="sc ${st.valid.has(s)?'done':''} ${s===cur?'cur':''} ${s===sel?'sel':''}" data-go="${s}">
+      <div class="n">${s}</div><div class="t ${t}">${s===35?'Final':(t==='m'?'Monstres':t==='b'?'Boss':'Archis')}</div>
+      <div class="bar"><i style="width:${pct}%"></i></div><div class="c">${n}/${vis.length}</div></button>`;
   }
-  let html = '';
-  for(let s=1; s<=35; s++){
-    const list = groups[s] || [];
-    const visible = list.filter(m => !st.hidden.has(m.i));
-    const done = st.valid.has(s);
-    if(done && S.ui.hideDone && s !== cur) continue;
-    const n = visible.filter(m => st.caught.has(m.i)).length;
-    const pct = visible.length ? Math.round(n*100/visible.length) : 0;
-    const t = s === 35 ? 'b' : stepType(list);
-    const isOpen = st.open.has(s);
-    let rows = '';
-    if(isOpen){
-      const shown = list.filter(m => !(S.ui.hide && st.caught.has(m.i) && !editMode));
-      rows = shown.map(m => rowHTML(m, st, false)).join('') || `<div class="empty">Tout est capturé pour cette étape ✓</div>`;
-    }
-    html += `<div class="step ${done?'done':''} ${s===cur?'cur':''} ${isOpen?'open':''}" data-step="${s}">
-      <div class="sh" data-toggle="${s}">
-        <div class="num">${done ? '✓' : s}</div>
-        <div class="sinfo">
-          <div class="stitle"><span>Étape ${s}<span class="tag ${t}">${s===35?'Final':TYPE_LABEL[t]}</span></span><em>${n} / ${visible.length}</em></div>
-          <div class="bar"><i style="width:${pct}%"></i></div>
-        </div>
-        <span class="chev">›</span>
-      </div>
-      <div class="sb">${rows}
-        <div class="sactions">
-          ${done ? `<button class="btn" data-unvalid="${s}">Annuler la validation</button>` : `<button class="btn pri" data-valid="${s}">Étape validée chez Otomaï</button>`}
-          <button class="btn" data-all="${s}">Tout cocher</button>
-          ${editMode ? `<button class="btn" data-add="${s}">+ Ajouter un monstre</button>` : ''}
-        </div>
-      </div>
-    </div>`;
+  const sb = $('#stepbar'); const keep = sb.scrollLeft;
+  sb.innerHTML = bar; sb.scrollLeft = keep;
+  const selEl = sb.querySelector('.sc.sel');
+  if(selEl && lastSel !== sel){
+    const target = selEl.offsetLeft - sb.clientWidth/2 + selEl.offsetWidth/2;
+    sb.scrollTo({left: target, behavior: lastSel === null ? 'auto' : 'smooth'});
   }
-  $('#steps').innerHTML = html;
+  lastSel = sel;
+  // ---- panel
+  const list = groups[sel] || [];
+  const vis = list.filter(m => !st.hidden.has(m.i));
+  const n = vis.filter(m => st.caught.has(m.i)).length;
+  const dup = vis.reduce((a,m) => a + Math.max(0, qOf(m.i) - 1), 0);
+  const pct = vis.length ? Math.round(n*100/vis.length) : 0;
+  const t = sel === 35 ? 'b' : stepType(list);
+  const done = st.valid.has(sel);
+  const steps = visibleSteps(); const idx = steps.indexOf(sel);
+  const shown = list.filter(m => !(S.ui.hide && st.caught.has(m.i) && !editMode));
+  const status = done ? '✓ Validée' : sel === cur ? 'En cours' : (cur && sel > cur ? 'À venir' : '');
+  const left = vis.length - n;
+  const rows = shown.map(m => rowHTML(m, st, false)).join('') || `<div class="empty">Tout est capturé pour cette étape ✓${!done ? '<br>Retourne voir Otomaï en [-55,15] pour la valider.' : ''}</div>`;
+  $('#steps').innerHTML = `<div class="panel ${anim ? 'slide-' + anim : ''}" id="stepPanel">
+    <div class="ph">
+      <button class="nav" id="prevStep" ${idx <= 0 ? 'disabled' : ''} aria-label="Étape précédente">‹</button>
+      <div class="mid">
+        <div class="ti">Étape ${sel} <span class="tag ${t}">${sel===35?'Final':TYPE_LABEL[t]}</span></div>
+        <div class="su">${status ? status + ' · ' : ''}${n} / ${vis.length} capturées${left && !done ? ` · ${left} restante${left>1?'s':''}` : ''}${dup ? ` · ${dup} en double` : ''}</div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+      </div>
+      <button class="nav" id="nextStep" ${idx >= steps.length-1 ? 'disabled' : ''} aria-label="Étape suivante">›</button>
+    </div>
+    ${rows}
+    <div class="sactions">
+      ${done ? `<button class="btn" data-unvalid="${sel}">Annuler la validation</button>` : `<button class="btn pri" data-valid="${sel}">Étape validée chez Otomaï</button>`}
+      <button class="btn" data-all="${sel}">Tout cocher</button>
+      ${editMode ? `<button class="btn" data-add="${sel}">+ Ajouter un monstre</button>` : ''}
+    </div>
+  </div>`;
+  $('#prevStep').onclick = () => stepBy(-1);
+  $('#nextStep').onclick = () => stepBy(1);
+  $('#chipCur').style.display = (cur && sel !== cur) ? '' : 'none';
   $('#chipHide').classList.toggle('on', !!S.ui.hide);
   $('#chipDone').classList.toggle('on', !!S.ui.hideDone);
   $('#chipEdit').classList.toggle('on', editMode);
@@ -408,7 +486,8 @@ function renderStats(){
   $('#statsTop').innerHTML = `
     <div class="stat"><div class="v">${got}</div><div class="l">capturées</div></div>
     <div class="stat"><div class="v">${act.length-got}</div><div class="l">restantes</div></div>
-    <div class="stat"><div class="v">${st.valid.size}/35</div><div class="l">étapes validées</div></div>`;
+    <div class="stat"><div class="v">${st.valid.size}/35</div><div class="l">étapes validées</div></div>
+    <div class="stat"><div class="v">${Object.values(P().qty).reduce((a,q) => a + Math.max(0,q-1), 0)}</div><div class="l">âmes en double</div></div>`;
   $('#statsType').innerHTML = ['m','b','a'].map(t => {
     const l = act.filter(m => m.t === t), n = l.filter(m => st.caught.has(m.i)).length;
     const p = l.length ? Math.round(n*100/l.length) : 0;
@@ -434,48 +513,56 @@ function exportCode(){
 function renderAll(){ renderHeader(); renderSteps(); if(curView==='search') renderSearch(); if(curView==='stats') renderStats(); if(curView==='map') renderMap(); if(curView==='settings') renderSettings(); }
 
 /* --- Actions --- */
-function toggleCaught(id){
+function qtyOf(id){ return P().qty[id] || 0; }
+function setQty(id, n){
   const p = P(); const k = isNaN(id) ? id : Number(id);
-  const i = p.caught.indexOf(k);
-  if(i >= 0) p.caught.splice(i,1); else p.caught.push(k);
+  n = Math.max(0, Math.min(999, n|0));
+  if(n > 0){ p.qty[k] = n; if(!p.caught.includes(k)) p.caught.push(k); }
+  else { delete p.qty[k]; p.caught = p.caught.filter(x => x !== k); }
   save(); renderHeader();
+}
+function toggleCaught(id){
+  const q = qtyOf(id);
+  if(q > 1){ toast(`Tu as ${q} âmes : utilise − pour en retirer`); return false; }
+  setQty(id, q ? 0 : 1); return true;
 }
 function toggleIn(arr, v){ const i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
 
 function onListClick(e){
-  const t = e.target.closest('[data-map],[data-hide],[data-del],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-add],.row');
+  const t = e.target.closest('[data-inc],[data-dec],[data-go],[data-map],[data-hide],[data-del],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-add],.row');
   if(!t) return;
   const p = P();
   const idOf = v => isNaN(v) ? v : Number(v);
+  if(t.dataset.inc || t.dataset.dec){
+    const id = t.dataset.inc || t.dataset.dec;
+    setQty(id, qtyOf(id) + (t.dataset.inc ? 1 : -1));
+    refreshAfterChange(); return;
+  }
+  if(t.dataset.go){ selectStep(Number(t.dataset.go)); return; }
   if(t.dataset.map){ openMapFor(t.dataset.map); return; }
   if(t.dataset.hide){ toggleIn(p.hidden, idOf(t.dataset.hide)); save(); renderAll(); return; }
-  if(t.dataset.del){ const id = t.dataset.del; p.custom = p.custom.filter(m => m.i !== id); p.caught = p.caught.filter(x => x !== id); save(); renderAll(); return; }
+  if(t.dataset.del){ const id = t.dataset.del; p.custom = p.custom.filter(m => m.i !== id); setQty(id, 0); renderAll(); return; }
   if(t.dataset.toggle){ toggleIn(p.open, Number(t.dataset.toggle)); save(); renderSteps(); return; }
   if(t.dataset.valid){
     const s = Number(t.dataset.valid);
     if(!p.valid.includes(s)) p.valid.push(s);
-    p.open = p.open.filter(x => x !== s);
-    const nx = currentStep(); if(nx && !p.open.includes(nx)) p.open.push(nx);
+    const nx = currentStep(); if(nx) p.sel = nx;
     save(); renderAll(); toast(s===35 ? '🥚 Dofus Ocre obtenu !' : `Étape ${s} validée ✓`); return;
   }
   if(t.dataset.unvalid){ const s = Number(t.dataset.unvalid); p.valid = p.valid.filter(x => x !== s); save(); renderAll(); return; }
   if(t.dataset.all){
-    const s = Number(t.dataset.all); const h = new Set(p.hidden); const c = new Set(p.caught);
-    allMonsters().filter(m => m.s === s && !h.has(m.i)).forEach(m => c.add(m.i));
-    p.caught = [...c]; save(); renderAll(); return;
+    const s = Number(t.dataset.all); const h = new Set(p.hidden);
+    allMonsters().filter(m => m.s === s && !h.has(m.i) && !qtyOf(m.i)).forEach(m => setQty(m.i, 1));
+    renderAll(); return;
   }
   if(t.dataset.add){ addMonsterDialog(Number(t.dataset.add)); return; }
   if(t.classList.contains('row')){
-    toggleCaught(t.dataset.id);
-    t.classList.toggle('got');
-    if(S.ui.hide && curView === 'steps' && !editMode) setTimeout(renderSteps, 250);
-    else if(curView === 'steps') renderStepHeaderOnly(t);
-    if(curView === 'search' && $('#fState').value) setTimeout(renderSearch, 250);
+    if(toggleCaught(t.dataset.id)) refreshAfterChange();
   }
 }
-function renderStepHeaderOnly(row){
-  // lightweight refresh of the step counters + current box
-  setTimeout(renderSteps, 120);
+function refreshAfterChange(){
+  if(curView === 'steps') setTimeout(renderSteps, S.ui.hide ? 220 : 0);
+  if(curView === 'search') setTimeout(renderSearch, $('#fState').value ? 220 : 0);
 }
 
 function addMonsterDialog(step){
@@ -518,7 +605,7 @@ function restore(txt){
     const o = JSON.parse(txt.trim());
     if(!o || !o.profiles || typeof o.profiles !== 'object') throw 0;
     for(const p of Object.values(o.profiles)){
-      for(const k of ['caught','hidden','valid','custom','open']) if(!Array.isArray(p[k])) p[k] = [];
+      fixProfile(p);
       p.name = p.name || 'Perso';
     }
     confirmDialog('Remplacer toute la progression actuelle par cette sauvegarde ?', () => {
@@ -539,13 +626,28 @@ document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
   renderAll();
 });
 $('#steps').addEventListener('click', onListClick);
+$('#stepbar').addEventListener('click', onListClick);
+$('#chipCur').onclick = () => { const c = currentStep(); if(c) selectStep(c); };
+(function(){
+  let x0 = null, y0 = 0, t0 = 0;
+  const el = $('#steps');
+  el.addEventListener('touchstart', e => { if(e.touches.length !== 1) { x0 = null; return; } x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); }, {passive:true});
+  el.addEventListener('touchend', e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    x0 = null;
+    if(Math.abs(dx) > 70 && Math.abs(dy) < 45 && Date.now() - t0 < 600) stepBy(dx < 0 ? 1 : -1);
+  }, {passive:true});
+})();
+function setHeaderVar(){ document.documentElement.style.setProperty('--hh', $('header').offsetHeight + 'px'); }
+window.addEventListener('resize', setHeaderVar);
 $('#results').addEventListener('click', onListClick);
 $('#chipHide').onclick = () => { S.ui.hide = !S.ui.hide; save(); renderSteps(); };
 $('#chipDone').onclick = () => { S.ui.hideDone = !S.ui.hideDone; save(); renderSteps(); };
 $('#chipEdit').onclick = () => { editMode = !editMode; renderSteps(); toast(editMode ? 'Mode édition : masque ou ajoute des entrées' : 'Mode édition désactivé'); };
 ['q','fType','fState','fStep'].forEach(id => $('#'+id).addEventListener('input', renderSearch));
 $('#fStep').innerHTML += Array.from({length:35}, (_,i) => `<option value="${i+1}">Étape ${i+1}</option>`).join('');
-$('#profileSel').onchange = e => { S.cur = e.target.value; save(); renderAll(); };
+$('#profileSel').onchange = e => { S.cur = e.target.value; fixProfile(P()); lastSel = null; save(); renderAll(); };
 $('#statsZones').addEventListener('click', e => {
   const b = e.target.closest('[data-zone]'); if(!b) return;
   MAP.focus = null; $('#mStep').value = ''; $('#mType').value = ''; MAP.todo = true; MAP.selSub = Number(b.dataset.zone); MAP.fitTo = [MAP.selSub];
@@ -710,8 +812,9 @@ $('#zFit').onclick = () => { MAP.vb=null; MAP.fitTo = MAP.focus!==null ? (allMon
 })();
 
 // open the current step by default the first time
-if(!P().open.length){ const c = currentStep(); if(c) P().open.push(c); }
+setHeaderVar();
 renderAll();
+setHeaderVar();
 </script>
 </body>
 </html>
