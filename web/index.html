@@ -64,7 +64,7 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .got .av{opacity:.45;filter:grayscale(.7)}
 .row .box{width:22px;height:22px}
 .mapb{background:#2a2014;border:1px solid #5a4420;border-radius:9px;padding:6px 8px;font-size:15px;flex:none;line-height:1}
-#map{width:100%;height:58vh;min-height:300px;background:#0f0b07;border:1px solid var(--line);border-radius:14px;touch-action:none;display:block}
+#map{width:100%;height:58vh;min-height:300px;background:#8fa58a;border:1px solid var(--line);border-radius:14px;touch-action:none;display:block}
 .mapbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
 .mapwrap{position:relative;margin-bottom:12px}
 .zbtns{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
@@ -172,7 +172,7 @@ dialog label{font-size:13px;color:var(--mute)}
       <div class="legend">Touche une zone en surbrillance</div>
     </div>
     <div class="list" id="mapInfo"></div>
-    <p class="note">Carte schématique du Monde des Douze : chaque case est une map du jeu, avec ses coordonnées [x,y]. Les donjons et les zones hors carte principale sont listés avec leurs coordonnées. Données de positions issues des fichiers du jeu (Dofus PC), elles peuvent légèrement différer sur Dofus Touch.</p>
+    <p class="note">Carte du monde de Dofus Touch : chaque case correspond à une map du jeu, avec ses coordonnées [x,y]. Les donjons et les zones hors carte principale sont listés avec leurs coordonnées. Les zones de chasse viennent des fichiers du jeu (Dofus PC) : quelques zones récentes peuvent ne pas exister sur Touch.</p>
   </section>
 
   <section class="view" id="v-stats">
@@ -566,7 +566,7 @@ $('#resetProfile').onclick = () => confirmDialog(`Remettre « ${P().name} » à 
 const MAP = {vb:null, focus:null, todo:true, selSub:null, selCell:null, fitTo:null, cellIndex:null};
 const LANDMARKS = [{x:-55,y:15,n:'Otomaï'},{x:5,y:-18,n:'Astrub'}];
 function runsPath(runs){ let d=''; for(const [x,y,n] of runs) d += `M${x} ${y}h${n}v1h-${n}z`; return d; }
-const WORLD_PATH = runsPath(WORLD);
+const WORLD_IMG = (window.OCRE_WORLD || 'world.jpg');
 function cellIndex(){
   if(MAP.cellIndex) return MAP.cellIndex;
   const idx = new Map();
@@ -619,16 +619,16 @@ function renderMap(){
     const s = SUB[sid]; if(!s || !s.r.length) continue;
     const a = 0.45 + 0.55 * (l.length/max);
     const sel = MAP.selSub===Number(sid);
-    hl += `<path d="${runsPath(s.r)}" fill="${sel?'#fff1c2':'#e0a030'}" fill-opacity="${sel?1:a.toFixed(2)}"/>`;
+    hl += `<path d="${runsPath(s.r)}" fill="${sel?'#fff4cf':'#ff9d1c'}" fill-opacity="${sel?0.7:(0.28+0.4*(l.length/max)).toFixed(2)}"/>`;
   }
   let grid = '';
-  for(let x=-90; x<=45; x+=10) grid += `<line x1="${x}" y1="-95" x2="${x}" y2="55" stroke="#ffffff10" stroke-width=".15"/><text x="${x+.3}" y="-93" font-size="1.6" fill="#7f705c">${x}</text>`;
-  for(let y=-90; y<=50; y+=10) grid += `<line x1="-90" y1="${y}" x2="45" y2="${y}" stroke="#ffffff10" stroke-width=".15"/><text x="-89.5" y="${y-.3}" font-size="1.6" fill="#7f705c">${y}</text>`;
+  for(let x=-90; x<=45; x+=10) grid += `<line x1="${x}" y1="-95" x2="${x}" y2="55" stroke="#00000030" stroke-width=".12"/><text x="${x+.3}" y="-93" font-size="1.6" fill="#3b2f20">${x}</text>`;
+  for(let y=-90; y<=50; y+=10) grid += `<line x1="-90" y1="${y}" x2="45" y2="${y}" stroke="#00000030" stroke-width=".12"/><text x="-89.5" y="${y-.3}" font-size="1.6" fill="#3b2f20">${y}</text>`;
   const lm = LANDMARKS.map(p => `<g><circle cx="${p.x+.5}" cy="${p.y+.5}" r=".9" fill="#7fbf5a" stroke="#13200c" stroke-width=".3"/><text x="${p.x+1.8}" y="${p.y+1.1}" font-size="1.9" fill="#cfeebc" stroke="#0f0b07" stroke-width=".5" paint-order="stroke">${p.n}</text></g>`).join('');
   const sc = MAP.selCell ? `<rect x="${MAP.selCell[0]}" y="${MAP.selCell[1]}" width="1" height="1" fill="none" stroke="#fff" stroke-width=".3"/>` : '';
   const vb = MAP.vb;
   $('#map').setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
-  $('#map').innerHTML = `${grid}<path d="${WORLD_PATH}" fill="#4a3c2a"/>${hl}${sc}${lm}`;
+  $('#map').innerHTML = `${grid}<image href="${WORLD_IMG}" x="-93.278" y="-99.5" width="144" height="161" preserveAspectRatio="none"/>${hl}${sc}${lm}`;
   // info panel
   const info = $('#mapInfo');
   const subsSorted = Object.entries(bySub).sort((a,b) => b[1].length - a[1].length);
