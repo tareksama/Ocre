@@ -6,4 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - run: ./tools/probe.sh
+      - run: ./tools/touch_probe.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: touch-data
+          path: tools/touch
