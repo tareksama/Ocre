@@ -126,6 +126,7 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:14px}
 .btn.pri{background:var(--ocre);border-color:var(--ocre);color:#24170a;font-weight:700}
 .btn.danger{color:#ff9d8a;border-color:#6b2e24}
+.btn:disabled{opacity:.4}
 .btn:active,.chip:active,.row:active{filter:brightness(1.25)}
 .search{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:10px;outline:none}
 .search:focus{border-color:var(--ocre)}
@@ -173,7 +174,6 @@ dialog label{font-size:13px;color:var(--mute)}
       <button class="chip" id="chipCur">⟲ Étape en cours</button>
       <button class="chip" id="chipHide">Masquer les capturés</button>
       <button class="chip" id="chipDone">Masquer les étapes validées</button>
-      <button class="chip" id="chipEdit">✎ Édition</button>
     </div>
     <div id="steps"></div>
     <div class="hint">Glisse la liste vers la gauche ou la droite pour changer d'étape</div>
@@ -230,7 +230,7 @@ dialog label{font-size:13px;color:var(--mute)}
     </div>
     <div class="card">
       <h2>Données de la quête</h2>
-      <p>35 étapes de la version Dofus Touch : 275 monstres (étapes 1 à 16), 47 boss (17 à 19), 257 archimonstres (20 à 34), puis le Kralamoure Géant. Si une entrée ne correspond pas à ce que te demande Otomaï en jeu, active le <b>mode édition</b> dans l'onglet Étapes pour masquer une entrée ou ajouter un monstre manquant.</p>
+      <p>35 étapes de la version Dofus Touch : 275 monstres (étapes 1 à 16), 47 boss (17 à 19), 257 archimonstres (20 à 34), puis le Kralamoure Géant.</p>
       <button class="btn danger" id="resetProfile">Remettre ce personnage à zéro</button>
     </div>
   </section>
@@ -263,6 +263,7 @@ function load(){
 function newProfile(name){ return {name, caught:[], qty:{}, hidden:[], valid:[], custom:[], open:[]}; }
 function fixProfile(p){
   for(const k of ['caught','hidden','valid','custom','open']) if(!Array.isArray(p[k])) p[k] = [];
+  p.hidden = [];
   if(!p.qty || typeof p.qty !== 'object') p.qty = {};
   for(const id of p.caught) if(!(p.qty[id] > 0)) p.qty[id] = 1;
   p.caught = p.caught.filter(id => p.qty[id] > 0);
@@ -276,7 +277,6 @@ function save(){
 let S = load();
 S.ui = S.ui || {hide:false, hideDone:false};
 Object.values(S.profiles).forEach(fixProfile);
-let editMode = false;
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -343,13 +343,9 @@ function avatar(m){
 }
 function rowHTML(m, st, withStep){
   const got = st.caught.has(m.i), hid = st.hidden.has(m.i);
-  let extra = '';
-  if(editMode && !withStep){
-    extra = `<button class="mini" data-hide="${m.i}">${hid ? 'Réafficher' : 'Masquer'}</button>`;
-    if(String(m.i).startsWith('c')) extra += `<button class="mini" data-del="${m.i}">Suppr.</button>`;
-  }
+  const extra = '';
   const q = qtyOf(m.i);
-  const qty = editMode ? '' : `<div class="qty ${q?'':'z'} ${q>1?'dup':''}"><button data-dec="${m.i}" aria-label="Retirer une âme">−</button><span>${q}</span><button data-inc="${m.i}" aria-label="Ajouter une âme">+</button></div>`;
+  const qty = `<div class="qty ${q?'':'z'} ${q>1?'dup':''}"><button data-dec="${m.i}" aria-label="Retirer une âme">−</button><span>${q}</span><button data-inc="${m.i}" aria-label="Ajouter une âme">+</button></div>`;
   return `<div class="row ${got?'got':''} ${hid?'hid':''}" data-id="${m.i}">
     ${avatar(m)}
     <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${qty}${extra}</div>`;
@@ -380,7 +376,7 @@ function stepBy(d){
 function renderSteps(anim){
   const st = sets();
   const all = allMonsters();
-  const groups = byStep(editMode ? all : all.filter(m => !st.hidden.has(m.i)));
+  const groups = byStep(all);
   const cur = currentStep();
   const sel = selStep();
   const qOf = id => P().qty[id] || 0;
@@ -412,7 +408,7 @@ function renderSteps(anim){
   const t = sel === 35 ? 'b' : stepType(list);
   const done = st.valid.has(sel);
   const steps = visibleSteps(); const idx = steps.indexOf(sel);
-  const shown = list.filter(m => !(S.ui.hide && st.caught.has(m.i) && !editMode));
+  const shown = list.filter(m => !(S.ui.hide && st.caught.has(m.i)));
   const status = done ? '✓ Validée' : sel === cur ? 'En cours' : (cur && sel > cur ? 'À venir' : '');
   const left = vis.length - n;
   const rows = shown.map(m => rowHTML(m, st, false)).join('') || `<div class="empty">Tout est capturé pour cette étape ✓${!done ? '<br>Retourne voir Otomaï en [-55,15] pour la valider.' : ''}</div>`;
@@ -430,7 +426,7 @@ function renderSteps(anim){
     <div class="sactions">
       ${done ? `<button class="btn" data-unvalid="${sel}">Annuler la validation</button>` : `<button class="btn pri" data-valid="${sel}">Étape validée chez Otomaï</button>`}
       <button class="btn" data-all="${sel}">Tout cocher</button>
-      ${editMode ? `<button class="btn" data-add="${sel}">+ Ajouter un monstre</button>` : ''}
+      <button class="btn danger" data-none="${sel}" ${n ? '' : 'disabled'}>Tout décocher</button>
     </div>
   </div>`;
   $('#prevStep').onclick = () => stepBy(-1);
@@ -438,7 +434,6 @@ function renderSteps(anim){
   $('#chipCur').style.display = (cur && sel !== cur) ? '' : 'none';
   $('#chipHide').classList.toggle('on', !!S.ui.hide);
   $('#chipDone').classList.toggle('on', !!S.ui.hideDone);
-  $('#chipEdit').classList.toggle('on', editMode);
 }
 
 function renderSearch(){
@@ -514,7 +509,7 @@ function toggleCaught(id){
 function toggleIn(arr, v){ const i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
 
 function onListClick(e){
-  const t = e.target.closest('[data-inc],[data-dec],[data-go],[data-hide],[data-del],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-add],.row');
+  const t = e.target.closest('[data-inc],[data-dec],[data-go],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-none],.row');
   if(!t) return;
   const p = P();
   const idOf = v => isNaN(v) ? v : Number(v);
@@ -524,8 +519,6 @@ function onListClick(e){
     refreshAfterChange(); return;
   }
   if(t.dataset.go){ selectStep(Number(t.dataset.go)); return; }
-  if(t.dataset.hide){ toggleIn(p.hidden, idOf(t.dataset.hide)); save(); renderAll(); return; }
-  if(t.dataset.del){ const id = t.dataset.del; p.custom = p.custom.filter(m => m.i !== id); setQty(id, 0); renderAll(); return; }
   if(t.dataset.toggle){ toggleIn(p.open, Number(t.dataset.toggle)); save(); renderSteps(); return; }
   if(t.dataset.valid){
     const s = Number(t.dataset.valid);
@@ -534,12 +527,20 @@ function onListClick(e){
     save(); renderAll(); toast(s===35 ? '🥚 Dofus Ocre obtenu !' : `Étape ${s} validée ✓`); return;
   }
   if(t.dataset.unvalid){ const s = Number(t.dataset.unvalid); p.valid = p.valid.filter(x => x !== s); save(); renderAll(); return; }
+  if(t.dataset.none){
+    const s = Number(t.dataset.none);
+    const list = allMonsters().filter(m => m.s === s && qtyOf(m.i));
+    if(!list.length) return;
+    confirmDialog(`Décocher les ${list.length} monstre${list.length>1?'s':''} de l'étape ${s} ? Leurs quantités seront remises à 0.`, () => {
+      list.forEach(m => setQty(m.i, 0)); renderAll(); toast(`Étape ${s} décochée`);
+    });
+    return;
+  }
   if(t.dataset.all){
     const s = Number(t.dataset.all); const h = new Set(p.hidden);
     allMonsters().filter(m => m.s === s && !h.has(m.i) && !qtyOf(m.i)).forEach(m => setQty(m.i, 1));
     renderAll(); return;
   }
-  if(t.dataset.add){ addMonsterDialog(Number(t.dataset.add)); return; }
   if(t.classList.contains('row')){
     if(toggleCaught(t.dataset.id)) refreshAfterChange();
   }
@@ -628,7 +629,6 @@ window.addEventListener('resize', setHeaderVar);
 $('#results').addEventListener('click', onListClick);
 $('#chipHide').onclick = () => { S.ui.hide = !S.ui.hide; save(); renderSteps(); };
 $('#chipDone').onclick = () => { S.ui.hideDone = !S.ui.hideDone; save(); renderSteps(); };
-$('#chipEdit').onclick = () => { editMode = !editMode; renderSteps(); toast(editMode ? 'Mode édition : masque ou ajoute des entrées' : 'Mode édition désactivé'); };
 ['q','fType','fState','fStep'].forEach(id => $('#'+id).addEventListener('input', renderSearch));
 $('#fStep').innerHTML += Array.from({length:35}, (_,i) => `<option value="${i+1}">Étape ${i+1}</option>`).join('');
 $('#profileSel').onchange = e => { S.cur = e.target.value; fixProfile(P()); lastSel = null; save(); renderAll(); };
