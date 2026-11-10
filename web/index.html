@@ -243,7 +243,7 @@ dialog label{font-size:13px;color:var(--mute)}
     </div>
     <div class="card">
       <h2>Données de la quête</h2>
-      <p>35 étapes : monstres (1 à 16), boss (17 à 19), archimonstres (20 à 34), puis le Kralamoure Géant. Si une entrée ne correspond pas à ce que te demande Otomaï en jeu, active le <b>mode édition</b> dans l'onglet Étapes pour masquer une entrée ou ajouter un monstre manquant.</p>
+      <p>35 étapes de la version Dofus Touch : 275 monstres (étapes 1 à 16), 47 boss (17 à 19), 257 archimonstres (20 à 34), puis le Kralamoure Géant. Si une entrée ne correspond pas à ce que te demande Otomaï en jeu, active le <b>mode édition</b> dans l'onglet Étapes pour masquer une entrée ou ajouter un monstre manquant.</p>
       <button class="btn danger" id="resetProfile">Remettre ce personnage à zéro</button>
     </div>
   </section>
@@ -487,7 +487,7 @@ function renderStats(){
     <div class="stat"><div class="v">${got}</div><div class="l">capturées</div></div>
     <div class="stat"><div class="v">${act.length-got}</div><div class="l">restantes</div></div>
     <div class="stat"><div class="v">${st.valid.size}/35</div><div class="l">étapes validées</div></div>
-    <div class="stat"><div class="v">${Object.values(P().qty).reduce((a,q) => a + Math.max(0,q-1), 0)}</div><div class="l">âmes en double</div></div>`;
+    <div class="stat"><div class="v">${act.reduce((a,m) => a + Math.max(0,(P().qty[m.i]||0)-1), 0)}</div><div class="l">âmes en double</div></div>`;
   $('#statsType').innerHTML = ['m','b','a'].map(t => {
     const l = act.filter(m => m.t === t), n = l.filter(m => st.caught.has(m.i)).length;
     const p = l.length ? Math.round(n*100/l.length) : 0;

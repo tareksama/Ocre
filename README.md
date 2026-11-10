@@ -40,7 +40,9 @@ Images des monstres : encyclopédie officielle Dofus Touch (static.ankama.com), 
 Carte du monde : tuiles du jeu Dofus Touch, via [yovanoc/DOFUSTouchMap](https://github.com/yovanoc/DOFUSTouchMap).
 Sous-zones et coordonnées de la carte extraites des fichiers du jeu via [bot4dofus/Datafus](https://github.com/bot4dofus/Datafus).
 
-Liste des étapes issue des outils communautaires
+Liste des étapes et images (version Dofus Touch) : outil de suivi [axiazi.fr](https://axiazi.fr/dofus-touch/leternelle-moisson-dofus-ocre/).
+
+Ancienne liste issue des outils communautaires
 [Mopolo/Eternelle-Moisson](https://github.com/Mopolo/Eternelle-Moisson) et
 [Ryswick/ocredex](https://github.com/Ryswick/ocredex). Si une étape diffère de ce
 qu'Otomaï demande sur Dofus Touch, utilise le **mode édition** de l'appli.
