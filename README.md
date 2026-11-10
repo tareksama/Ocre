@@ -36,7 +36,7 @@ désinstallation).
 ## Données
 
 Images des monstres : encyclopédie officielle Dofus Touch (static.ankama.com), via [MinZe25/dofus-ocre-tracker](https://github.com/MinZe25/dofus-ocre-tracker). Les images manquantes sont chargées en direct depuis le site officiel quand le téléphone est connecté.
-Sous-zones et coordonnées de la carte extraites des fichiers du jeu via [bot4dofus/Datafus](https://github.com/bot4dofus/Datafus).
+Zones d'apparition extraites des fichiers du jeu via [bot4dofus/Datafus](https://github.com/bot4dofus/Datafus).
 
 Liste des étapes et images (version Dofus Touch) : outil de suivi [axiazi.fr](https://axiazi.fr/dofus-touch/leternelle-moisson-dofus-ocre/).
 
