@@ -19,7 +19,9 @@ sans effacer ta progression.
 
 | Dossier | Contenu |
 |---|---|
-| `web/index.html` | L'appli elle-même (HTML/JS, données de la quête incluses). Fonctionne aussi dans un navigateur. |
+| `web/index.html` | L'appli elle-même (HTML/JS). Fonctionne aussi dans un navigateur. |
+| `web/data.js` | Données : monstres des 35 étapes, sous-zones de chasse et contour de la carte du monde. |
+| `web/img/` | Images des monstres (WebP). |
 | `android/` | Projet Android minimal qui affiche `web/index.html` en plein écran (WebView). |
 | `.github/workflows/android.yml` | Construction de l'APK et publication de la release. |
 
@@ -32,6 +34,9 @@ temps ton code de sauvegarde : il permet de tout restaurer (même après une
 désinstallation).
 
 ## Données
+
+Images des monstres issues de [MinZe25/dofus-ocre-tracker](https://github.com/MinZe25/dofus-ocre-tracker) (Dofus Touch).
+Sous-zones et coordonnées de la carte extraites des fichiers du jeu via [bot4dofus/Datafus](https://github.com/bot4dofus/Datafus).
 
 Liste des étapes issue des outils communautaires
 [Mopolo/Eternelle-Moisson](https://github.com/Mopolo/Eternelle-Moisson) et
