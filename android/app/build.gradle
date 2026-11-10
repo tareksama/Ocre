@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.tareksama.ocre'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.tareksama.ocre'
+        minSdk 26
+        targetSdk 34
+        versionCode (System.getenv('GITHUB_RUN_NUMBER') ?: '1').toInteger()
+        versionName "1.0.${System.getenv('GITHUB_RUN_NUMBER') ?: '0'}"
+    }
+
+    // Clé de signature fixe : chaque nouvelle version s'installe par-dessus
+    // l'ancienne sans effacer la progression enregistrée.
+    signingConfigs {
+        ocre {
+            storeFile file('ocre.keystore')
+            storePassword 'ocre-touch'
+            keyAlias 'ocre'
+            keyPassword 'ocre-touch'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.ocre
+        }
+        debug {
+            signingConfig signingConfigs.ocre
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // L'appli web (../../web/index.html) est embarquée telle quelle dans l'APK.
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets', '../../web']
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+}

@@ -1,0 +1,44 @@
+name: Construire l'APK Android
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Compiler l'APK
+        run: gradle -p android assembleRelease --no-daemon
+
+      - name: Renommer l'APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk dofus-ocre.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dofus-ocre-apk
+          path: dofus-ocre.apk
+
+      - name: Publier dans la release « latest »
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest dofus-ocre.apk \
+            --title "Dofus Ocre – dernière version" \
+            --notes "APK construit automatiquement depuis le commit ${GITHUB_SHA::7}. Télécharge dofus-ocre.apk depuis ton téléphone et installe-le."

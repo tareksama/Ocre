@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1b140c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Suivi Dofus Ocre – Dofus Touch</title>
+<style>
+:root{
+  --bg:#17110b;--panel:#221a11;--panel2:#2c2216;--line:#3d3020;
+  --ink:#f3e9d8;--mute:#b3a28a;--faint:#7f705c;
+  --ocre:#d99a2b;--ocre2:#f0b74a;--ok:#7fbf5a;--boss:#c96f4a;--archi:#a985e0;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(#1f170e,#1b140cf2);border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+.top{display:flex;align-items:center;gap:10px}
+.egg{width:30px;height:38px;flex:none;border-radius:50% 50% 46% 46%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 30%,#ffe2a1,var(--ocre) 45%,#7a4d0c);box-shadow:0 0 14px #d99a2b55}
+h1{font-size:17px;margin:0;line-height:1.15}
+h1 small{display:block;font-size:12px;color:var(--mute);font-weight:500}
+#profileSel{margin-left:auto;max-width:42%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:7px 8px}
+.global{margin-top:10px}
+.gline{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-bottom:5px}
+.gline b{color:var(--ink)}
+.bar{height:8px;background:#0e0a06;border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--ocre),var(--ocre2));border-radius:99px;transition:width .3s}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;background:#1b140cf5;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;padding:10px 0 9px;color:var(--faint);font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button span{font-size:19px;line-height:1}
+nav button.on{color:var(--ocre2)}
+main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
+.view{display:none}.view.on{display:block}
+.current{background:linear-gradient(135deg,#3a2a12,#2a1f12);border:1px solid #6b4f22;border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.current .k{font-size:12px;color:var(--ocre2);text-transform:uppercase;letter-spacing:.06em}
+.current .v{font-size:20px;font-weight:700;margin:2px 0 6px}
+.current .s{color:var(--mute);font-size:13px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;color:var(--mute)}
+.chip.on{background:#4a3613;border-color:var(--ocre);color:var(--ink)}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.step.done{opacity:.62}
+.step.cur{border-color:var(--ocre)}
+.sh{display:flex;align-items:center;gap:10px;padding:11px 12px;cursor:pointer;user-select:none}
+.num{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;font-weight:700;background:var(--panel2);border:1px solid var(--line)}
+.done .num{background:#2f4a22;border-color:#4f7a37;color:#cfeebc}
+.cur .num{background:#5a3f12;border-color:var(--ocre)}
+.sinfo{flex:1;min-width:0}
+.stitle{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.stitle em{font-style:normal;color:var(--mute);font-weight:500;font-size:13px;white-space:nowrap}
+.sinfo .bar{height:5px;margin-top:6px}
+.tag{font-size:11px;padding:1px 7px;border-radius:99px;border:1px solid;margin-left:4px;vertical-align:1px;font-weight:600}
+.tag.m{color:var(--ok);border-color:#4f7a37}.tag.b{color:var(--boss);border-color:#7a4330}.tag.a{color:var(--archi);border-color:#5d4785}
+.chev{color:var(--faint);transition:transform .2s}
+.open .chev{transform:rotate(90deg)}
+.sb{display:none;border-top:1px solid var(--line)}
+.open .sb{display:block}
+.row{display:flex;align-items:center;gap:11px;padding:9px 12px;border-bottom:1px solid #2f2518;cursor:pointer}
+.row:last-child{border-bottom:0}
+.row.got .nm{color:var(--mute);text-decoration:line-through;text-decoration-color:#7f705c88}
+.row.hid{opacity:.4}
+.box{width:24px;height:24px;flex:none;border-radius:7px;border:2px solid #6b5a42;display:grid;place-items:center;font-size:15px;color:transparent;transition:.15s}
+.got .box{background:var(--ok);border-color:var(--ok);color:#13200c}
+.rt{flex:1;min-width:0}
+.nm{font-weight:550}
+.meta{font-size:12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta b{color:var(--mute);font-weight:500}
+.sbadge{font-size:11px;color:var(--ocre2);background:#3a2a12;border-radius:6px;padding:1px 6px;margin-right:6px}
+.mini{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12px;color:var(--mute);flex:none}
+.sactions{display:flex;gap:8px;padding:10px 12px;background:#1d160e;flex-wrap:wrap}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:14px}
+.btn.pri{background:var(--ocre);border-color:var(--ocre);color:#24170a;font-weight:700}
+.btn.danger{color:#ff9d8a;border-color:#6b2e24}
+.btn:active,.chip:active,.row:active{filter:brightness(1.25)}
+.search{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:10px;outline:none}
+.search:focus{border-color:var(--ocre)}
+select.f{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:7px 8px;font-size:13px}
+.list{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.empty{color:var(--faint);text-align:center;padding:28px 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h2{font-size:15px;margin:0 0 10px}
+.card p{color:var(--mute);font-size:13px;margin:6px 0 10px}
+.prow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #2f2518}
+.prow:last-child{border-bottom:0}
+.prow .n{flex:1}
+textarea{width:100%;min-height:80px;background:#120d08;border:1px solid var(--line);border-radius:10px;padding:9px;font-size:12px;font-family:ui-monospace,monospace}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.stat .v{font-size:18px;font-weight:700}
+.stat .l{font-size:11px;color:var(--mute)}
+.toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);background:#3a2a12;border:1px solid var(--ocre);padding:9px 16px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:9;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%)}
+dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;width:min(92vw,420px);padding:16px}
+dialog::backdrop{background:#000a}
+dialog input,dialog select{width:100%;background:#120d08;border:1px solid var(--line);border-radius:10px;padding:9px;margin:4px 0 10px}
+dialog label{font-size:13px;color:var(--mute)}
+.dact{display:flex;gap:8px;justify-content:flex-end}
+.note{font-size:12px;color:var(--faint);margin-top:8px}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="egg" aria-hidden="true"></div>
+    <h1>Dofus Ocre<small>L'éternelle moisson · Dofus Touch</small></h1>
+    <select id="profileSel" aria-label="Personnage"></select>
+  </div>
+  <div class="global">
+    <div class="gline"><span><b id="gCount">0</b> / <span id="gTotal">0</span> âmes capturées</span><b id="gPct">0 %</b></div>
+    <div class="bar"><i id="gBar" style="width:0"></i></div>
+  </div>
+</header>
+
+<main>
+  <section class="view on" id="v-steps">
+    <div class="current" id="curBox"></div>
+    <div class="toolbar">
+      <button class="chip" id="chipHide">Masquer les capturés</button>
+      <button class="chip" id="chipDone">Masquer les étapes validées</button>
+      <button class="chip" id="chipEdit">✎ Mode édition</button>
+    </div>
+    <div id="steps"></div>
+  </section>
+
+  <section class="view" id="v-search">
+    <input class="search" id="q" type="search" placeholder="Chercher un monstre, un archi, une zone…" autocomplete="off">
+    <div class="toolbar">
+      <select class="f" id="fType">
+        <option value="">Tous les types</option>
+        <option value="m">Monstres</option>
+        <option value="b">Boss</option>
+        <option value="a">Archimonstres</option>
+      </select>
+      <select class="f" id="fState">
+        <option value="todo">À capturer</option>
+        <option value="got">Capturés</option>
+        <option value="">Tous</option>
+      </select>
+      <select class="f" id="fStep"><option value="">Toutes les étapes</option></select>
+    </div>
+    <div class="list" id="results"></div>
+  </section>
+
+  <section class="view" id="v-stats">
+    <div class="stats" id="statsTop"></div>
+    <div class="card"><h2>Par type</h2><div id="statsType"></div></div>
+    <div class="card"><h2>Zones avec le plus d'âmes restantes</h2><p>Pratique pour planifier une session de chasse.</p><div id="statsZones"></div></div>
+  </section>
+
+  <section class="view" id="v-settings">
+    <div class="card">
+      <h2>Personnages</h2>
+      <div id="profiles"></div>
+      <div class="sactions" style="background:none;padding:10px 0 0"><button class="btn" id="addProfile">+ Ajouter un personnage</button></div>
+    </div>
+    <div class="card">
+      <h2>Sauvegarde</h2>
+      <p>Ta progression est enregistrée sur ce téléphone, dans ce navigateur. Copie régulièrement ton code de sauvegarde (par exemple dans Google Keep ou tes notes) pour ne rien perdre si les données du navigateur sont effacées.</p>
+      <textarea id="backup" readonly></textarea>
+      <div class="sactions" style="background:none;padding:8px 0 0">
+        <button class="btn pri" id="copyBackup">Copier le code</button>
+      </div>
+      <p style="margin-top:14px">Restaurer : colle un code ou choisis un fichier de sauvegarde.</p>
+      <textarea id="restoreTxt" placeholder="Colle ton code de sauvegarde ici"></textarea>
+      <div class="sactions" style="background:none;padding:8px 0 0">
+        <button class="btn" id="restoreBtn">Restaurer le code</button>
+        <label class="btn" style="cursor:pointer">Ouvrir un fichier<input type="file" id="restoreFile" accept=".json,.txt,application/json,text/plain" hidden></label>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Installer sur Android</h2>
+      <p>Dans Chrome : menu ⋮ → « Ajouter à l'écran d'accueil ». L'appli s'ouvre alors comme une appli normale depuis ton écran d'accueil.</p>
+    </div>
+    <div class="card">
+      <h2>Données de la quête</h2>
+      <p>35 étapes : monstres (1 à 16), boss (17 à 19), archimonstres (20 à 34), puis le Kralamoure Géant. Si une entrée ne correspond pas à ce que te demande Otomaï en jeu, active le <b>mode édition</b> dans l'onglet Étapes pour masquer une entrée ou ajouter un monstre manquant.</p>
+      <button class="btn danger" id="resetProfile">Remettre ce personnage à zéro</button>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button class="on" data-v="steps"><span>☰</span>Étapes</button>
+  <button data-v="search"><span>⌕</span>Recherche</button>
+  <button data-v="stats"><span>◔</span>Stats</button>
+  <button data-v="settings"><span>⚙</span>Réglages</button>
+</nav>
+
+<dialog id="dlg"><form method="dialog" id="dlgForm"></form></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = [{"i":1,"s":1,"t":"m","n":"Souris Grise","z":["Cryptes du cimetière"]},{"i":2,"s":1,"t":"m","n":"Moskito","z":["Bord de la forêt maléfique","Campagne d'Amakna"]},{"i":3,"s":1,"t":"m","n":"Arakne","z":["Campagne d'Amakna","Forêt maléfique"]},{"i":4,"s":1,"t":"m","n":"Boufton Blanc","z":["Coin des Bouftous","Tainéla"]},{"i":5,"s":1,"t":"m","n":"Boufton Noir","z":["Coin des Bouftous","Tainéla"]},{"i":6,"s":1,"t":"m","n":"Tofu Maléfique","z":["Cimetière","Cryptes du cimetière","Forêt maléfique"]},{"i":7,"s":1,"t":"m","n":"Arakne Malade","z":["Souterrains d'Astrub"]},{"i":8,"s":1,"t":"m","n":"Piou Bleu","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"]},{"i":9,"s":1,"t":"m","n":"Piou Jaune","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"]},{"i":10,"s":1,"t":"m","n":"Piou Rouge","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"]},{"i":11,"s":1,"t":"m","n":"Piou Vert","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"]},{"i":12,"s":1,"t":"m","n":"Piou Violet","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"]},{"i":13,"s":1,"t":"m","n":"Piou Rose","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"]},{"i":14,"s":1,"t":"m","n":"Flammèche Air","z":["Plaine des Scarafeuilles"]},{"i":15,"s":1,"t":"m","n":"Flammèche Eau","z":["Plaine des Scarafeuilles"]},{"i":16,"s":1,"t":"m","n":"Flammèche Feu","z":["Plaine des Scarafeuilles"]},{"i":17,"s":1,"t":"m","n":"Flammèche Terre","z":["Plaine des Scarafeuilles"]},{"i":18,"s":1,"t":"m","n":"Larve Bleue","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"]},{"i":19,"s":1,"t":"m","n":"Crabe","z":["Rivages sufokien"]},{"i":20,"s":1,"t":"m","n":"Tofu","z":["Champ des Ingalsse"]},{"i":21,"s":2,"t":"m","n":"Tofu Malade","z":["Souterrains d'Astrub"]},{"i":22,"s":2,"t":"m","n":"Champ Champ","z":["Campagne d'Amakna","Coin des Bouftous"]},{"i":23,"s":2,"t":"m","n":"Pissenlit Diabolique","z":["Champs d'Astrub","Pâturages de Bonta"]},{"i":24,"s":2,"t":"m","n":"Arakne des Égouts","z":["Égouts d'Astrub"]},{"i":25,"s":2,"t":"m","n":"Bandit Manchot","z":["Passage vers Brâkmar"]},{"i":26,"s":2,"t":"m","n":"Rose Démoniaque","z":["Champs d'Astrub","Coin des Bouftous","Pâturages de Bonta"]},{"i":27,"s":2,"t":"m","n":"Gelée Bleue","z":["Gelaxième dimension","Péninsule des Gelées"]},{"i":28,"s":2,"t":"m","n":"Gelée Menthe","z":["Gelaxième dimension","Péninsule des Gelées"]},{"i":29,"s":2,"t":"m","n":"Kwoan","z":["Cimetière","Forêt maléfique"]},{"i":30,"s":2,"t":"m","n":"Larve Verte","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"]},{"i":31,"s":2,"t":"m","n":"Bouftou","z":["Coin des Bouftous","Tainéla"]},{"i":32,"s":2,"t":"m","n":"Kolérat","z":["Désolation de Sidimote"]},{"i":33,"s":2,"t":"m","n":"Larve Orange","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"]},{"i":34,"s":2,"t":"m","n":"Boulanger Sombre","z":["Passage vers Brâkmar","Territoire des Bandits"]},{"i":35,"s":2,"t":"m","n":"Black Tiwabbit","z":["Île de la Cawotte"]},{"i":36,"s":2,"t":"m","n":"Tiwabbit","z":["Île de la Cawotte"]},{"i":37,"s":2,"t":"m","n":"Tiwabbit Kiafin","z":["Île de la Cawotte"]},{"i":38,"s":2,"t":"m","n":"Tournesol Sauvage","z":["Champs d'Astrub","Pâturages de Bonta"]},{"i":39,"s":2,"t":"m","n":"Bandit du clan des Roublards","z":["Territoire des Bandits"]},{"i":40,"s":2,"t":"m","n":"Gobelin","z":["Campement des Bworks","Campement des Gobelins","Montagne basse des Craqueleurs"]},{"i":41,"s":3,"t":"m","n":"Nodkoko","z":["Île des naufragés","Plage de la Tortue"]},{"i":42,"s":3,"t":"m","n":"Tikoko","z":["Île des naufragés","Plage de la Tortue"]},{"i":43,"s":3,"t":"m","n":"Trukikol","z":["Jungle Interdite"]},{"i":44,"s":3,"t":"m","n":"Sanglier","z":["Bord de la forêt maléfique","Forêt d'Amakna","Forêt d'Astrub","Milifutaie"]},{"i":45,"s":3,"t":"m","n":"Champa Vert","z":["Clairière de Bruce Boulgour"]},{"i":46,"s":3,"t":"m","n":"Citwouille","z":["Forêt maléfique"]},{"i":47,"s":3,"t":"m","n":"Vampire","z":["Cryptes du cimetière"]},{"i":48,"s":3,"t":"m","n":"Biblop Coco","z":["Lac de Cania"]},{"i":49,"s":3,"t":"m","n":"Biblop Griotte","z":["Lac de Cania"]},{"i":50,"s":3,"t":"m","n":"Biblop Indigo","z":["Lac de Cania"]},{"i":51,"s":3,"t":"m","n":"Biblop Reinette","z":["Lac de Cania"]},{"i":52,"s":3,"t":"m","n":"Chevaucheur de Karne","z":["Campement des Bworks","Campement des Gobelins","Montagne basse des Craqueleurs"]},{"i":53,"s":3,"t":"m","n":"Milirat Strubien","z":["Égouts d'Astrub"]},{"i":54,"s":3,"t":"m","n":"Boo","z":["Coin des Boos","Marécages d'Amakna","Marécages nauséabonds","Marécages sans fond"]},{"i":55,"s":3,"t":"m","n":"Prespic","z":["Bord de la forêt maléfique","Forêt d'Amakna","Forêt d'Astrub","Milifutaie"]},{"i":56,"s":3,"t":"m","n":"Cochon de Lait","z":["Plaine des Porkass"]},{"i":57,"s":3,"t":"m","n":"Tortue Jaune","z":["Plage de la Tortue"]},{"i":58,"s":3,"t":"m","n":"Wabbit","z":["Île de la Cawotte","Îlot de la Couronne"]},{"i":59,"s":3,"t":"m","n":"Chef de Guerre Bouftou","z":["Coin des Bouftous","Tainéla"]},{"i":60,"s":3,"t":"m","n":"Berger Porkass","z":["Plaine des Porkass"]},{"i":61,"s":4,"t":"m","n":"Croc Gland","z":["Désolation de Sidimote"]},{"i":62,"s":4,"t":"m","n":"Floristile","z":["Plantala"]},{"i":63,"s":4,"t":"m","n":"Tortue Bleue","z":["Plage de la Tortue"]},{"i":64,"s":4,"t":"m","n":"Tortue Rouge","z":["Plage de la Tortue"]},{"i":65,"s":4,"t":"m","n":"Tortue Verte","z":["Plage de la Tortue"]},{"i":66,"s":4,"t":"m","n":"Corbac","z":["Pénates du Corbac"]},{"i":67,"s":4,"t":"m","n":"Étoile de la Mer d'Asse","z":["Rivages sufokien"]},{"i":68,"s":4,"t":"m","n":"Pichon Blanc","z":["Calanques d'Astrub"]},{"i":69,"s":4,"t":"m","n":"Pichon Bleu","z":["Calanques d'Astrub"]},{"i":70,"s":4,"t":"m","n":"Pichon Orange","z":["Calanques d'Astrub"]},{"i":71,"s":4,"t":"m","n":"Pichon Vert","z":["Calanques d'Astrub"]},{"i":72,"s":4,"t":"m","n":"Bambouto","z":["Plantala"]},{"i":73,"s":4,"t":"m","n":"Maître Vampire","z":["Cryptes du cimetière"]},{"i":74,"s":4,"t":"m","n":"Minoskito","z":["Île du Minotoror"]},{"i":75,"s":4,"t":"m","n":"Noeul","z":["Forêt maléfique"]},{"i":76,"s":4,"t":"m","n":"Milimulou","z":["Forêt d'Amakna","Forêt d'Astrub","Milifutaie"]},{"i":77,"s":4,"t":"m","n":"Fourbasse","z":["Jungle Interdite"]},{"i":78,"s":4,"t":"m","n":"Bulbiflore","z":["Bambuseraie de Damadrya"]},{"i":79,"s":4,"t":"m","n":"Bwork Mage","z":["Campement des Bworks","Forêt maléfique","Montagne basse des Craqueleurs","Village des Bworks"]},{"i":80,"s":4,"t":"m","n":"Croc Gland Enragé","z":["Bordure de Brâkmar"]},{"i":81,"s":5,"t":"m","n":"Rose Obscure","z":["Pâturages de Bonta"]},{"i":82,"s":5,"t":"m","n":"Black Wabbit","z":["Île de la Cawotte","Îlot de la Couronne"]},{"i":83,"s":5,"t":"m","n":"Mineur Sombre","z":["Passage vers Brâkmar","Territoire des Bandits"]},{"i":84,"s":5,"t":"m","n":"Bwork Archer","z":["Campement des Bworks","Forêt maléfique","Montagne basse des Craqueleurs","Village des Bworks"]},{"i":85,"s":5,"t":"m","n":"Champa Bleu","z":["Clairière des Bruce Boulgour"]},{"i":86,"s":5,"t":"m","n":"Champa Marron","z":["Clairière des Bruce Boulgour"]},{"i":87,"s":5,"t":"m","n":"Champa Rouge","z":["Clairière des Bruce Boulgour"]},{"i":88,"s":5,"t":"m","n":"Craqueboule","z":["Montagne basse des Craqueleurs","Montagne des Craqueleurs"]},{"i":89,"s":5,"t":"m","n":"Mandrine","z":["Île du Minotoror"]},{"i":90,"s":5,"t":"m","n":"Ishigro Pake","z":["Terrdala"]},{"i":91,"s":5,"t":"m","n":"Gargrouille","z":["Cimetière d'Astrub"]},{"i":92,"s":5,"t":"m","n":"Dragodinde Amande Sauvage","z":["Territoire des Dragodindes Sauvages"]},{"i":93,"s":5,"t":"m","n":"Gelée Fraise","z":["Gelaxième dimension","Péninsule des Gelées"]},{"i":94,"s":5,"t":"m","n":"Wabbit Squelette","z":["Îlot des Tombeaux"]},{"i":95,"s":5,"t":"m","n":"Chafer Invisible","z":["Bois de Litneg","Cimetière","Forêt maléfique"]},{"i":96,"s":5,"t":"m","n":"Craqueleur","z":["Montagne basse des Craqueleurs","Montagne des Craqueleurs"]},{"i":97,"s":5,"t":"m","n":"Bwork","z":["Campement des Bworks","Forêt maléfique","Montagne basse des Craqueleurs","Village des Bworks"]},{"i":98,"s":5,"t":"m","n":"Abraknyde","z":["Orée de la forêt des Abraknydes"]},{"i":99,"s":5,"t":"m","n":"Kraméléhon","z":["Île du Minotoror"]},{"i":100,"s":6,"t":"m","n":"Scarafeuille Blanc","z":["Plaine des Scarafeuilles"]},{"i":101,"s":6,"t":"m","n":"Scarafeuille Bleu","z":["Plaine des Scarafeuilles"]},{"i":102,"s":6,"t":"m","n":"Scarafeuille Rouge","z":["Plaine des Scarafeuilles"]},{"i":103,"s":6,"t":"m","n":"Scarafeuille Vert","z":["Plaine des Scarafeuilles"]},{"i":104,"s":6,"t":"m","n":"Rib","z":["Bois de Litneg","Cimetière","Forêt maléfique"]},{"i":105,"s":6,"t":"m","n":"Blop Coco","z":["Lac de Cania"]},{"i":106,"s":6,"t":"m","n":"Blop Griotte","z":["Lac de Cania"]},{"i":107,"s":6,"t":"m","n":"Blop Indigo","z":["Lac de Cania"]},{"i":108,"s":6,"t":"m","n":"Blop Reinette","z":["Lac de Cania"]},{"i":109,"s":6,"t":"m","n":"Cochon de Farle","z":["Territoire des Porcos","Labyrinthe du Dragon Cochon"]},{"i":110,"s":6,"t":"m","n":"Scaratos","z":["Labyrinthe du Minotoror"]},{"i":111,"s":6,"t":"m","n":"Boomba","z":["Chemin du Crâne"]},{"i":112,"s":6,"t":"m","n":"Tronknyde","z":["Orée de la forêt des Abraknydes"]},{"i":113,"s":6,"t":"m","n":"Chafer Fantassin","z":["Bois de Litneg","Cimetière"]},{"i":114,"s":6,"t":"m","n":"Pichon Kloune","z":["Donjon Ensablé"]},{"i":115,"s":6,"t":"m","n":"Abrakne","z":["Orée de la forêt des Abraknydes"]},{"i":116,"s":6,"t":"m","n":"Chafer","z":["Bois de Litneg","Cimetière","Forêt maléfique"]},{"i":117,"s":6,"t":"m","n":"Crocodaille","z":["Marécages d'Amakna","Marécages nauséabonds","Marécages sans fond"]},{"i":118,"s":6,"t":"m","n":"Scélérat Strubien","z":["Égouts d'Astrub"]},{"i":119,"s":6,"t":"m","n":"Scorbute","z":["Désolation de Sidimote"]},{"i":120,"s":7,"t":"m","n":"Dragodinde Rousse Sauvage","z":["Territoire des Dragodindes Sauvages"]},{"i":121,"s":7,"t":"m","n":"Forgeron Sombre","z":["Passage vers Brâkmar","Territoire des Bandits"]},{"i":122,"s":7,"t":"m","n":"Crustorail Kouraçao","z":["Plage de Corail"]},{"i":123,"s":7,"t":"m","n":"Crustorail Malibout","z":["Plage de Corail"]},{"i":124,"s":7,"t":"m","n":"Crustorail Morito","z":["Plage de Corail"]},{"i":125,"s":7,"t":"m","n":"Crustorail Passaoh","z":["Plage de Corail"]},{"i":126,"s":7,"t":"m","n":"Bulbuisson","z":["Plantala"]},{"i":127,"s":7,"t":"m","n":"Arakne Majeure","z":["Forêt maléfique","Orée de la forêt des Abraknydes"]},{"i":128,"s":7,"t":"m","n":"Akakwa","z":["Akwadala"]},{"i":129,"s":7,"t":"m","n":"Grand Pa Wabbit","z":["Îlot de la Couronne","Îlot de Waldo"]},{"i":130,"s":7,"t":"m","n":"Wo Wabbit","z":["Îlot de la Couronne","Îlot de Waldo"]},{"i":131,"s":7,"t":"m","n":"Cavalier Porkass","z":["Plaine des Porkass"]},{"i":132,"s":7,"t":"m","n":"Aboub","z":["Mine des Dopeuls","Village des Dopeuls"]},{"i":133,"s":7,"t":"m","n":"Amlub","z":["Baie de Cania","Village des Dopeuls"]},{"i":134,"s":7,"t":"m","n":"Codem","z":["Baie de Cania","Village des Dopeuls"]},{"i":135,"s":7,"t":"m","n":"Gink","z":["Mine des Dopeuls","Village des Dopeuls"]},{"i":136,"s":7,"t":"m","n":"Kirevam","z":["Baie de Cania","Village des Dopeuls"]},{"i":137,"s":7,"t":"m","n":"Let Emoliug","z":["Baie de Cania","Village des Dopeuls"]},{"i":138,"s":7,"t":"m","n":"Nebgib","z":["Mine des Dopeuls","Village des Dopeuls"]},{"i":139,"s":7,"t":"m","n":"Nipul","z":["Mine des Dopeuls","Village des Dopeuls"]},{"i":140,"s":8,"t":"m","n":"Osurc","z":["Mine des Dopeuls","Village des Dopeuls"]},{"i":141,"s":8,"t":"m","n":"Susej","z":["Baie de Cania","Village des Dopeuls"]},{"i":142,"s":8,"t":"m","n":"Kokoko","z":["Île des naufragés","Plage de la Tortue"]},{"i":143,"s":8,"t":"m","n":"Chafer Archer","z":["Bois de Litneg","Cimetière des Héros","Cimetière des Torturés","Forêt maléfique"]},{"i":144,"s":8,"t":"m","n":"Chafer Lancier","z":["Bois de Litneg","Cimetière des Héros","Cimetière des Torturés"]},{"i":145,"s":8,"t":"m","n":"Dok Alako","z":["Canyon sauvage","Forêt de Kaliptus","Lacs enchantés"]},{"i":146,"s":8,"t":"m","n":"Koalak Immature","z":["Forêt de Kaliptus","Lacs enchantés"]},{"i":147,"s":8,"t":"m","n":"Gamino","z":["Labyrinthe du Minotoror"]},{"i":148,"s":8,"t":"m","n":"Ramane d'Égoutant","z":["Égouts de Bonta","Égouts de Brâkmar","Souterrains du Château d'Amakna"]},{"i":149,"s":8,"t":"m","n":"Le Ouassingue Entourbé","z":["Tourbière nauséabonde","Tourbière sans fond"]},{"i":150,"s":8,"t":"m","n":"Le Ouassingue","z":["Cimetière d'Astrub"]},{"i":151,"s":8,"t":"m","n":"La Ouassingue","z":["Cimetière d'Astrub"]},{"i":152,"s":8,"t":"m","n":"Palmifleur Malibout","z":["Plage de Corail"]},{"i":153,"s":8,"t":"m","n":"Palmifleur Morito","z":["Plage de Corail"]},{"i":154,"s":8,"t":"m","n":"Palmifleur Passaoh","z":["Plage de Corail"]},{"i":155,"s":8,"t":"m","n":"Sanglier des Plaines","z":["Plaine des Porkass"]},{"i":156,"s":8,"t":"m","n":"Abraknyde Vénérable","z":["Forêt Sombre"]},{"i":157,"s":8,"t":"m","n":"Craqueleur des Plaines","z":["Plaines Rocheuses"]},{"i":158,"s":8,"t":"m","n":"Fangshu","z":["Aerdala"]},{"i":159,"s":8,"t":"m","n":"Chafer d'Élite","z":["Cimetière des Héros","Cimetière des Torturés"]},{"i":160,"s":9,"t":"m","n":"Maître Bolet","z":["Routes Rocailleuses"]},{"i":161,"s":9,"t":"m","n":"Craqueboule Poli","z":["Plaines herbeuses"]},{"i":162,"s":9,"t":"m","n":"Ino-Naru","z":["Aerdala"]},{"i":163,"s":9,"t":"m","n":"Kanniboul Ark","z":["Forêt des Masques"]},{"i":164,"s":9,"t":"m","n":"Kanniboul Jav","z":["Forêt des Masques"]},{"i":165,"s":9,"t":"m","n":"Kanniboul Sarbak","z":["Forêt des Masques"]},{"i":166,"s":9,"t":"m","n":"Kanniboul Eth","z":["Forêt des Masques"]},{"i":167,"s":9,"t":"m","n":"Sarkapwane","z":["Akwadala"]},{"i":168,"s":9,"t":"m","n":"Rat d'Égoutant","z":["Égouts de Bonta","Égouts de Brâkmar","Souterrains du Château d'Amakna"]},{"i":169,"s":9,"t":"m","n":"Palmifleur Kouraçao","z":["Plage de Corail"]},{"i":170,"s":9,"t":"m","n":"Macien","z":["Laboratoire de Brumen Tinctorias"]},{"i":171,"s":9,"t":"m","n":"Dragoss Protéiforme","z":["Repaire du Kharnozor"]},{"i":172,"s":9,"t":"m","n":"Dragacé","z":["Sanctuaire des Dragoeufs"]},{"i":173,"s":9,"t":"m","n":"Dragmatique","z":["Antre de Corcabulia"]},{"i":174,"s":9,"t":"m","n":"Kwak de Vent","z":["Montagne des Craqueleurs"]},{"i":175,"s":9,"t":"m","n":"Kwak de Terre","z":["Montagne des Craqueleurs"]},{"i":176,"s":9,"t":"m","n":"Kwak de Flamme","z":["Montagne des Craqueleurs"]},{"i":177,"s":9,"t":"m","n":"Kwak de Glace","z":["Montagne des Craqueleurs"]},{"i":178,"s":9,"t":"m","n":"Vétauran","z":["Routes Rocailleuses"]},{"i":179,"s":9,"t":"m","n":"Crachefoux","z":["Feudala"]},{"i":180,"s":10,"t":"m","n":"Serpiplume","z":["Labyrinthe du Minotoror"]},{"i":181,"s":10,"t":"m","n":"Corailleur","z":["Plage de Corail"]},{"i":182,"s":10,"t":"m","n":"Lolojiki","z":["Terrdala"]},{"i":183,"s":10,"t":"m","n":"Raul Mops","z":["Rivages sufokien"]},{"i":184,"s":10,"t":"m","n":"Shinibaru","z":["Atelier du Tanukouï San"]},{"i":185,"s":10,"t":"m","n":"Betto","z":["Akwadala"]},{"i":186,"s":10,"t":"m","n":"Moumoule","z":["Rivages sufokien"]},{"i":187,"s":10,"t":"m","n":"Canondorf","z":["Chemin du Crâne"]},{"i":188,"s":10,"t":"m","n":"Nakunbra","z":["Chemin du Crâne"]},{"i":189,"s":10,"t":"m","n":"Don Duss Ang","z":["Labyrinthe du Dragon Cochon"]},{"i":190,"s":10,"t":"m","n":"Dragoeuf Calcaire","z":["Presqu'île des Dragoeufs"]},{"i":191,"s":10,"t":"m","n":"Dragoeuf Argile","z":["Presqu'île des Dragoeufs"]},{"i":192,"s":10,"t":"m","n":"Dragoeuf Charbon","z":["Presqu'île des Dragoeufs"]},{"i":193,"s":10,"t":"m","n":"Dragoeuf Ardoise","z":["Presqu'île des Dragoeufs"]},{"i":194,"s":10,"t":"m","n":"Koalak Coco","z":["Canyon sauvage"]},{"i":195,"s":10,"t":"m","n":"Koalak Griotte","z":["Canyon sauvage"]},{"i":196,"s":10,"t":"m","n":"Koalak Indigo","z":["Canyon sauvage"]},{"i":197,"s":10,"t":"m","n":"Koalak Reinette","z":["Canyon sauvage"]},{"i":198,"s":10,"t":"m","n":"Rat d'Hyoactif","z":["Égouts de Bonta","Égouts de Brâkmar"]},{"i":199,"s":10,"t":"m","n":"Sparo","z":["Arche d'Otomaï"]},{"i":200,"s":11,"t":"m","n":"Chiendent","z":["Jungle obscure"]},{"i":201,"s":11,"t":"m","n":"Fantôme Apero","z":["Bordure de Brâkmar"]},{"i":202,"s":11,"t":"m","n":"Fantôme aux Plates","z":["Bordure de Brâkmar"]},{"i":203,"s":11,"t":"m","n":"Fantôme Hicide","z":["Bordure de Brâkmar"]},{"i":204,"s":11,"t":"m","n":"Fantôme égèrie","z":["Bordure de Brâkmar"]},{"i":205,"s":11,"t":"m","n":"Don Dorgan","z":["Labyrinthe du Dragon Cochon"]},{"i":206,"s":11,"t":"m","n":"Barbroussa","z":["Arche d'Otomaï"]},{"i":207,"s":11,"t":"m","n":"Le Flib","z":["Arche d'Otomaï"]},{"i":208,"s":11,"t":"m","n":"Nerbe","z":["Jungle obscure"]},{"i":209,"s":11,"t":"m","n":"Chef Crocodaille","z":["Marécages d'Amakna","Marécages nauséabonds","Marécages sans fond"]},{"i":210,"s":11,"t":"m","n":"Serpentin","z":["Champs de Cania"]},{"i":211,"s":11,"t":"m","n":"Kanigrou","z":["Routes Rocailleuses"]},{"i":212,"s":11,"t":"m","n":"Bitouf des Plaines","z":["Plaines herbeuses"]},{"i":213,"s":11,"t":"m","n":"Craqueleur Poli","z":["Plaines herbeuses"]},{"i":214,"s":11,"t":"m","n":"Mufafah","z":["Plaines herbeuses"]},{"i":215,"s":11,"t":"m","n":"Mulou","z":["Hauts des Hurlements"]},{"i":216,"s":11,"t":"m","n":"Kurookin","z":["Aerdala"]},{"i":217,"s":11,"t":"m","n":"Kido","z":["Plaines herbeuses"]},{"i":218,"s":11,"t":"m","n":"Kilibriss","z":["Plaines herbeuses"]},{"i":219,"s":11,"t":"m","n":"Larve Champêtre","z":["Champs de Cania"]},{"i":220,"s":12,"t":"m","n":"Bourdard","z":["Champs de Cania"]},{"i":221,"s":12,"t":"m","n":"Foufayteur","z":["Routes Rocailleuses"]},{"i":222,"s":12,"t":"m","n":"Dragoeuf AlbÂtre","z":["Épreuve de Draegnerys"]},{"i":223,"s":12,"t":"m","n":"Dragueuse","z":["Sanctuaire des Dragoeufs"]},{"i":224,"s":12,"t":"m","n":"Guerrier Koalak","z":["Vallée de la Morh'Kitu"]},{"i":225,"s":12,"t":"m","n":"Kokom","z":["Akwadala"]},{"i":226,"s":12,"t":"m","n":"Oni","z":["Forêt maléfique"]},{"i":227,"s":12,"t":"m","n":"Warko Marron","z":["Canyon sauvage","Forêt de Kaliptus"]},{"i":228,"s":12,"t":"m","n":"Parashukouï","z":["Terrdala"]},{"i":229,"s":12,"t":"m","n":"Abraknyde sombre","z":["Forêt Sombre"]},{"i":230,"s":12,"t":"m","n":"Damadrya","z":["Bambuseraie de Damadrya"],"l":150},{"i":231,"s":12,"t":"m","n":"Fossoyeur koalak","z":["Cimetière primitif"]},{"i":232,"s":12,"t":"m","n":"Koalak forestier","z":["Forêt de Kaliptus"]},{"i":233,"s":12,"t":"m","n":"Piralak","z":["Lacs enchantés"]},{"i":234,"s":12,"t":"m","n":"Pékeualak","z":["Lacs enchantés"]},{"i":235,"s":12,"t":"m","n":"Gloutovore","z":["Jungle Interdite"]},{"i":236,"s":12,"t":"m","n":"Abrakne sombre","z":["Forêt Sombre"]},{"i":237,"s":12,"t":"m","n":"Dragodinde Dorée Sauvage","z":["Territoire des Dragodindes Sauvages"]},{"i":238,"s":12,"t":"m","n":"Chevaucheur Koalak","z":["Cimetière primitif"]},{"i":239,"s":12,"t":"m","n":"Meupette","z":["Tronc de l'arbre Hakam"]},{"i":240,"s":13,"t":"m","n":"Grenufar","z":["Plantala"]},{"i":241,"s":13,"t":"m","n":"Dragnarok","z":["Sanctuaire des Dragoeufs"]},{"i":242,"s":13,"t":"m","n":"Draguaindrop","z":["Sanctuaire des Dragoeufs"]},{"i":243,"s":13,"t":"m","n":"Bizarbwork","z":["Pics de Cania"]},{"i":244,"s":13,"t":"m","n":"Krambwork","z":["Pics de Cania"]},{"i":245,"s":13,"t":"m","n":"Médibwork","z":["Pics de Cania"]},{"i":246,"s":13,"t":"m","n":"Mégabwork","z":["Pics de Cania"]},{"i":247,"s":13,"t":"m","n":"Disciple Zoth","z":["Village de la Canopée","Village des Zoths"]},{"i":248,"s":13,"t":"m","n":"Brouture","z":["Jungle obscure"]},{"i":249,"s":13,"t":"m","n":"Koalak sanguin","z":["Vallée de la Morh'Kitu"]},{"i":250,"s":13,"t":"m","n":"Bitouf sombre","z":["Jungle obscure"]},{"i":251,"s":13,"t":"m","n":"Floribonde","z":["Jungle obscure"]},{"i":252,"s":13,"t":"m","n":"Fécorce","z":["Jungle obscure"]},{"i":253,"s":13,"t":"m","n":"Koalak farouche","z":["Vallée de la Morh'Kitu"]},{"i":254,"s":13,"t":"m","n":"Mama koalak","z":["Canyon sauvage"]},{"i":255,"s":13,"t":"m","n":"Momie koalak","z":["Cimetière primitif"]},{"i":256,"s":13,"t":"m","n":"Bourbassingue","z":["Tourbière nauséabonde","Tourbière sans fond"]},{"i":257,"s":13,"t":"m","n":"Warko Violet","z":["Vallée de la Morh'Kitu"]},{"i":258,"s":13,"t":"m","n":"Gamine Zoth","z":["Village de la Canopée","Village des Zoths"]},{"i":259,"s":13,"t":"m","n":"Guerrier Zoth","z":["Village de la Canopée","Village des Zoths"]},{"i":260,"s":14,"t":"m","n":"Tourbassingue","z":["Tourbière nauséabonde","Tourbière sans fond"]},{"i":261,"s":14,"t":"m","n":"Abrakleur Sombre","z":["Jungle obscure"]},{"i":262,"s":14,"t":"m","n":"Dragoss Calcaire","z":["Souterrains des Dragoeufs","Village des Dragoeufs"]},{"i":263,"s":14,"t":"m","n":"Dragoss Argile","z":["Souterrains des Dragoeufs","Village des Dragoeufs"]},{"i":264,"s":14,"t":"m","n":"Dragoss Charbon","z":["Souterrains des Dragoeufs","Village des Dragoeufs"]},{"i":265,"s":14,"t":"m","n":"Dragoss Ardoise","z":["Souterrains des Dragoeufs","Village des Dragoeufs"]},{"i":266,"s":14,"t":"m","n":"Rouquette","z":["Feudala"]},{"i":267,"s":14,"t":"m","n":"Tétonuki","z":["Terrdala"]},{"i":268,"s":14,"t":"m","n":"Boumbardier","z":["Feudala"]},{"i":269,"s":14,"t":"m","n":"Drakoalak","z":["Canyon sauvage"]},{"i":270,"s":14,"t":"m","n":"Fauchalak","z":["Vallée de la Morh'Kitu"]},{"i":271,"s":14,"t":"m","n":"Maître koalak","z":["Cimetière primitif"]},{"i":272,"s":14,"t":"m","n":"Poolay","z":["Feuillage de l'arbre Hakam","Tronc de l'arbre Hakam"]},{"i":273,"s":14,"t":"m","n":"Malle Outilliée","z":["Massif de Cania"]},{"i":274,"s":14,"t":"m","n":"Robot Fléau","z":["Massif de Cania"]},{"i":275,"s":14,"t":"m","n":"Robot Pousse-Pousse","z":["Massif de Cania"]},{"i":276,"s":14,"t":"m","n":"Robionicle","z":["Massif de Cania"]},{"i":277,"s":14,"t":"m","n":"Troollaraj","z":["Bois de Litneg"]},{"i":278,"s":15,"t":"m","n":"Sergent Zoth","z":["Village de la Canopée","Village des Zoths"]},{"i":279,"s":15,"t":"m","n":"Maître Zoth","z":["Village de la Canopée","Village des Zoths"]},{"i":280,"s":15,"t":"m","n":"Kaskargo","z":["Feuillage de l'arbre Hakam","Tronc de l'arbre Hakam"]},{"i":281,"s":15,"t":"m","n":"Bitouf Aérien","z":["Feuillage de l'arbre Hakam","Tronc de l'arbre Hakam"]},{"i":282,"s":15,"t":"m","n":"Abrakleur clair","z":["Tronc de l'arbre Hakam"]},{"i":283,"s":15,"t":"m","n":"Pétartifoux","z":["Feudala"]},{"i":284,"s":15,"t":"m","n":"Champaknyde","z":["Domaine des Fungus"]},{"i":285,"s":15,"t":"m","n":"Tromperelle","z":["Domaine des Fungus"]},{"i":286,"s":15,"t":"m","n":"Champodonte","z":["Caverne des Fungus"]},{"i":287,"s":15,"t":"m","n":"Champbis","z":["Caverne des Fungus"]},{"i":288,"s":15,"t":"m","n":"Champ à gnon","z":["Caverne des Fungus","Domaine des Fungus"]},{"i":289,"s":15,"t":"m","n":"Champmane","z":["Caverne des Fungus","Domaine des Fungus"]},{"i":290,"s":15,"t":"m","n":"Tsukinochi","z":["Cimetière de Grobe"]},{"i":291,"s":15,"t":"m","n":"Tambouraï","z":["Cimetière de Grobe"]},{"i":292,"s":15,"t":"m","n":"Onabu-Geisha","z":["Cimetière de Grobe"]},{"i":293,"s":15,"t":"m","n":"Jiangshi-Nobi","z":["Cimetière de Grobe"]},{"i":294,"s":15,"t":"m","n":"Lichangoro","z":["Aerdala"]},{"i":295,"s":15,"t":"m","n":"Madura","z":["Mont des Tombeaux"]},{"i":296,"s":15,"t":"m","n":"Bakazako","z":["Mont des Tombeaux"]},{"i":297,"s":15,"t":"m","n":"Roissingue","z":["Tourbière nauséabonde","Tourbière sans fond"]},{"i":298,"s":16,"t":"m","n":"Kaonashi","z":["Mont des Tombeaux"]},{"i":299,"s":16,"t":"m","n":"Tsume-bozu","z":["Mont des Tombeaux"]},{"i":300,"s":17,"t":"b","n":"Mob l'Éponge","z":["Château Ensablé"],"l":50},{"i":301,"s":17,"t":"b","n":"Bouftou Royal","z":["Cour du Bouftou Royal"],"l":50},{"i":302,"s":17,"t":"b","n":"Tournesol Affamé","z":["Grange du Tournesol Affamé"],"l":50},{"i":303,"s":17,"t":"b","n":"Gelée Royale Bleue","z":["Gelaxième Dimension"]},{"i":304,"s":17,"t":"b","n":"Gelée Royale Menthe","z":["Gelaxième Dimension"],"l":100},{"i":305,"s":17,"t":"b","n":"Shin Larve","z":["Donjon des Larves"],"l":50},{"i":306,"s":17,"t":"b","n":"Wabbit GM","z":[]},{"i":307,"s":17,"t":"b","n":"Scarabosse Doré","z":["Donjon des Scarafeuilles"],"l":50},{"i":308,"s":17,"t":"b","n":"Bworkette","z":["Donjon des Bworks"],"l":50},{"i":309,"s":17,"t":"b","n":"Dragon Cochon","z":["Antre du Dragon Cochon"],"l":100},{"i":310,"s":17,"t":"b","n":"Mominotor","z":["Labyrinthe du Minotoror"]},{"i":311,"s":17,"t":"b","n":"Déminoboule","z":["Labyrinthe du Minotoror"]},{"i":312,"s":17,"t":"b","n":"Tofu Royal","z":["Donjon du Tofu Royal"],"l":150},{"i":313,"s":17,"t":"b","n":"Blop Coco Royal","z":["Antre du Blop Coco"],"l":100},{"i":314,"s":17,"t":"b","n":"Blop Griotte Royal","z":["Antre du Blop Griotte"],"l":100},{"i":315,"s":17,"t":"b","n":"Blop Indigo Royal","z":["Antre du Blop Indigo"],"l":100},{"i":316,"s":17,"t":"b","n":"Blop Reinette Royal","z":["Antre du Blop Reinette"],"l":100},{"i":317,"s":17,"t":"b","n":"Rat Noir","z":["Donjon des Rats de Brâkmar"],"l":150},{"i":318,"s":17,"t":"b","n":"Rat Blanc","z":["Donjon des Rats de Bonta"],"l":150},{"i":319,"s":17,"t":"b","n":"Minotoror","z":["Labyrinthe du Minotoror"],"l":150},{"i":320,"s":18,"t":"b","n":"Hell Mina","z":["Labyrinthe du Minotoror"],"l":150},{"i":321,"s":18,"t":"b","n":"Tanukouï San","z":["Donjon du Kitsoune"],"l":150},{"i":322,"s":18,"t":"b","n":"Craqueleur légendaire","z":["Donjon des Craqueleurs"],"l":100},{"i":323,"s":18,"t":"b","n":"Gardienne des égouts","z":[]},{"i":324,"s":18,"t":"b","n":"Gelée royale fraise","z":["Gelaxième Dimension"],"l":100},{"i":325,"s":18,"t":"b","n":"Maître corbac","z":["Bibliothèque du Maître Corbac"],"l":150},{"i":326,"s":18,"t":"b","n":"Blop multicolore royal","z":["Antre du Blop Multicolore"],"l":150},{"i":327,"s":18,"t":"b","n":"Corailleur magistral","z":["Grotte Hesque"],"l":50},{"i":328,"s":18,"t":"b","n":"Gourlo le terrible","z":["Arche d'Otomaï"],"l":100},{"i":329,"s":18,"t":"b","n":"Meulou","z":["Donjon des Canidés"],"l":100},{"i":330,"s":18,"t":"b","n":"Wa wabbit","z":["Donjon Wa Wabbit"],"l":100},{"i":331,"s":18,"t":"b","n":"Moon","z":["Donjon de Moon"],"l":100},{"i":332,"s":18,"t":"b","n":"Koulosse","z":["Donjon du Koulosse"],"l":100},{"i":333,"s":18,"t":"b","n":"Skeunk","z":["Repaire de Skeunk"],"l":150},{"i":334,"s":18,"t":"b","n":"Abraknyde ancestral","z":["Domaine ancestral"],"l":100},{"i":335,"s":18,"t":"b","n":"Hanshi","z":["Donjon des Kitsounes"],"l":150},{"i":336,"s":18,"t":"b","n":"Tynril ahuri","z":["Laboratoire du Tynril"],"l":150},{"i":337,"s":18,"t":"b","n":"Tynril consterné","z":["Laboratoire du Tynril"],"l":150},{"i":338,"s":18,"t":"b","n":"Tynril déconcerté","z":["Laboratoire du Tynril"],"l":150},{"i":339,"s":18,"t":"b","n":"Tynril perfide","z":["Laboratoire du Tynril"],"l":150},{"i":340,"s":19,"t":"b","n":"Gelée royale citron","z":["Gelaxième Dimension"],"l":100},{"i":341,"s":19,"t":"b","n":"Founamboul","z":[]},{"i":342,"s":19,"t":"b","n":"Bworker","z":["Donjon du Bworker"],"l":190},{"i":343,"s":19,"t":"b","n":"Sphincter Cell","z":["Donjon des Rats du Château d'Amakna"],"l":150},{"i":344,"s":19,"t":"b","n":"Minotot","z":["Antre du Minotot"],"l":190},{"i":345,"s":19,"t":"b","n":"Silf le rasboul majeur","z":["Goulet du Rasboul"],"l":150},{"i":346,"s":19,"t":"b","n":"Crocabulia","z":["Sanctuaire des Dragoeufs"],"l":150},{"i":347,"s":19,"t":"b","n":"Haute Truche","z":["Donjon de la Haute Truche"],"l":150},{"i":348,"s":19,"t":"b","n":"Chêne mou","z":["Donjon du Chêne Mou"],"l":150},{"i":349,"s":19,"t":"b","n":"Ougah","z":["Temple du Grand Ougah"],"l":190},{"i":350,"s":19,"t":"b","n":"Kimbo","z":["Canopée du Kimbo"],"l":190},{"i":351,"s":20,"t":"a","n":"Sourizoto le Collant","z":["Cryptes du cimetière"]},{"i":352,"s":20,"t":"a","n":"Mosketère le Dévoué","z":["Bord de la forêt maléfique","Campagne d'Amakna"],"b":"Moskito","l":50},{"i":353,"s":20,"t":"a","n":"Arakule la Revancharde","z":["Campagne d'Amakna","Forêt maléfique"],"b":"Arakne","l":50},{"i":354,"s":20,"t":"a","n":"Boudalf le Blanc","z":["Coin des Bouftous","Tainéla"],"b":"Boufton Blanc","l":50},{"i":355,"s":20,"t":"a","n":"Boulgourvil le Lointain","z":["Coin des Bouftous","Tainéla"],"b":"Boufton Noir","l":50},{"i":356,"s":20,"t":"a","n":"Tofumanchou l'Empereur","z":["Cimetière","Cryptes du cimetière","Forêt maléfique"],"b":"Tofu Maléfique","l":50},{"i":357,"s":20,"t":"a","n":"Arachitik la Souffreteuse","z":["Souterrains d'Astrub"],"b":"Arakne Malade","l":50},{"i":358,"s":20,"t":"a","n":"Pioustone le Problème","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"],"b":"Piou Bleu","l":50},{"i":359,"s":20,"t":"a","n":"Pioulbrineur le Mercenaire","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"],"b":"Piou Jaune","l":50},{"i":360,"s":20,"t":"a","n":"Pioulette la Coquine","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"],"b":"Piou Rouge","l":50},{"i":361,"s":20,"t":"a","n":"Pioukas la Plante","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"],"b":"Piou Vert","l":50},{"i":362,"s":20,"t":"a","n":"Pioussokrim le Délétère","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"],"b":"Piou Violet","l":50},{"i":363,"s":20,"t":"a","n":"Craraboss le Féérique","z":["Rivages sufokien"],"b":"Crabe","l":50},{"i":364,"s":20,"t":"a","n":"Larvonika l'Instrument","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"],"b":"Larve Bleue","l":50},{"i":365,"s":20,"t":"a","n":"Pioufe la Maquillée","z":["Astrub","Bonta","Brâkmar","Sufokia","Village d'Amakna"],"b":"Piou Rose","l":50},{"i":366,"s":20,"t":"a","n":"Tofuldebeu l'Explosif","z":["Champ des Ingalsse"],"b":"Tofu","l":50},{"i":367,"s":20,"t":"a","n":"Tofurapin le Pétri","z":["Souterrains d'Astrub"],"b":"Tofu Malade","l":50},{"i":368,"s":20,"t":"a","n":"Chamchie le Difficile","z":["Campagne d'Amakna","Coin des Bouftous"],"b":"Champ Champ","l":50},{"i":369,"s":20,"t":"a","n":"Pissdane l'Insipide","z":["Champs d'Astrub","Pâturages de Bonta"],"b":"Pissenlit Diabolique","l":50},{"i":370,"s":20,"t":"a","n":"Araknay la Galopante","z":["Égouts d'Astrub"],"b":"Arakne Agressive","l":50},{"i":371,"s":21,"t":"a","n":"Bandapar l'Exclu","z":["Passage vers Brâkmar"],"b":"Bandit Manchot","l":50},{"i":372,"s":21,"t":"a","n":"Roz la Magicienne","z":["Champs d'Astrub","Coin des Bouftous","Pâturages de Bonta"],"b":"Rose Démoniaque","l":50},{"i":373,"s":21,"t":"a","n":"Gelanal le Huileux","z":["Péninsule des Gelées"],"b":"Gelée Bleue","l":100},{"i":374,"s":21,"t":"a","n":"Kwoanneur le Frimeur","z":["Cimetière","Forêt maléfique"],"b":"Kwoan","l":50},{"i":375,"s":21,"t":"a","n":"Larchimaide la Poussée","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"],"b":"Larve Verte","l":50},{"i":376,"s":21,"t":"a","n":"Boufdégou le Refoulant","z":["Coin des Bouftous","Tainéla"],"b":"Bouftou","l":50},{"i":377,"s":21,"t":"a","n":"Kolforthe l'Indécollable","z":["Désolation de Sidimote"],"b":"Kolérat","l":100},{"i":378,"s":21,"t":"a","n":"Geloliaine l'Aérien","z":["Péninsule des Gelées"],"b":"Gelée Menthe","l":100},{"i":379,"s":21,"t":"a","n":"Larvapstrè le Subjectif","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"],"b":"Larve Orange","l":50},{"i":380,"s":21,"t":"a","n":"Serpistol l'Illustre","z":["Champs de Cania"],"b":"Serpentin","l":100},{"i":381,"s":21,"t":"a","n":"Tiwa'Missou le Gateux","z":["Île de la Cawotte"],"b":"Black Tiwabbit","l":50},{"i":382,"s":21,"t":"a","n":"Boudur le Raide","z":["Passage vers Brâkmar","Territoire des Bandits"],"b":"Boulanger sombre","l":50},{"i":383,"s":21,"t":"a","n":"Tiwalpé le Dévêtu","z":["Île de la Cawotte"],"b":"Tiwabbit","l":50},{"i":384,"s":21,"t":"a","n":"Tiwoflan le Lâche","z":["Île de la Cawotte"],"b":"Tiwabbit Kiaffin","l":50},{"i":385,"s":21,"t":"a","n":"Tour le Vice","z":["Champs d'Astrub","Pâturages de Bonta"],"b":"Tournesol Sauvage","l":50},{"i":386,"s":21,"t":"a","n":"Bandson le Tonitruant","z":["Territoire des Bandits"],"b":"Bandit du Clan des Roublards","l":50},{"i":387,"s":21,"t":"a","n":"Gobstiniais le Têtu","z":["Campement des Bworks","Campement des Gobelins","Montagne basse des Craqueleurs"],"b":"Gobet","l":50},{"i":388,"s":21,"t":"a","n":"Nodkoku le Trahi","z":["Île des naufragés","Plage de la Tortue"],"b":"Nodkoko","l":50},{"i":389,"s":21,"t":"a","n":"Tikosto le Mousse","z":["Île des naufragés","Plage de la Tortue"],"b":"Tikoko","l":50},{"i":390,"s":21,"t":"a","n":"Trukul le Lent","z":["Jungle Interdite"],"b":"Trukikol","l":100},{"i":391,"s":22,"t":"a","n":"Sangria le Fruité","z":["Bord de la forêt maléfique","Forêt d'Amakna","Forêt d'Astrub","Milifutaie"],"b":"Sanglier","l":50},{"i":392,"s":22,"t":"a","n":"Champayr le Disjoncté","z":["Clairière de Bruce Boulgour"],"b":"Champa Vert","l":50},{"i":393,"s":22,"t":"a","n":"Citassaté le Service","z":["Forêt maléfique"]},{"i":394,"s":22,"t":"a","n":"Vampunor le Glacial","z":["Cryptes du cimetière"],"b":"Vampire","l":50},{"i":395,"s":22,"t":"a","n":"Bilvoezé le Bonimenteur","z":["Lac de Cania"],"b":"Biblop Coco","l":50},{"i":396,"s":22,"t":"a","n":"Bi le Partageur","z":["Lac de Cania"],"b":"Biblop Griotte","l":50},{"i":397,"s":22,"t":"a","n":"Bistou le Quêteur","z":["Lac de Cania"],"b":"Biblop Indigo","l":50},{"i":398,"s":22,"t":"a","n":"Bistou le Rieur","z":["Lac de Cania"],"b":"Biblop Reinette","l":50},{"i":399,"s":22,"t":"a","n":"Chevaustine le Reconstruit","z":["Campement des Bworks","Campement des Gobelins","Montagne basse des Craqueleurs"],"b":"Gob-Trotteur","l":50},{"i":400,"s":22,"t":"a","n":"Milipussien le Géant","z":["Égouts d'Astrub"],"b":"Milirat Strubien","l":50},{"i":401,"s":22,"t":"a","n":"Boostif l'Affamé","z":["Coin des Boos","Marécages d'Amakna","Marécages nauséabonds","Marécages sans fond"],"b":"Boo","l":50},{"i":402,"s":22,"t":"a","n":"Preskapwal le Tendancieux","z":["Bord de la forêt maléfique","Forêt d'Amakna","Forêt d'Astrub","Milifutaie"],"b":"Prespic","l":50},{"i":403,"s":22,"t":"a","n":"Chonstip la Passagère","z":["Plaine des Porkass"],"b":"Cochon de Lait","l":50},{"i":404,"s":22,"t":"a","n":"Torthur la Lutte","z":["Plage de la Tortue"],"b":"Tortue Jaune","l":50},{"i":405,"s":22,"t":"a","n":"Wabbitud le Constant","z":["Île de la Cawotte","Îlot de la Couronne"],"b":"Wabbit","l":100},{"i":406,"s":22,"t":"a","n":"Porfavor le Quémandeur","z":["Plaine des Porkass"],"b":"Berger Porkass","l":50},{"i":407,"s":22,"t":"a","n":"Robiolego l'Assemblé","z":["Massif de Cania"],"b":"Robionicle","l":100},{"i":408,"s":22,"t":"a","n":"Bouflet le Puéril","z":["Coin des Bouftous","Tainéla"],"b":"Chef de Guerre Bouftou","l":50},{"i":409,"s":22,"t":"a","n":"Cromikay le Néophyte","z":["Désolation de Sidimote"],"b":"Croc Gland","l":100},{"i":410,"s":22,"t":"a","n":"Tortenssia la Fleurie","z":["Plage de la Tortue"],"b":"Tortue Bleue","l":50},{"i":411,"s":23,"t":"a","n":"Bambouské le Camouflé","z":["Plantala"],"b":"Bambouto","l":150},{"i":412,"s":23,"t":"a","n":"Corpat le Vampire","z":["Pénates du Corbac"],"b":"Corbac","l":150},{"i":413,"s":23,"t":"a","n":"Pichduitre le Totem","z":["Calanques d'Astrub"],"b":"Pichon Blanc","l":50},{"i":414,"s":23,"t":"a","n":"Pichdourse le Puissant","z":["Calanques d'Astrub"],"b":"Pichon Bleu","l":50},{"i":415,"s":23,"t":"a","n":"Pichtoire l'Erudit","z":["Calanques d'Astrub"],"b":"Pichon Orange","l":50},{"i":416,"s":23,"t":"a","n":"Pichakoté le Dégoutant","z":["Calanques d'Astrub"],"b":"Pichon Vert","l":50},{"i":417,"s":23,"t":"a","n":"Tortorak le Cornu","z":["Plage de la Tortue"],"b":"Tortue Rouge","l":50},{"i":418,"s":23,"t":"a","n":"Maître Amboat le Moqueur","z":["Cryptes du cimetière"],"b":"Maître Vampire","l":50},{"i":419,"s":23,"t":"a","n":"Robocoop l'échangé","z":["Massif de Cania"],"b":"Robot Fléau","l":100},{"i":420,"s":23,"t":"a","n":"Fourapin le Chaud","z":["Jungle Interdite"],"b":"Fourbasse","l":100},{"i":421,"s":23,"t":"a","n":"Milipatte la Griffe","z":["Forêt d'Amakna","Forêt d'Astrub","Milifutaie"],"b":"Milimulou","l":50},{"i":422,"s":23,"t":"a","n":"Minoskour le Sauveur","z":["Île du Minotoror"],"b":"Minoskito","l":150},{"i":423,"s":23,"t":"a","n":"Neufedur le Flottant","z":["Forêt maléfique"],"b":"Noeul","l":50},{"i":424,"s":23,"t":"a","n":"Tortilleur le Coulé","z":["Plage de la Tortue"],"b":"Tortue Verte","l":50},{"i":425,"s":23,"t":"a","n":"Bwormage le Respectueux","z":["Campement des Bworks","Forêt maléfique","Montagne basse des Craqueleurs","Village des Bworks"],"b":"Bwork Mage","l":50},{"i":426,"s":23,"t":"a","n":"Wagnagnah le Sanglant","z":["Île de la Cawotte","Îlot de la Couronne"],"b":"Black Wabbit","l":100},{"i":427,"s":23,"t":"a","n":"Crognan le Barbare","z":["Désolation de Sidimote"],"b":"Crowneille","l":100},{"i":428,"s":23,"t":"a","n":"Rostensyl la Cuisinière","z":["Pâturages de Bonta"],"b":"Rose Obscure","l":50},{"i":429,"s":23,"t":"a","n":"Minsinistre l'Elu","z":["Passage vers Brâkmar","Territoire des Bandits"],"b":"Mineur Sombre","l":50},{"i":430,"s":23,"t":"a","n":"Barchwork le Multicolore","z":["Campement des Bworks","Forêt maléfique","Montagne basse des Craqueleurs","Village des Bworks"],"b":"Bwork Archer","l":50},{"i":431,"s":24,"t":"a","n":"Champayt l'Odorant","z":["Clairière des Bruce Boulgour"],"b":"Champa Bleu","l":50},{"i":432,"s":24,"t":"a","n":"Chamflay le Ballonné","z":["Clairière des Bruce Boulgour"],"b":"Champa Marron","l":50},{"i":433,"s":24,"t":"a","n":"Chamdblé le Cultivé","z":["Clairière des Bruce Boulgour"],"b":"Champa Rouge","l":50},{"i":434,"s":24,"t":"a","n":"Craquetuss le Piquant","z":["Montagne basse des Craqueleurs","Montagne des Craqueleurs"],"b":"Craqueboule","l":100},{"i":435,"s":24,"t":"a","n":"Mandalo l'Aqueuse","z":["Île du Minotoror"],"b":"Mandrine","l":150},{"i":436,"s":24,"t":"a","n":"Mallopiée l'épineuse","z":["Massif de Cania"],"b":"Malle Outillée","l":100},{"i":437,"s":24,"t":"a","n":"Garsim le Mort","z":["Cimetière d'Astrub"],"b":"Gargrouille","l":50},{"i":438,"s":24,"t":"a","n":"Draglida la Disparue","z":["Territoire des Dragodindes Sauvages"],"b":"Dragodinde Amande Sauvage","l":100},{"i":439,"s":24,"t":"a","n":"Gelaviv le Glaçon","z":["Péninsule des Gelées"],"b":"Gelée Rouge","l":100},{"i":440,"s":24,"t":"a","n":"Watdogue le Bien Nommé","z":["Îlot des Tombeaux"],"b":"Wabbit Squelette","l":100},{"i":441,"s":24,"t":"a","n":"Chafalfer l'Optimiste","z":["Bois de Litneg","Cimetière","Forêt maléfique"],"b":"Chafer Invisible","l":50},{"i":442,"s":24,"t":"a","n":"Crakmitaine le Faucheur","z":["Montagne basse des Craqueleurs","Montagne des Craqueleurs"],"b":"Craqueleur","l":100},{"i":443,"s":24,"t":"a","n":"Bworkasse le Dégoutant","z":["Campement des Bworks","Forêt maléfique","Montagne basse des Craqueleurs","Village des Bworks"],"b":"Bwork","l":50},{"i":444,"s":24,"t":"a","n":"Abrakroc l'édenté","z":["Orée de la forêt des Abraknydes"],"b":"Abraknyde","l":50},{"i":445,"s":24,"t":"a","n":"Krapahut le Randonneur","z":["Île du Minotoror"],"b":"Kraméléhon","l":150},{"i":446,"s":24,"t":"a","n":"Scapé l'Epée","z":["Plaine des Scarafeuilles"],"b":"Scarafeuille Blanc","l":50},{"i":447,"s":24,"t":"a","n":"Scarfayss le Balafré","z":["Plaine des Scarafeuilles"],"b":"Scarafeuille Bleu","l":50},{"i":448,"s":24,"t":"a","n":"Scarouarze l'Epopée","z":["Plaine des Scarafeuilles"],"b":"Scarafeuille Rouge","l":50},{"i":449,"s":24,"t":"a","n":"Scaramel le Fondant","z":["Plaine des Scarafeuilles"],"b":"Scarafeuille Vert","l":50},{"i":450,"s":24,"t":"a","n":"Ribibi le Cher","z":["Bois de Litneg","Cimetière","Forêt maléfique"],"b":"Rib","l":50},{"i":451,"s":25,"t":"a","n":"Blorie l'Assourdissante","z":["Lac de Cania"],"b":"Blop Coco","l":100},{"i":452,"s":25,"t":"a","n":"Blordur l'Infect","z":["Lac de Cania"],"b":"Blop Griotte","l":100},{"i":453,"s":25,"t":"a","n":"Bloporte le Veule","z":["Lac de Cania"],"b":"Blop Indigo","l":100},{"i":454,"s":25,"t":"a","n":"Blof l'Apathique","z":["Lac de Cania"],"b":"Blop Reinette","l":100},{"i":455,"s":25,"t":"a","n":"Boombata le Garde","z":["Chemin du Crâne"],"b":"Boomba","l":100},{"i":456,"s":25,"t":"a","n":"Farlon l'Enfant","z":["Territoire des Porcos","Labyrinthe du Dragon Cochon"],"b":"Cochon de farle","l":100},{"i":457,"s":25,"t":"a","n":"Scaratyn l'Huître","z":["Labyrinthe du Minotoror"],"b":"Scaratos","l":150},{"i":458,"s":25,"t":"a","n":"Chaffoin le Sournois","z":["Bois de Litneg","Cimetière"],"b":"Chafer Fantassin","l":50},{"i":459,"s":25,"t":"a","n":"Larvomatik le Propre","z":["Bord de la forêt maléfique","Côte d'Asse","Port de Madrestam","Prairies d'Astrub","Rivière Kawaii"],"b":"Larve Jaune","l":50},{"i":460,"s":25,"t":"a","n":"Tronkoneuz la Tranchante","z":["Orée de la forêt des Abraknydes"],"b":"Tronknyde","l":50},{"i":461,"s":25,"t":"a","n":"Abrakadnuzar","z":["Orée de la forêt des Abraknydes"],"b":"Abrakne","l":50},{"i":462,"s":25,"t":"a","n":"Chafemal le Bagarreur","z":["Bois de Litneg","Cimetière","Forêt maléfique"],"b":"Chafer","l":50},{"i":463,"s":25,"t":"a","n":"Crolnareff l'Exilé","z":["Marécages d'Amakna","Marécages nauséabonds","Marécages sans fond"],"b":"Crocodaille","l":50},{"i":464,"s":25,"t":"a","n":"Radoutable le Craint","z":["Égouts d'Astrub"],"b":"Scélérat Strubien","l":50},{"i":465,"s":25,"t":"a","n":"Scorpitène l'Enflammé","z":["Désolation de Sidimote"],"b":"Scorbute","l":100},{"i":466,"s":25,"t":"a","n":"Dragnoute l'Irascible","z":["Territoire des Dragodindes Sauvages"],"b":"Dragodinde Rousse Sauvage","l":100},{"i":467,"s":25,"t":"a","n":"Bulsavon le Gonflé","z":["Plantala"],"b":"Bulbuisson","l":150},{"i":468,"s":25,"t":"a","n":"Crustterus l'Organique","z":["Plage de Corail"],"b":"Crustorail Kouraçao","l":50},{"i":469,"s":25,"t":"a","n":"Crustensyl le Pragmatique","z":["Plage de Corail"],"b":"Crustorail Malibout","l":50},{"i":470,"s":25,"t":"a","n":"Cruskof le Rustre","z":["Plage de Corail"],"b":"Crustorail Morito","l":50},{"i":471,"s":26,"t":"a","n":"Crusmeyer le Pervers","z":["Plage de Corail"],"b":"Crustorail Passaoh","l":50},{"i":472,"s":26,"t":"a","n":"Forboyar l'Enigmatique","z":["Passage vers Brâkmar","Territoire des Bandits"],"b":"Forgeron Sombre","l":50},{"i":473,"s":26,"t":"a","n":"Floriste la Cannibale","z":["Plantala"],"b":"Floristile","l":150},{"i":474,"s":26,"t":"a","n":"Arabord la Cruche","z":["Forêt maléfique","Orée de la forêt des Abraknydes"],"b":"Arakne Majeure","l":50},{"i":475,"s":26,"t":"a","n":"Grandilok le Clameur","z":["Îlot de la Couronne","Îlot de Waldo"],"b":"Grand Pa Wabbit","l":100},{"i":476,"s":26,"t":"a","n":"Wokènrôl le Danseur","z":["Îlot de la Couronne","Îlot de Waldo"],"b":"Wo Wabbit","l":100},{"i":477,"s":26,"t":"a","n":"Cavordemal le Sorcier","z":["Plaine des Porkass"],"b":"Cavalier Porkass","l":50},{"i":478,"s":26,"t":"a","n":"Aboudbra le Porteur","z":["Mine des Dopeuls","Village des Dopeuls"],"b":"Aboub","l":50},{"i":479,"s":26,"t":"a","n":"Ameur la Laide","z":["Baie de Cania","Village des Dopeuls"],"b":"Amlub","l":50},{"i":480,"s":26,"t":"a","n":"Codenlgaz le Problème","z":["Baie de Cania","Village des Dopeuls"],"b":"Codem","l":50},{"i":481,"s":26,"t":"a","n":"Ginsenk le Stimulant","z":["Mine des Dopeuls","Village des Dopeuls"],"b":"Gink","l":50},{"i":482,"s":26,"t":"a","n":"Kiroyal le Sirupeux","z":["Baie de Cania","Village des Dopeuls"],"b":"Kirevam","l":50},{"i":483,"s":26,"t":"a","n":"Let le Rond","z":["Baie de Cania","Village des Dopeuls"],"b":"Let Emoliug","l":50},{"i":484,"s":26,"t":"a","n":"Nelvin le Boulet","z":["Mine des Dopeuls","Village des Dopeuls"],"b":"Negbib","l":50},{"i":485,"s":26,"t":"a","n":"Nipulnislip l'Exhibitionniste","z":["Mine des Dopeuls","Village des Dopeuls"],"b":"Nipul","l":50},{"i":486,"s":26,"t":"a","n":"Osuxion le Vampirique","z":["Mine des Dopeuls","Village des Dopeuls"],"b":"Osurc","l":50},{"i":487,"s":26,"t":"a","n":"Susbewl l'Hypocrite","z":["Baie de Cania","Village des Dopeuls"],"b":"Susej","l":50},{"i":488,"s":26,"t":"a","n":"Koktèle le Secoué","z":["Île des naufragés","Plage de la Tortue"],"b":"Kokoko","l":50},{"i":489,"s":26,"t":"a","n":"Chafmarcel le Fêtard","z":["Bois de Litneg","Cimetière des Héros","Cimetière des Torturés","Forêt maléfique"],"b":"Chafer Archer","l":50},{"i":490,"s":26,"t":"a","n":"Chalan le Commerçant","z":["Bois de Litneg","Cimetière des Héros","Cimetière des Torturés"],"b":"Chafer Lancier","l":50},{"i":491,"s":27,"t":"a","n":"Chamitant le Dilettante","z":["Égouts de Bonta","Égouts de Brâkmar","Souterrains du Château d'Amakna"]},{"i":492,"s":27,"t":"a","n":"Doktopuss le Maléfique","z":["Canyon sauvage","Forêt de Kaliptus","Lacs enchantés"],"b":"Dok Alako","l":100},{"i":493,"s":27,"t":"a","n":"Germinol l'Indigent","z":["Labyrinthe du Minotoror"],"b":"Gamino","l":150},{"i":494,"s":27,"t":"a","n":"Koalastrof la Naturelle","z":["Forêt de Kaliptus","Lacs enchantés"],"b":"Koalak Immature","l":100},{"i":495,"s":27,"t":"a","n":"Ouature la Mobile","z":["Cimetière d'Astrub"],"b":"La Ouassingue","l":50},{"i":496,"s":27,"t":"a","n":"Ouassébo l'Esthète","z":["Cimetière d'Astrub"],"b":"Le Ouassingue","l":50},{"i":497,"s":27,"t":"a","n":"Ouashouash l'Exubérant","z":["Tourbière nauséabonde","Tourbière sans fond"],"b":"Le Ouassingue Entourbé","l":150},{"i":498,"s":27,"t":"a","n":"Palmito le Menteur","z":["Plage de Corail"],"b":"Palmifleur Malibout","l":50},{"i":499,"s":27,"t":"a","n":"Palmiche le Serein","z":["Plage de Corail"],"b":"Palmifleur Morito","l":50},{"i":500,"s":27,"t":"a","n":"Palmiflette le Convivial","z":["Plage de Corail"],"b":"Palmifleur Passaoh","l":50},{"i":501,"s":27,"t":"a","n":"Sampi l'Eternel","z":["Plaine des Porkass"],"b":"Sanglier des Plaines","l":50},{"i":502,"s":27,"t":"a","n":"Abrakildas le Vénérable","z":["Forêt Sombre"],"b":"Abraknyde Vénérable","l":100},{"i":503,"s":27,"t":"a","n":"Cramikaz le Suicidaire","z":["Plaines Rocheuses"],"b":"Craqueleur des Plaines","l":100},{"i":504,"s":27,"t":"a","n":"Koko la Violente","z":["Akwadala"],"b":"Kokom","l":150},{"i":505,"s":27,"t":"a","n":"Chafrit le Barbare","z":["Cimetière des Héros","Cimetière des Torturés"],"b":"Chafer d'Élite","l":50},{"i":506,"s":27,"t":"a","n":"Craquetou le Fissuré","z":["Plaines herbeuses"],"b":"Craqueboule Poli","l":150},{"i":507,"s":27,"t":"a","n":"Maître Onom le Régulier","z":["Routes Rocailleuses"]},{"i":508,"s":27,"t":"a","n":"Grenuche la Gentille","z":["Plantala"],"b":"Grenufar","l":150},{"i":509,"s":27,"t":"a","n":"Kannibal le Lecteur","z":["Forêt des Masques"],"b":"Kanniboul Archer","l":100},{"i":510,"s":27,"t":"a","n":"Kapota la Fraise","z":["Forêt des Masques"],"b":"Kanniboul Jav","l":100},{"i":511,"s":28,"t":"a","n":"Kannémik le Maigre","z":["Forêt des Masques"],"b":"Kanniboul Sarbak","l":100},{"i":512,"s":28,"t":"a","n":"Kannisterik le Forcené","z":["Forêt des Masques"],"b":"Kanniboul Thierry","l":100},{"i":513,"s":28,"t":"a","n":"Sarkastik l'Incompris","z":["Akwadala"],"b":"Sarkapwane","l":150},{"i":514,"s":28,"t":"a","n":"Palmbytch la Bronzée","z":["Plage de Corail"],"b":"Palmifleur Kouraçao","l":50},{"i":515,"s":28,"t":"a","n":"Ratlbol l'Aigri","z":["Égouts de Bonta","Égouts de Brâkmar","Souterrains du Château d'Amakna"],"b":"Rat d'Égoutant","l":100},{"i":516,"s":28,"t":"a","n":"Ougaould le Parasite","z":["Cimetière","Cimetière des Héros","Cimetière des Torturés"],"b":"Chafer Draugr","l":50},{"i":517,"s":28,"t":"a","n":"Corboyard l'Enigmatique","z":["Plage de Corail"],"b":"Corailleur","l":50},{"i":518,"s":28,"t":"a","n":"Kwaké le Piraté","z":["Montagne des Craqueleurs"],"b":"Kwak de Vent","l":50},{"i":519,"s":28,"t":"a","n":"Kwakwatique le Trempé","z":["Montagne des Craqueleurs"],"b":"Kwak de Glace","l":50},{"i":520,"s":28,"t":"a","n":"Kwakolak le Chocolaté","z":["Montagne des Craqueleurs"],"b":"Kwak de Flamme","l":50},{"i":521,"s":28,"t":"a","n":"Kwakamole l'Appétissant","z":["Montagne des Craqueleurs"],"b":"Kwak de Terre","l":50},{"i":522,"s":28,"t":"a","n":"Porsalé le Râleur","z":["Territoire des Porcos","Labyrinthe du Dragon Cochon"],"b":"Porsalu","l":100},{"i":523,"s":28,"t":"a","n":"Dragioli le Succulent","z":["Sanctuaire des Dragoeufs"],"b":"Dragacé","l":150},{"i":524,"s":28,"t":"a","n":"Vétaurine l'énergisé","z":["Routes Rocailleuses"],"b":"Vétauran","l":100},{"i":525,"s":28,"t":"a","n":"Moumoute la Douce","z":["Rivages sufokien"],"b":"Moumoule","l":50},{"i":526,"s":28,"t":"a","n":"Parapadkouï l'émasculé","z":["Terrdala"],"b":"Parashukouï","l":150},{"i":527,"s":28,"t":"a","n":"Bebetto l'Intellectuel","z":["Akwadala"],"b":"Betto","l":150},{"i":528,"s":28,"t":"a","n":"Serpistule le Purulent","z":["Labyrinthe du Minotoror"],"b":"Serpiplume","l":150},{"i":529,"s":28,"t":"a","n":"Akaka le Souillé","z":["Akwadala"],"b":"Akakwa","l":150},{"i":530,"s":28,"t":"a","n":"Rauligo le Sale","z":["Rivages sufokien"],"b":"Raul Mops","l":50},{"i":531,"s":29,"t":"a","n":"Tilolo la Bien Moulée","z":["Terrdala"],"b":"Lolojiki","l":150},{"i":532,"s":29,"t":"a","n":"Caboume l'Artilleur","z":["Chemin du Crâne"],"b":"Canondorf","l":100},{"i":533,"s":29,"t":"a","n":"Nakuneuye le Borgne","z":["Chemin du Crâne"],"b":"Nakunbra","l":100},{"i":534,"s":29,"t":"a","n":"Dragstayr le Fonceur","z":["Presqu'île des Dragoeufs"],"b":"Dragoeuf Calcaire","l":100},{"i":535,"s":29,"t":"a","n":"Dragmoclaiss le Fataliste","z":["Presqu'île des Dragoeufs"],"b":"Dragoeuf Ardoise","l":100},{"i":536,"s":29,"t":"a","n":"Dragkouine la Déguisée","z":["Presqu'île des Dragoeufs"],"b":"Dragoeuf Argile","l":100},{"i":537,"s":29,"t":"a","n":"Dragnostik le Sceptique","z":["Presqu'île des Dragoeufs"],"b":"Dragoeuf Charbon","l":100},{"i":538,"s":29,"t":"a","n":"Koamaembair le Coulant","z":["Canyon sauvage"],"b":"Koalak Coco","l":100},{"i":539,"s":29,"t":"a","n":"Koakofrui le Confit","z":["Canyon sauvage"],"b":"Koalak Griotte","l":100},{"i":540,"s":29,"t":"a","n":"Koaskette la Chapelière","z":["Canyon sauvage"],"b":"Koalak Indigo","l":100},{"i":541,"s":29,"t":"a","n":"Koarmit la Batracienne","z":["Canyon sauvage"],"b":"Koalak Reinette","l":100},{"i":542,"s":29,"t":"a","n":"Ratéhaifaim le Professeur","z":["Égouts de Bonta","Égouts de Brâkmar"],"b":"Rat d'Hyoactif","l":100},{"i":543,"s":29,"t":"a","n":"Sparoket le Lanceur","z":["Arche d'Otomaï"],"b":"Sparo","l":100},{"i":544,"s":29,"t":"a","n":"Chiendanlémin l'Illusionniste","z":["Jungle obscure"],"b":"Chiendent","l":150},{"i":545,"s":29,"t":"a","n":"Fanlabiz le Véloce","z":["Bordure de Brâkmar"],"b":"Fantôme Apero","l":50},{"i":546,"s":29,"t":"a","n":"Fandanleuil le Précis","z":["Bordure de Brâkmar"],"b":"Fantôme aux Plates","l":50},{"i":547,"s":29,"t":"a","n":"Fantoch le Pantin","z":["Bordure de Brâkmar"],"b":"Fantôme Hicide","l":50},{"i":548,"s":29,"t":"a","n":"Fantrask la Rêveuse","z":["Bordure de Brâkmar"],"b":"Fantôme Égérie","l":50},{"i":549,"s":29,"t":"a","n":"Barebourd le Comte","z":["Arche d'Otomaï"],"b":"Barbroussa","l":100},{"i":550,"s":29,"t":"a","n":"Nerdeubeu le Flagellant","z":["Jungle obscure"],"b":"Nerbe","l":150},{"i":551,"s":30,"t":"a","n":"Crathdogue le Cruel","z":["Plaines herbeuses"],"b":"Craqueleur Poli","l":150},{"i":552,"s":30,"t":"a","n":"Toufou le Benêt","z":["Plaines herbeuses"],"b":"Bitouf des Plaines","l":150},{"i":553,"s":30,"t":"a","n":"Crok le Beau","z":["Marécages d'Amakna","Marécages nauséabonds","Marécages sans fond"],"b":"Chef Crocodaille","l":100},{"i":554,"s":30,"t":"a","n":"Alhoui le Répondeur","z":["Dents de Pierre","Village des Kanigs"],"b":"Alhyène","l":190},{"i":555,"s":30,"t":"a","n":"Pantacour le Long","z":["Dents de Pierre","Village des Kanigs"],"b":"Panthégros","l":190},{"i":556,"s":30,"t":"a","n":"Orfélyre le Charmeur","z":["Dents de Pierre","Village des Kanigs"],"b":"Orfélin","l":190},{"i":557,"s":30,"t":"a","n":"Félyssion la Gourmande","z":["Dents de Pierre","Village des Kanigs"],"b":"Félygiène","l":190},{"i":558,"s":30,"t":"a","n":"Kanibière l'Encordée","z":["Dents de Pierre","Village des Kanigs"],"b":"Kaniblou","l":190},{"i":559,"s":30,"t":"a","n":"Kanasukr le Mielleux","z":["Routes Rocailleuses"],"b":"Kanigrou","l":100},{"i":560,"s":30,"t":"a","n":"Mufguedin le Suprême","z":["Plaines herbeuses"],"b":"Mufafah","l":150},{"i":561,"s":30,"t":"a","n":"Muloufok l'Hilarant","z":["Hauts des Hurlements"],"b":"Mulou","l":100},{"i":562,"s":30,"t":"a","n":"Bonpake le Chavireur","z":["Terrdala"],"b":"Ishigro Pake","l":150},{"i":563,"s":30,"t":"a","n":"Kido l'Âtre","z":["Plaines herbeuses"],"b":"Kido","l":150},{"i":564,"s":30,"t":"a","n":"Kilimanj'haro le Grimpeur","z":["Plaines herbeuses"],"b":"Kilibriss","l":150},{"i":565,"s":30,"t":"a","n":"Larvaloeil l'Émue","z":["Champs de Cania"],"b":"Larve Champêtre","l":100},{"i":566,"s":30,"t":"a","n":"Souristiti l'Immortalisée","z":["Champs de Cania"],"b":"Souris Verte","l":100},{"i":567,"s":30,"t":"a","n":"Bourde le Maladroit","z":["Champs de Cania"],"b":"Bourdard","l":100},{"i":568,"s":30,"t":"a","n":"Fouflay le Retombé","z":["Routes Rocailleuses"],"b":"Foufayteur","l":100},{"i":569,"s":30,"t":"a","n":"Dragonienne l'Econome","z":["Sanctuaire des Dragoeufs"],"b":"Dragueuse","l":150},{"i":570,"s":30,"t":"a","n":"Guerrite le Veilleur","z":["Vallée de la Morh'Kitu"],"b":"Guerrier Koalak","l":150},{"i":571,"s":31,"t":"a","n":"Lichangora l'ImmaculÉe","z":["Aerdala"],"b":"Lichangoro","l":150},{"i":572,"s":31,"t":"a","n":"Onihylis le Destructeur","z":["Forêt maléfique"]},{"i":573,"s":31,"t":"a","n":"Warkolad l'Etreinte","z":["Canyon sauvage","Forêt de Kaliptus"],"b":"Warko Marron","l":100},{"i":574,"s":31,"t":"a","n":"Inopenope le Négatif","z":["Aerdala"],"b":"Ino-Naru","l":150},{"i":575,"s":31,"t":"a","n":"Abrakanette l'Encapsulé","z":["Forêt Sombre"],"b":"Abraknyde Sombre","l":100},{"i":576,"s":31,"t":"a","n":"Tétonée la Plantureuse","z":["Terrdala"],"b":"Tétonuki","l":150},{"i":577,"s":31,"t":"a","n":"Fossamoel le Juteux","z":["Cimetière primitif"],"b":"Fossoyeur Koalak","l":150},{"i":578,"s":31,"t":"a","n":"Gloubibou le Gars","z":["Jungle Interdite"],"b":"Gloutovore","l":100},{"i":579,"s":31,"t":"a","n":"Koasossyal le Psychopathe","z":["Forêt de Kaliptus"],"b":"Koalak Forestier","l":100},{"i":580,"s":31,"t":"a","n":"Pékeutar le Tireur","z":["Lacs enchantés"],"b":"Pékeualak","l":100},{"i":581,"s":31,"t":"a","n":"Piradain le Pingre","z":["Lacs enchantés"],"b":"Piralak","l":100},{"i":582,"s":31,"t":"a","n":"Abraklette le Fondant","z":["Forêt Sombre"],"b":"Abrakne Sombre","l":100},{"i":583,"s":31,"t":"a","n":"Koamag'oel le Défiguré","z":["Cimetière primitif"],"b":"Chevaucheur Koalak","l":150},{"i":584,"s":31,"t":"a","n":"Meuroup le Prêtre","z":["Tronc de l'arbre Hakam"],"b":"Meupette","l":190},{"i":585,"s":31,"t":"a","n":"Rooroku l'Imposant","z":["Aerdala"],"b":"Kurookin","l":150},{"i":586,"s":31,"t":"a","n":"Dragdikal le Décisif","z":["Sanctuaire des Dragoeufs"],"b":"Dragnarok","l":150},{"i":587,"s":31,"t":"a","n":"Dragobert le Monarque","z":["Sanctuaire des Dragoeufs"],"b":"Draguaindrop","l":150},{"i":588,"s":31,"t":"a","n":"Diskord le Belliqueux","z":["Village de la Canopée","Village des Zoths"],"b":"Disciple Zoth","l":150},{"i":589,"s":31,"t":"a","n":"Brouste l'Humiliant","z":["Jungle obscure"],"b":"Brouture","l":150},{"i":590,"s":31,"t":"a","n":"Bitoven le Musicien","z":["Jungle obscure"],"b":"Bitouf Sombre","l":150},{"i":591,"s":32,"t":"a","n":"Ecorfé la Vive","z":["Jungle obscure"],"b":"Fécorce","l":150},{"i":592,"s":32,"t":"a","n":"Floanna la Blonde","z":["Jungle obscure"],"b":"Floribonde","l":150},{"i":593,"s":32,"t":"a","n":"Koalvissie le Chauve","z":["Vallée de la Morh'Kitu"],"b":"Koalak Sanguin","l":150},{"i":594,"s":32,"t":"a","n":"Koalaboi le Calorifère","z":["Vallée de la Morh'Kitu"],"b":"Koalak Farouche","l":150},{"i":595,"s":32,"t":"a","n":"Mamakomou l'âge","z":["Canyon sauvage"],"b":"Mama Koalak","l":100},{"i":596,"s":32,"t":"a","n":"Momikonos la Bandelette","z":["Cimetière primitif"],"b":"Momie Koalak","l":150},{"i":597,"s":32,"t":"a","n":"Bouliver le Géant","z":["Tourbière nauséabonde","Tourbière sans fond"],"b":"Bourbassingue","l":150},{"i":598,"s":32,"t":"a","n":"Wara l'Amer","z":["Vallée de la Morh'Kitu"],"b":"Warko Violet","l":150},{"i":599,"s":32,"t":"a","n":"Gastroth la Contagieuse","z":["Village de la Canopée","Village des Zoths"],"b":"Gamine Zoth","l":150},{"i":600,"s":32,"t":"a","n":"Guerumoth le Collant","z":["Village de la Canopée","Village des Zoths"],"b":"Guerrier Zoth","l":150},{"i":601,"s":32,"t":"a","n":"Tourbiket le Virevoletant","z":["Tourbière nauséabonde","Tourbière sans fond"],"b":"Tourbassingue","l":150},{"i":602,"s":32,"t":"a","n":"Abrakine le Sombre","z":["Jungle obscure"],"b":"Abrakleur Sombre","l":150},{"i":603,"s":32,"t":"a","n":"Dragminster le Magicien","z":["Souterrains des Dragoeufs","Village des Dragoeufs"],"b":"Dragoss Calcaire","l":100},{"i":604,"s":32,"t":"a","n":"Dragtarus le Bellâtre","z":["Souterrains des Dragoeufs","Village des Dragoeufs"],"b":"Dragoss Argile","l":100},{"i":605,"s":32,"t":"a","n":"Draquetteur le Voleur","z":["Souterrains des Dragoeufs","Village des Dragoeufs"],"b":"Dragoss Charbon","l":100},{"i":606,"s":32,"t":"a","n":"Drageaufol la Joyeuse","z":["Souterrains des Dragoeufs","Village des Dragoeufs"],"b":"Dragoss Ardoise","l":100},{"i":607,"s":32,"t":"a","n":"Pétarfoutu le Mouillé","z":["Feudala"],"b":"Pétartifoux","l":150},{"i":608,"s":32,"t":"a","n":"Fangshui la Dysorthographiée","z":["Aerdala"],"b":"Fangshu","l":150},{"i":609,"s":32,"t":"a","n":"Bigbadaboum l'élémentaire","z":["Feudala"],"b":"Boumbardier","l":150},{"i":610,"s":32,"t":"a","n":"Drakolage le Tentateur","z":["Canyon sauvage"],"b":"Drakoalak","l":100},{"i":611,"s":33,"t":"a","n":"Faufoll la Joyeuse","z":["Vallée de la Morh'Kitu"],"b":"Fauchalak","l":150},{"i":612,"s":33,"t":"a","n":"Maître Koantik le Théoricien","z":["Cimetière primitif"],"b":"Maître Koalak","l":150},{"i":613,"s":33,"t":"a","n":"Poolopo la Traditionnelle","z":["Feuillage de l'arbre Hakam","Tronc de l'arbre Hakam"],"b":"Poolay","l":190},{"i":614,"s":33,"t":"a","n":"Trooyé l'Oxydé","z":["Bois de Litneg"],"b":"Trollaraj","l":150},{"i":615,"s":33,"t":"a","n":"Seripoth l'Ennemi","z":["Village de la Canopée","Village des Zoths"],"b":"Sergent Zoth","l":150},{"i":616,"s":33,"t":"a","n":"Kaskapointhe la Couverte","z":["Feuillage de l'arbre Hakam","Tronc de l'arbre Hakam"],"b":"Kaskargo","l":190},{"i":617,"s":33,"t":"a","n":"Toutouf le Velu","z":["Feuillage de l'arbre Hakam","Tronc de l'arbre Hakam"],"b":"Bitouf Aérien","l":190},{"i":618,"s":33,"t":"a","n":"Abrinos le Clair","z":["Tronc de l'arbre Hakam"],"b":"Abrakleur Clair","l":190},{"i":619,"s":33,"t":"a","n":"Don Kizoth l'Obstiné","z":["Village de la Canopée","Village des Zoths"],"b":"Maître Zoth","l":150},{"i":620,"s":33,"t":"a","n":"Chamilero le Malchanceux","z":["Domaine des Fungus"],"b":"Champaknyde","l":190},{"i":621,"s":33,"t":"a","n":"Crachefouxtre le Surpris","z":["Feudala"],"b":"Crachefoux","l":150},{"i":622,"s":33,"t":"a","n":"Tromplamor le Survivant","z":["Domaine des Fungus"],"b":"Tromperelle","l":190},{"i":623,"s":33,"t":"a","n":"Chamoute le Duveteux","z":["Caverne des Fungus"],"b":"Champodonte","l":190},{"i":624,"s":33,"t":"a","n":"Jiankor le Radoteur","z":["Cimetière de Grobe"],"b":"Jiangshi-Nobi","l":190},{"i":625,"s":33,"t":"a","n":"Onabuémangé la Rassasiée","z":["Cimetière de Grobe"],"b":"Onabu-Geisha","l":190},{"i":626,"s":33,"t":"a","n":"Champoul l'Illuminé","z":["Caverne des Fungus"],"b":"Champbis","l":190},{"i":627,"s":33,"t":"a","n":"Champolyon le Polyglotte","z":["Caverne des Fungus","Domaine des Fungus"],"b":"Champ À Gnons","l":190},{"i":628,"s":33,"t":"a","n":"Champmé le Méchant","z":["Caverne des Fungus","Domaine des Fungus"],"b":"Champmane","l":190},{"i":629,"s":33,"t":"a","n":"Tambouille le Gastronome","z":["Cimetière de Grobe"],"b":"Tambouraï","l":190},{"i":630,"s":33,"t":"a","n":"Tsucékoi la Colporteuse","z":["Cimetière de Grobe"],"b":"Tsukinochi","l":190},{"i":631,"s":34,"t":"a","n":"Tronquette la Réduite","z":["Feudala"],"b":"Rouquette","l":150},{"i":632,"s":34,"t":"a","n":"Roy le Merlin","z":["Tourbière nauséabonde","Tourbière sans fond"],"b":"Roissingue","l":190},{"i":633,"s":34,"t":"a","n":"Bakaglace le Congelé","z":["Mont des Tombeaux"],"b":"Bakazako","l":190},{"i":634,"s":34,"t":"a","n":"Kaonucléair l'Instable","z":["Mont des Tombeaux"],"b":"Kaonashi","l":190},{"i":635,"s":34,"t":"a","n":"Madgang le Docteur","z":["Mont des Tombeaux"],"b":"Madura","l":190},{"i":636,"s":34,"t":"a","n":"Tsumani l'Inondeur","z":["Mont des Tombeaux"],"b":"Tsume-Bozu","l":190},{"i":999,"s":35,"t":"b","n":"Kralamoure Géant","z":["Antre du Kralamoure Géant"]}];
+const TYPE_LABEL = {m:'Monstres', b:'Boss', a:'Archimonstres'};
+const KEY = 'dofusOcreTouch.v1';
+let memStore = null;
+
+function load(){
+  let raw = null;
+  try { raw = localStorage.getItem(KEY); } catch(e) { raw = memStore; }
+  if(raw){ try { return JSON.parse(raw); } catch(e){} }
+  return {cur:'p1', ui:{hide:false, hideDone:false}, profiles:{p1:newProfile('Mon perso')}};
+}
+function newProfile(name){ return {name, caught:[], hidden:[], valid:[], custom:[], open:[]}; }
+function save(){
+  const raw = JSON.stringify(S);
+  try { localStorage.setItem(KEY, raw); } catch(e) { memStore = raw; }
+}
+let S = load();
+S.ui = S.ui || {hide:false, hideDone:false};
+let editMode = false;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+
+function P(){ return S.profiles[S.cur]; }
+function sets(){
+  const p = P();
+  return {caught:new Set(p.caught), hidden:new Set(p.hidden), valid:new Set(p.valid), open:new Set(p.open)};
+}
+function allMonsters(){ return BASE.concat(P().custom); }
+function activeMonsters(){ const h = new Set(P().hidden); return allMonsters().filter(m => !h.has(m.i)); }
+function byStep(list){
+  const g = {};
+  for(const m of list){ (g[m.s] = g[m.s] || []).push(m); }
+  return g;
+}
+function stepType(list){ return list.length ? list[0].t : 'm'; }
+function currentStep(){
+  const v = new Set(P().valid);
+  for(let s=1; s<=35; s++) if(!v.has(s)) return s;
+  return null;
+}
+
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove('on'), 1800);
+}
+
+function renderHeader(){
+  const sel = $('#profileSel');
+  sel.innerHTML = Object.entries(S.profiles).map(([id,p]) => `<option value="${id}" ${id===S.cur?'selected':''}>${esc(p.name)}</option>`).join('');
+  const act = activeMonsters();
+  const c = new Set(P().caught);
+  const n = act.filter(m => c.has(m.i)).length;
+  const pct = act.length ? Math.floor(n*100/act.length) : 0;
+  $('#gCount').textContent = n; $('#gTotal').textContent = act.length;
+  $('#gPct').textContent = pct + ' %'; $('#gBar').style.width = pct + '%';
+}
+
+function metaLine(m, withStep){
+  const parts = [];
+  if(m.b) parts.push('<b>' + esc(m.b) + '</b>');
+  if(m.l) parts.push('niv. ' + m.l);
+  if(m.z && m.z.length) parts.push(esc(m.z.join(', ')));
+  return (withStep ? `<span class="sbadge">É${m.s}</span>` : '') + parts.join(' · ');
+}
+
+function rowHTML(m, st, withStep){
+  const got = st.caught.has(m.i), hid = st.hidden.has(m.i);
+  let extra = '';
+  if(editMode && !withStep){
+    extra = `<button class="mini" data-hide="${m.i}">${hid ? 'Réafficher' : 'Masquer'}</button>`;
+    if(String(m.i).startsWith('c')) extra += `<button class="mini" data-del="${m.i}">Suppr.</button>`;
+  }
+  return `<div class="row ${got?'got':''} ${hid?'hid':''}" data-id="${m.i}">
+    <div class="box">✓</div>
+    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${extra}</div>`;
+}
+
+function renderSteps(){
+  const st = sets();
+  const all = allMonsters();
+  const groups = byStep(editMode ? all : all.filter(m => !st.hidden.has(m.i)));
+  const cur = currentStep();
+  // Current step summary
+  const box = $('#curBox');
+  if(cur === null){
+    box.innerHTML = `<div class="k">Quête terminée</div><div class="v">🥚 Dofus Ocre obtenu !</div><div class="s">Toutes les étapes sont validées. Bravo !</div>`;
+  } else {
+    const list = (groups[cur]||[]).filter(m => !st.hidden.has(m.i));
+    const left = list.filter(m => !st.caught.has(m.i));
+    const lbl = cur === 35 ? 'Étape finale' : TYPE_LABEL[stepType(list)];
+    box.innerHTML = `<div class="k">Étape en cours</div><div class="v">Étape ${cur} · ${lbl}</div>
+      <div class="s">${left.length ? `Il te reste <b style="color:var(--ink)">${left.length}</b> âme${left.length>1?'s':''} à capturer : ${left.slice(0,4).map(m=>esc(m.n)).join(', ')}${left.length>4?'…':''}` : `Tout est capturé : retourne voir Otomaï en [-55,15] pour valider l'étape.`}</div>`;
+  }
+  let html = '';
+  for(let s=1; s<=35; s++){
+    const list = groups[s] || [];
+    const visible = list.filter(m => !st.hidden.has(m.i));
+    const done = st.valid.has(s);
+    if(done && S.ui.hideDone && s !== cur) continue;
+    const n = visible.filter(m => st.caught.has(m.i)).length;
+    const pct = visible.length ? Math.round(n*100/visible.length) : 0;
+    const t = s === 35 ? 'b' : stepType(list);
+    const isOpen = st.open.has(s);
+    let rows = '';
+    if(isOpen){
+      const shown = list.filter(m => !(S.ui.hide && st.caught.has(m.i) && !editMode));
+      rows = shown.map(m => rowHTML(m, st, false)).join('') || `<div class="empty">Tout est capturé pour cette étape ✓</div>`;
+    }
+    html += `<div class="step ${done?'done':''} ${s===cur?'cur':''} ${isOpen?'open':''}" data-step="${s}">
+      <div class="sh" data-toggle="${s}">
+        <div class="num">${done ? '✓' : s}</div>
+        <div class="sinfo">
+          <div class="stitle"><span>Étape ${s}<span class="tag ${t}">${s===35?'Final':TYPE_LABEL[t]}</span></span><em>${n} / ${visible.length}</em></div>
+          <div class="bar"><i style="width:${pct}%"></i></div>
+        </div>
+        <span class="chev">›</span>
+      </div>
+      <div class="sb">${rows}
+        <div class="sactions">
+          ${done ? `<button class="btn" data-unvalid="${s}">Annuler la validation</button>` : `<button class="btn pri" data-valid="${s}">Étape validée chez Otomaï</button>`}
+          <button class="btn" data-all="${s}">Tout cocher</button>
+          ${editMode ? `<button class="btn" data-add="${s}">+ Ajouter un monstre</button>` : ''}
+        </div>
+      </div>
+    </div>`;
+  }
+  $('#steps').innerHTML = html;
+  $('#chipHide').classList.toggle('on', !!S.ui.hide);
+  $('#chipDone').classList.toggle('on', !!S.ui.hideDone);
+  $('#chipEdit').classList.toggle('on', editMode);
+}
+
+function renderSearch(){
+  const q = norm($('#q').value.trim());
+  const ft = $('#fType').value, fs = $('#fState').value, fst = $('#fStep').value;
+  const st = sets();
+  let list = activeMonsters().filter(m => {
+    if(ft && m.t !== ft) return false;
+    if(fst && String(m.s) !== fst) return false;
+    const got = st.caught.has(m.i);
+    if(fs === 'todo' && got) return false;
+    if(fs === 'got' && !got) return false;
+    if(q){
+      const hay = norm(m.n + ' ' + (m.b||'') + ' ' + (m.z||[]).join(' '));
+      if(!q.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
+  });
+  const total = list.length;
+  list = list.slice(0, 150);
+  $('#results').innerHTML = list.length
+    ? list.map(m => rowHTML(m, st, true)).join('') + (total > 150 ? `<div class="empty">… ${total-150} autres résultats, affine ta recherche</div>` : '')
+    : `<div class="empty">Aucun résultat</div>`;
+}
+
+function renderStats(){
+  const st = sets();
+  const act = activeMonsters();
+  const got = act.filter(m => st.caught.has(m.i)).length;
+  $('#statsTop').innerHTML = `
+    <div class="stat"><div class="v">${got}</div><div class="l">capturées</div></div>
+    <div class="stat"><div class="v">${act.length-got}</div><div class="l">restantes</div></div>
+    <div class="stat"><div class="v">${st.valid.size}/35</div><div class="l">étapes validées</div></div>`;
+  $('#statsType').innerHTML = ['m','b','a'].map(t => {
+    const l = act.filter(m => m.t === t), n = l.filter(m => st.caught.has(m.i)).length;
+    const p = l.length ? Math.round(n*100/l.length) : 0;
+    return `<div style="margin-bottom:10px"><div class="gline"><span>${TYPE_LABEL[t]}</span><b>${n} / ${l.length}</b></div><div class="bar"><i style="width:${p}%"></i></div></div>`;
+  }).join('');
+  const zones = {};
+  for(const m of act){ if(st.caught.has(m.i)) continue; for(const z of (m.z||[])) (zones[z] = zones[z] || []).push(m); }
+  const top = Object.entries(zones).sort((a,b) => b[1].length - a[1].length).slice(0, 12);
+  $('#statsZones').innerHTML = top.length ? top.map(([z,l]) => `<div class="prow"><span class="n">${esc(z)}</span><button class="mini" data-zone="${esc(z)}">${l.length} à capturer ›</button></div>`).join('') : `<div class="empty">Plus rien à capturer 🎉</div>`;
+}
+
+function renderSettings(){
+  $('#profiles').innerHTML = Object.entries(S.profiles).map(([id,p]) => `
+    <div class="prow"><span class="n">${id===S.cur?'● ':''}${esc(p.name)} <span style="color:var(--faint);font-size:12px">· ${p.caught.length} âmes · ${p.valid.length} étapes</span></span>
+    <button class="mini" data-ren="${id}">Renommer</button>${Object.keys(S.profiles).length>1?`<button class="mini" data-delp="${id}">Suppr.</button>`:''}</div>`).join('');
+  $('#backup').value = exportCode();
+}
+
+function exportCode(){
+  return JSON.stringify({app:'ocre-touch', v:1, date:new Date().toISOString().slice(0,10), profiles:S.profiles});
+}
+
+function renderAll(){ renderHeader(); renderSteps(); if(curView==='search') renderSearch(); if(curView==='stats') renderStats(); if(curView==='settings') renderSettings(); }
+
+/* --- Actions --- */
+function toggleCaught(id){
+  const p = P(); const k = isNaN(id) ? id : Number(id);
+  const i = p.caught.indexOf(k);
+  if(i >= 0) p.caught.splice(i,1); else p.caught.push(k);
+  save(); renderHeader();
+}
+function toggleIn(arr, v){ const i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
+
+function onListClick(e){
+  const t = e.target.closest('[data-hide],[data-del],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-add],.row');
+  if(!t) return;
+  const p = P();
+  const idOf = v => isNaN(v) ? v : Number(v);
+  if(t.dataset.hide){ toggleIn(p.hidden, idOf(t.dataset.hide)); save(); renderAll(); return; }
+  if(t.dataset.del){ const id = t.dataset.del; p.custom = p.custom.filter(m => m.i !== id); p.caught = p.caught.filter(x => x !== id); save(); renderAll(); return; }
+  if(t.dataset.toggle){ toggleIn(p.open, Number(t.dataset.toggle)); save(); renderSteps(); return; }
+  if(t.dataset.valid){
+    const s = Number(t.dataset.valid);
+    if(!p.valid.includes(s)) p.valid.push(s);
+    p.open = p.open.filter(x => x !== s);
+    const nx = currentStep(); if(nx && !p.open.includes(nx)) p.open.push(nx);
+    save(); renderAll(); toast(s===35 ? '🥚 Dofus Ocre obtenu !' : `Étape ${s} validée ✓`); return;
+  }
+  if(t.dataset.unvalid){ const s = Number(t.dataset.unvalid); p.valid = p.valid.filter(x => x !== s); save(); renderAll(); return; }
+  if(t.dataset.all){
+    const s = Number(t.dataset.all); const h = new Set(p.hidden); const c = new Set(p.caught);
+    allMonsters().filter(m => m.s === s && !h.has(m.i)).forEach(m => c.add(m.i));
+    p.caught = [...c]; save(); renderAll(); return;
+  }
+  if(t.dataset.add){ addMonsterDialog(Number(t.dataset.add)); return; }
+  if(t.classList.contains('row')){
+    toggleCaught(t.dataset.id);
+    t.classList.toggle('got');
+    if(S.ui.hide && curView === 'steps' && !editMode) setTimeout(renderSteps, 250);
+    else if(curView === 'steps') renderStepHeaderOnly(t);
+    if(curView === 'search' && $('#fState').value) setTimeout(renderSearch, 250);
+  }
+}
+function renderStepHeaderOnly(row){
+  // lightweight refresh of the step counters + current box
+  setTimeout(renderSteps, 120);
+}
+
+function addMonsterDialog(step){
+  const f = $('#dlgForm');
+  f.innerHTML = `<h2 style="margin:0 0 10px;font-size:16px">Ajouter à l'étape ${step}</h2>
+    <label>Nom</label><input id="aN" required placeholder="Ex. : Bouftou">
+    <label>Zone (facultatif)</label><input id="aZ" placeholder="Ex. : Coin des Bouftous">
+    <label>Type</label><select id="aT"><option value="m">Monstre</option><option value="b">Boss</option><option value="a">Archimonstre</option></select>
+    <div class="dact"><button class="btn" value="cancel">Annuler</button><button class="btn pri" value="ok">Ajouter</button></div>`;
+  $('#aT').value = stepType(allMonsters().filter(m=>m.s===step));
+  const d = $('#dlg');
+  d.onclose = () => {
+    if(d.returnValue !== 'ok') return;
+    const n = $('#aN').value.trim(); if(!n) return;
+    const z = $('#aZ').value.trim();
+    P().custom.push({i:'c'+Date.now().toString(36), s:step, t:$('#aT').value, n, z: z ? [z] : []});
+    save(); renderAll(); toast('Monstre ajouté');
+  };
+  d.returnValue = ''; d.showModal();
+}
+
+function promptDialog(title, value, cb){
+  const f = $('#dlgForm');
+  f.innerHTML = `<h2 style="margin:0 0 10px;font-size:16px">${esc(title)}</h2><input id="pV" value="${esc(value)}">
+    <div class="dact"><button class="btn" value="cancel">Annuler</button><button class="btn pri" value="ok">OK</button></div>`;
+  const d = $('#dlg');
+  d.onclose = () => { if(d.returnValue === 'ok'){ const v = $('#pV').value.trim(); if(v) cb(v); } };
+  d.returnValue = ''; d.showModal(); setTimeout(()=>$('#pV').select(), 50);
+}
+function confirmDialog(msg, cb){
+  const f = $('#dlgForm');
+  f.innerHTML = `<p style="margin:0 0 14px">${esc(msg)}</p><div class="dact"><button class="btn" value="cancel">Annuler</button><button class="btn pri" value="ok">Confirmer</button></div>`;
+  const d = $('#dlg');
+  d.onclose = () => { if(d.returnValue === 'ok') cb(); };
+  d.returnValue = ''; d.showModal();
+}
+
+function restore(txt){
+  try{
+    const o = JSON.parse(txt.trim());
+    if(!o || !o.profiles || typeof o.profiles !== 'object') throw 0;
+    for(const p of Object.values(o.profiles)){
+      for(const k of ['caught','hidden','valid','custom','open']) if(!Array.isArray(p[k])) p[k] = [];
+      p.name = p.name || 'Perso';
+    }
+    confirmDialog('Remplacer toute la progression actuelle par cette sauvegarde ?', () => {
+      S.profiles = o.profiles; S.cur = Object.keys(o.profiles)[0];
+      save(); renderAll(); toast('Sauvegarde restaurée ✓');
+    });
+  } catch(e){ toast('Code de sauvegarde invalide'); }
+}
+
+/* --- Navigation & events --- */
+let curView = 'steps';
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => {
+  curView = b.dataset.v;
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('on', v.id === 'v-' + curView));
+  window.scrollTo(0,0);
+  renderAll();
+});
+$('#steps').addEventListener('click', onListClick);
+$('#results').addEventListener('click', onListClick);
+$('#chipHide').onclick = () => { S.ui.hide = !S.ui.hide; save(); renderSteps(); };
+$('#chipDone').onclick = () => { S.ui.hideDone = !S.ui.hideDone; save(); renderSteps(); };
+$('#chipEdit').onclick = () => { editMode = !editMode; renderSteps(); toast(editMode ? 'Mode édition : masque ou ajoute des entrées' : 'Mode édition désactivé'); };
+['q','fType','fState','fStep'].forEach(id => $('#'+id).addEventListener('input', renderSearch));
+$('#fStep').innerHTML += Array.from({length:35}, (_,i) => `<option value="${i+1}">Étape ${i+1}</option>`).join('');
+$('#profileSel').onchange = e => { S.cur = e.target.value; save(); renderAll(); };
+$('#statsZones').addEventListener('click', e => {
+  const b = e.target.closest('[data-zone]'); if(!b) return;
+  $('#q').value = b.dataset.zone; $('#fType').value = ''; $('#fState').value = 'todo'; $('#fStep').value = '';
+  document.querySelector('nav button[data-v="search"]').click();
+});
+$('#addProfile').onclick = () => promptDialog('Nom du personnage', 'Perso ' + (Object.keys(S.profiles).length+1), v => {
+  const id = 'p' + Date.now().toString(36); S.profiles[id] = newProfile(v); S.cur = id; save(); renderAll(); toast('Personnage ajouté');
+});
+$('#profiles').addEventListener('click', e => {
+  const r = e.target.closest('[data-ren]'), d = e.target.closest('[data-delp]');
+  if(r) promptDialog('Renommer', S.profiles[r.dataset.ren].name, v => { S.profiles[r.dataset.ren].name = v; save(); renderAll(); });
+  if(d) confirmDialog(`Supprimer « ${S.profiles[d.dataset.delp].name} » et toute sa progression ?`, () => {
+    delete S.profiles[d.dataset.delp]; if(!S.profiles[S.cur]) S.cur = Object.keys(S.profiles)[0]; save(); renderAll();
+  });
+});
+$('#copyBackup').onclick = async () => {
+  const v = exportCode();
+  try { await navigator.clipboard.writeText(v); toast('Code copié ✓'); }
+  catch(e){ const t = $('#backup'); t.focus(); t.select(); try{ document.execCommand('copy'); toast('Code copié ✓'); }catch(_){ toast('Sélectionne le texte et copie-le'); } }
+};
+$('#restoreBtn').onclick = () => restore($('#restoreTxt').value);
+$('#restoreFile').onchange = e => { const f = e.target.files[0]; if(!f) return; f.text().then(restore); e.target.value = ''; };
+$('#resetProfile').onclick = () => confirmDialog(`Remettre « ${P().name} » à zéro ?`, () => {
+  const n = P().name; S.profiles[S.cur] = newProfile(n); save(); renderAll(); toast('Personnage remis à zéro');
+});
+
+// open the current step by default the first time
+if(!P().open.length){ const c = currentStep(); if(c) P().open.push(c); }
+renderAll();
+</script>
+</body>
+</html>

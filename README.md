@@ -1,0 +1,43 @@
+# Dofus Ocre – suivi de L'éternelle moisson (Dofus Touch)
+
+Appli Android pour suivre ta progression dans la quête du Dofus Ocre : les 35 étapes
+(monstres, boss, archimonstres, Kralamoure Géant), 637 âmes à cocher, recherche par nom
+ou par zone, stats par zone, plusieurs personnages et sauvegarde par code.
+
+## Installer l'appli sur ton téléphone
+
+1. Ouvre la page **Releases** du dépôt depuis ton téléphone :
+   https://github.com/tareksama/ocre/releases/tag/latest
+2. Télécharge `dofus-ocre.apk` et ouvre-le.
+3. Android te demandera d'autoriser l'installation depuis ton navigateur : accepte.
+
+Chaque `push` sur `main` reconstruit l'APK automatiquement (onglet **Actions**) et
+remplace la release `latest`. Les nouvelles versions s'installent par-dessus l'ancienne
+sans effacer ta progression.
+
+## Organisation
+
+| Dossier | Contenu |
+|---|---|
+| `web/index.html` | L'appli elle-même (HTML/JS, données de la quête incluses). Fonctionne aussi dans un navigateur. |
+| `android/` | Projet Android minimal qui affiche `web/index.html` en plein écran (WebView). |
+| `.github/workflows/android.yml` | Construction de l'APK et publication de la release. |
+
+Pour modifier l'appli, il suffit d'éditer `web/index.html` puis de pousser.
+
+## Sauvegarde
+
+La progression est enregistrée sur le téléphone. Dans **Réglages**, copie de temps en
+temps ton code de sauvegarde : il permet de tout restaurer (même après une
+désinstallation).
+
+## Données
+
+Liste des étapes issue des outils communautaires
+[Mopolo/Eternelle-Moisson](https://github.com/Mopolo/Eternelle-Moisson) et
+[Ryswick/ocredex](https://github.com/Ryswick/ocredex). Si une étape diffère de ce
+qu'Otomaï demande sur Dofus Touch, utilise le **mode édition** de l'appli.
+
+> Note : la clé de signature (`android/app/ocre.keystore`) est dans le dépôt pour que
+> les mises à jour s'installent sans effacer les données. C'est suffisant pour un usage
+> perso ; ne publie pas l'appli sur le Play Store avec cette clé.
