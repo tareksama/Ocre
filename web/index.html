@@ -97,15 +97,15 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .got .av img{filter:grayscale(.6) brightness(.55)}
 .got .av{border-color:#4f7a37}
 
-.mapb{background:#2a2014;border:1px solid #5a4420;border-radius:9px;padding:6px 8px;font-size:15px;flex:none;line-height:1}
-#map{width:100%;height:58vh;min-height:300px;background:#8fa58a;border:1px solid var(--line);border-radius:14px;touch-action:none;display:block}
-.mapbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.mapwrap{position:relative;margin-bottom:12px}
-.zbtns{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
-.zbtns button{width:38px;height:38px;border-radius:10px;background:#221a11e6;border:1px solid var(--line);font-size:18px}
-.legend{position:absolute;left:10px;bottom:8px;font-size:11px;color:var(--mute);background:#17110bcc;padding:3px 8px;border-radius:8px}
-.focus{display:flex;align-items:center;gap:8px;background:#3a2a12;border:1px solid var(--ocre);border-radius:12px;padding:8px 10px;margin-bottom:10px}
-.focus .n{flex:1;font-weight:600}
+
+
+
+
+
+
+
+
+
 .zh{padding:10px 12px;border-bottom:1px solid var(--line);background:#1d160e}
 .zh b{font-size:15px}.zh small{color:var(--mute)}
 .row:last-child{border-bottom:0}
@@ -115,7 +115,10 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .got .box{background:var(--ok);border-color:var(--ok);color:#13200c}
 .rt{flex:1;min-width:0}
 .nm{font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.meta{font-size:12px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.meta{font-size:12px;color:var(--faint)}
+.meta>div:first-child:not(.zones){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zones{color:var(--mute);line-height:1.35;margin-top:1px}
+.zones.none{color:var(--faint);font-style:italic}
 .meta b{color:var(--mute);font-weight:500}
 .sbadge{font-size:11px;color:var(--ocre2);background:#3a2a12;border-radius:6px;padding:1px 6px;margin-right:6px}
 .mini{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:12px;color:var(--mute);flex:none}
@@ -195,26 +198,10 @@ dialog label{font-size:13px;color:var(--mute)}
     <div class="list" id="results"></div>
   </section>
 
-  <section class="view" id="v-map">
-    <div id="mapFocus"></div>
-    <div class="mapbar">
-      <select class="f" id="mStep"><option value="cur">Étape en cours</option><option value="">Toutes les étapes</option></select>
-      <select class="f" id="mType"><option value="">Tous les types</option><option value="m">Monstres</option><option value="b">Boss</option><option value="a">Archimonstres</option></select>
-      <button class="chip on" id="mTodo">À capturer seulement</button>
-    </div>
-    <div class="mapwrap">
-      <svg id="map" xmlns="http://www.w3.org/2000/svg"></svg>
-      <div class="zbtns"><button id="zIn" aria-label="Zoomer">+</button><button id="zOut" aria-label="Dézoomer">−</button><button id="zFit" aria-label="Recentrer">⤢</button></div>
-      <div class="legend">Touche une zone en surbrillance</div>
-    </div>
-    <div class="list" id="mapInfo"></div>
-    <p class="note">Carte du monde de Dofus Touch : chaque case correspond à une map du jeu, avec ses coordonnées [x,y]. Les donjons et les zones hors carte principale sont listés avec leurs coordonnées. Les zones de chasse viennent des fichiers du jeu (Dofus PC) : quelques zones récentes peuvent ne pas exister sur Touch.</p>
-  </section>
-
   <section class="view" id="v-stats">
     <div class="stats" id="statsTop"></div>
     <div class="card"><h2>Par type</h2><div id="statsType"></div></div>
-    <div class="card"><h2>Zones avec le plus d'âmes restantes</h2><p>Pratique pour planifier une session de chasse.</p><div id="statsZones"></div></div>
+    <div class="card"><h2>Zones avec le plus d'âmes restantes</h2><p>Touche une zone pour voir les monstres à y capturer.</p><div id="statsZones"></div></div>
   </section>
 
   <section class="view" id="v-settings">
@@ -252,7 +239,6 @@ dialog label{font-size:13px;color:var(--mute)}
 <nav>
   <button class="on" data-v="steps"><span>☰</span>Étapes</button>
   <button data-v="search"><span>⌕</span>Recherche</button>
-  <button data-v="map"><span>⌖</span>Carte</button>
   <button data-v="stats"><span>◔</span>Stats</button>
   <button data-v="settings"><span>⚙</span>Réglages</button>
 </nav>
@@ -264,7 +250,6 @@ dialog label{font-size:13px;color:var(--mute)}
 <script>
 const BASE = (window.OCRE_DATA||{}).monsters || [];
 const SUB = (window.OCRE_DATA||{}).sub || {};
-const WORLD = (window.OCRE_DATA||{}).world || [];
 const TYPE_LABEL = {m:'Monstres', b:'Boss', a:'Archimonstres'};
 const KEY = 'dofusOcreTouch.v1';
 let memStore = null;
@@ -336,8 +321,9 @@ function metaLine(m, withStep){
   const parts = [];
   if(m.b) parts.push('<b>' + esc(m.b) + '</b>');
   if(m.l) parts.push('niv. ' + m.l);
-  if(m.z && m.z.length) parts.push(esc(m.z.join(', ')));
-  return (withStep ? `<span class="sbadge">É${m.s}</span>` : '') + parts.join(' · ');
+  const head = (withStep ? `<span class="sbadge">É${m.s}</span>` : '') + parts.join(' · ');
+  const zones = (m.z && m.z.length) ? `<div class="zones">📍 ${m.z.map(esc).join(' · ')}</div>` : `<div class="zones none">📍 Zone non renseignée</div>`;
+  return (head ? `<div>${head}</div>` : '') + zones;
 }
 
 const OFFICIAL_IMG = id => `https://static.ankama.com/dofus-touch/www/game/monsters/200/${id}.w200h.png`;
@@ -362,12 +348,11 @@ function rowHTML(m, st, withStep){
     extra = `<button class="mini" data-hide="${m.i}">${hid ? 'Réafficher' : 'Masquer'}</button>`;
     if(String(m.i).startsWith('c')) extra += `<button class="mini" data-del="${m.i}">Suppr.</button>`;
   }
-  const mapBtn = (m.sa && m.sa.length && !editMode) ? `<button class="mapb" data-map="${m.i}" aria-label="Voir sur la carte">🗺</button>` : '';
   const q = qtyOf(m.i);
   const qty = editMode ? '' : `<div class="qty ${q?'':'z'} ${q>1?'dup':''}"><button data-dec="${m.i}" aria-label="Retirer une âme">−</button><span>${q}</span><button data-inc="${m.i}" aria-label="Ajouter une âme">+</button></div>`;
   return `<div class="row ${got?'got':''} ${hid?'hid':''}" data-id="${m.i}">
     ${avatar(m)}
-    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${qty}${mapBtn}${extra}</div>`;
+    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${qty}${extra}</div>`;
 }
 
 let lastSel = null;
@@ -496,7 +481,7 @@ function renderStats(){
   const zones = {};
   for(const m of act){ if(st.caught.has(m.i)) continue; for(const sid of (m.sa||[])) (zones[sid] = zones[sid] || []).push(m); }
   const top = Object.entries(zones).sort((a,b) => b[1].length - a[1].length).slice(0, 15);
-  $('#statsZones').innerHTML = top.length ? top.map(([sid,l]) => `<div class="prow"><span class="n">${esc(SUB[sid].n)} <span style="color:var(--faint);font-size:12px">${esc(SUB[sid].a)}</span></span><button class="mini" data-zone="${sid}">${l.length} à capturer 🗺</button></div>`).join('') : `<div class="empty">Plus rien à capturer 🎉</div>`;
+  $('#statsZones').innerHTML = top.length ? top.map(([sid,l]) => `<div class="prow"><span class="n">${esc(SUB[sid].n)} <span style="color:var(--faint);font-size:12px">${esc(SUB[sid].a)}</span></span><button class="mini" data-zone="${esc(SUB[sid].n)}">${l.length} à capturer ›</button></div>`).join('') : `<div class="empty">Plus rien à capturer 🎉</div>`;
 }
 
 function renderSettings(){
@@ -510,7 +495,7 @@ function exportCode(){
   return JSON.stringify({app:'ocre-touch', v:1, date:new Date().toISOString().slice(0,10), profiles:S.profiles});
 }
 
-function renderAll(){ renderHeader(); renderSteps(); if(curView==='search') renderSearch(); if(curView==='stats') renderStats(); if(curView==='map') renderMap(); if(curView==='settings') renderSettings(); }
+function renderAll(){ renderHeader(); renderSteps(); if(curView==='search') renderSearch(); if(curView==='stats') renderStats(); if(curView==='settings') renderSettings(); }
 
 /* --- Actions --- */
 function qtyOf(id){ return P().qty[id] || 0; }
@@ -529,7 +514,7 @@ function toggleCaught(id){
 function toggleIn(arr, v){ const i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
 
 function onListClick(e){
-  const t = e.target.closest('[data-inc],[data-dec],[data-go],[data-map],[data-hide],[data-del],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-add],.row');
+  const t = e.target.closest('[data-inc],[data-dec],[data-go],[data-hide],[data-del],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-add],.row');
   if(!t) return;
   const p = P();
   const idOf = v => isNaN(v) ? v : Number(v);
@@ -539,7 +524,6 @@ function onListClick(e){
     refreshAfterChange(); return;
   }
   if(t.dataset.go){ selectStep(Number(t.dataset.go)); return; }
-  if(t.dataset.map){ openMapFor(t.dataset.map); return; }
   if(t.dataset.hide){ toggleIn(p.hidden, idOf(t.dataset.hide)); save(); renderAll(); return; }
   if(t.dataset.del){ const id = t.dataset.del; p.custom = p.custom.filter(m => m.i !== id); setQty(id, 0); renderAll(); return; }
   if(t.dataset.toggle){ toggleIn(p.open, Number(t.dataset.toggle)); save(); renderSteps(); return; }
@@ -650,8 +634,8 @@ $('#fStep').innerHTML += Array.from({length:35}, (_,i) => `<option value="${i+1}
 $('#profileSel').onchange = e => { S.cur = e.target.value; fixProfile(P()); lastSel = null; save(); renderAll(); };
 $('#statsZones').addEventListener('click', e => {
   const b = e.target.closest('[data-zone]'); if(!b) return;
-  MAP.focus = null; $('#mStep').value = ''; $('#mType').value = ''; MAP.todo = true; MAP.selSub = Number(b.dataset.zone); MAP.fitTo = [MAP.selSub];
-  goView('map');
+  $('#q').value = b.dataset.zone; $('#fType').value = ''; $('#fState').value = 'todo'; $('#fStep').value = '';
+  goView('search');
 });
 $('#addProfile').onclick = () => promptDialog('Nom du personnage', 'Perso ' + (Object.keys(S.profiles).length+1), v => {
   const id = 'p' + Date.now().toString(36); S.profiles[id] = newProfile(v); S.cur = id; save(); renderAll(); toast('Personnage ajouté');
@@ -675,143 +659,6 @@ $('#resetProfile').onclick = () => confirmDialog(`Remettre « ${P().name} » à 
 });
 
 
-/* ---------------- Carte ---------------- */
-const MAP = {vb:null, focus:null, todo:true, selSub:null, selCell:null, fitTo:null, cellIndex:null};
-const LANDMARKS = [{x:-55,y:15,n:'Otomaï'},{x:5,y:-18,n:'Astrub'}];
-function runsPath(runs){ let d=''; for(const [x,y,n] of runs) d += `M${x} ${y}h${n}v1h-${n}z`; return d; }
-const WORLD_IMG = (window.OCRE_WORLD || 'world.jpg');
-function cellIndex(){
-  if(MAP.cellIndex) return MAP.cellIndex;
-  const idx = new Map();
-  for(const [sid,s] of Object.entries(SUB)) for(const [x,y,n] of s.r) for(let k=0;k<n;k++){ const key=(x+k)+','+y; if(!idx.has(key)) idx.set(key,[]); idx.get(key).push(Number(sid)); }
-  return MAP.cellIndex = idx;
-}
-function subBBox(sids){
-  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
-  for(const sid of sids){ const s=SUB[sid]; if(!s) continue; for(const [x,y,n] of s.r){ x0=Math.min(x0,x); x1=Math.max(x1,x+n); y0=Math.min(y0,y); y1=Math.max(y1,y+1); } }
-  return x0>x1 ? null : [x0,y0,x1,y1];
-}
-function worldBBox(){ return [-90,-95,45,54]; }
-function fitBox(b, pad){
-  const svg=$('#map'); const r=svg.getBoundingClientRect(); const ar=(r.width||360)/(r.height||420);
-  let [x0,y0,x1,y1]=b; x0-=pad; y0-=pad; x1+=pad; y1+=pad;
-  let w=x1-x0, h=y1-y0;
-  if(w/h < ar){ const nw=h*ar; x0-=(nw-w)/2; w=nw; } else { const nh=w/ar; y0-=(nh-h)/2; h=nh; }
-  MAP.vb={x:x0,y:y0,w,h};
-}
-function openMapFor(id){
-  const m = allMonsters().find(x => String(x.i)===String(id)); if(!m) return;
-  MAP.focus = m.i; MAP.selSub = null; MAP.selCell = null; MAP.fitTo = m.sa;
-  goView('map');
-}
-function mapMonsters(){
-  const st = sets();
-  if(MAP.focus!==null){ const m = allMonsters().find(x => x.i===MAP.focus); return m ? [m] : []; }
-  let step = $('#mStep').value; if(step==='cur') step = String(currentStep()||'');
-  const ft = $('#mType').value;
-  return activeMonsters().filter(m => (!step || String(m.s)===step) && (!ft || m.t===ft) && (!MAP.todo || !st.caught.has(m.i)));
-}
-function renderMap(){
-  const st = sets();
-  const list = mapMonsters();
-  const bySub = {};
-  for(const m of list) for(const sid of (m.sa||[])) (bySub[sid]=bySub[sid]||[]).push(m);
-  // focus banner
-  if(MAP.focus!==null && list[0]){
-    $('#mapFocus').innerHTML = `<div class="focus">${avatar(list[0])}<span class="n">${esc(list[0].n)}<br><small style="color:var(--mute);font-weight:400">Étape ${list[0].s} · zones de chasse</small></span><button class="mini" id="mClear">✕ Tout voir</button></div>`;
-    $('#mClear').onclick = () => { MAP.focus=null; MAP.fitTo=null; MAP.selSub=null; renderMap(); };
-  } else $('#mapFocus').innerHTML = '';
-  $('#mTodo').classList.toggle('on', MAP.todo);
-  document.querySelectorAll('#v-map .mapbar select').forEach(x => x.disabled = MAP.focus!==null);
-  // view box
-  if(MAP.fitTo){ const b = subBBox(MAP.fitTo); fitBox(b || worldBBox(), b ? 8 : 2); MAP.fitTo = null; }
-  if(!MAP.vb) fitBox(worldBBox(), 2);
-  const max = Math.max(1, ...Object.values(bySub).map(l => l.length));
-  let hl = '';
-  for(const [sid,l] of Object.entries(bySub)){
-    const s = SUB[sid]; if(!s || !s.r.length) continue;
-    const a = 0.45 + 0.55 * (l.length/max);
-    const sel = MAP.selSub===Number(sid);
-    hl += `<path d="${runsPath(s.r)}" fill="${sel?'#fff4cf':'#ff9d1c'}" fill-opacity="${sel?0.7:(0.28+0.4*(l.length/max)).toFixed(2)}"/>`;
-  }
-  let grid = '';
-  for(let x=-90; x<=45; x+=10) grid += `<line x1="${x}" y1="-95" x2="${x}" y2="55" stroke="#00000030" stroke-width=".12"/><text x="${x+.3}" y="-93" font-size="1.6" fill="#3b2f20">${x}</text>`;
-  for(let y=-90; y<=50; y+=10) grid += `<line x1="-90" y1="${y}" x2="45" y2="${y}" stroke="#00000030" stroke-width=".12"/><text x="-89.5" y="${y-.3}" font-size="1.6" fill="#3b2f20">${y}</text>`;
-  const lm = LANDMARKS.map(p => `<g><circle cx="${p.x+.5}" cy="${p.y+.5}" r=".9" fill="#7fbf5a" stroke="#13200c" stroke-width=".3"/><text x="${p.x+1.8}" y="${p.y+1.1}" font-size="1.9" fill="#cfeebc" stroke="#0f0b07" stroke-width=".5" paint-order="stroke">${p.n}</text></g>`).join('');
-  const sc = MAP.selCell ? `<rect x="${MAP.selCell[0]}" y="${MAP.selCell[1]}" width="1" height="1" fill="none" stroke="#fff" stroke-width=".3"/>` : '';
-  const vb = MAP.vb;
-  $('#map').setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
-  $('#map').innerHTML = `${grid}<image href="${WORLD_IMG}" x="-93.278" y="-99.5" width="144" height="161" preserveAspectRatio="none"/>${hl}${sc}${lm}`;
-  // info panel
-  const info = $('#mapInfo');
-  const subsSorted = Object.entries(bySub).sort((a,b) => b[1].length - a[1].length);
-  if(MAP.selSub!==null && SUB[MAP.selSub]){
-    const s = SUB[MAP.selSub], l = bySub[MAP.selSub] || [];
-    const b = subBBox([MAP.selSub]);
-    const coord = b ? `[${Math.round((b[0]+b[2]-1)/2)},${Math.round((b[1]+b[3]-1)/2)}]` : (s.d ? `[${s.d[0]},${s.d[1]}]` : '');
-    info.innerHTML = `<div class="zh"><b>${esc(s.n)}</b> <small>${esc(s.a)} · centre ${coord}${MAP.selCell?` · case [${MAP.selCell[0]},${MAP.selCell[1]}]`:''}</small><br><small>${l.length} âme${l.length>1?'s':''} ${MAP.todo?'à capturer':''} ici</small> <button class="mini" id="mBack" style="float:right">‹ Toutes les zones</button></div>` +
-      (l.length ? l.map(m => rowHTML(m, st, true)).join('') : `<div class="empty">Rien à capturer dans cette zone pour ce filtre</div>`);
-    $('#mBack').onclick = () => { MAP.selSub=null; MAP.selCell=null; renderMap(); };
-  } else {
-    info.innerHTML = subsSorted.length ? `<div class="zh"><b>${subsSorted.length} zone${subsSorted.length>1?'s':''} de chasse</b> <small>· ${list.length} âme${list.length>1?'s':''}</small></div>` + subsSorted.map(([sid,l]) => {
-      const s = SUB[sid]; const b = subBBox([sid]);
-      const where = b ? `centre [${Math.round((b[0]+b[2]-1)/2)},${Math.round((b[1]+b[3]-1)/2)}]` : (s.d ? `hors carte du monde · [${s.d[0]},${s.d[1]}]` : 'hors carte du monde');
-      return `<div class="prow" style="padding:9px 12px;cursor:pointer" data-sub="${sid}"><span class="n">${esc(s.n)}<br><small style="color:var(--faint)">${esc(s.a)} · ${where}</small></span><span class="mini">${l.length} ›</span></div>`;
-    }).join('') : `<div class="empty">${list.length ? 'Pas de zone connue pour ces monstres' : 'Rien à capturer pour ce filtre 🎉'}</div>`;
-  }
-}
-$('#mapInfo').addEventListener('click', e => {
-  const z = e.target.closest('[data-sub]');
-  if(z){ MAP.selSub = Number(z.dataset.sub); MAP.selCell=null; MAP.fitTo = [MAP.selSub]; renderMap(); $('#map').scrollIntoView({behavior:'smooth', block:'center'}); return; }
-  onListClick(e);
-  if(e.target.closest('.row') && !e.target.closest('[data-map]')) setTimeout(renderMap, 260);
-});
-['mStep','mType'].forEach(id => $('#'+id).addEventListener('input', () => { MAP.selSub=null; renderMap(); }));
-$('#mTodo').onclick = () => { MAP.todo = !MAP.todo; renderMap(); };
-$('#mStep').innerHTML += Array.from({length:35}, (_,i) => `<option value="${i+1}">Étape ${i+1}</option>`).join('');
-function zoom(f, cx, cy){
-  const v = MAP.vb; if(cx===undefined){ cx = v.x+v.w/2; cy = v.y+v.h/2; }
-  const nw = Math.min(200, Math.max(6, v.w*f)); const k = nw/v.w;
-  MAP.vb = {x: cx-(cx-v.x)*k, y: cy-(cy-v.y)*k, w: nw, h: v.h*k};
-  $('#map').setAttribute('viewBox', `${MAP.vb.x} ${MAP.vb.y} ${MAP.vb.w} ${MAP.vb.h}`);
-}
-$('#zIn').onclick = () => zoom(0.6); $('#zOut').onclick = () => zoom(1/0.6);
-$('#zFit').onclick = () => { MAP.vb=null; MAP.fitTo = MAP.focus!==null ? (allMonsters().find(m=>m.i===MAP.focus)||{}).sa : null; renderMap(); };
-(function(){
-  const svg = $('#map'); const pts = new Map(); let moved = 0, last = null;
-  const toWorld = (cx, cy) => { const r = svg.getBoundingClientRect(), v = MAP.vb; return [v.x + (cx-r.left)/r.width*v.w, v.y + (cy-r.top)/r.height*v.h]; };
-  svg.addEventListener('pointerdown', e => { svg.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]); moved = 0; last = null; });
-  svg.addEventListener('pointermove', e => {
-    if(!pts.has(e.pointerId)) return;
-    const prev = pts.get(e.pointerId); pts.set(e.pointerId, [e.clientX, e.clientY]);
-    const r = svg.getBoundingClientRect(), v = MAP.vb;
-    if(pts.size === 1){
-      const dx = (e.clientX-prev[0])/r.width*v.w, dy = (e.clientY-prev[1])/r.height*v.h;
-      moved += Math.abs(e.clientX-prev[0]) + Math.abs(e.clientY-prev[1]);
-      MAP.vb = {x:v.x-dx, y:v.y-dy, w:v.w, h:v.h};
-      svg.setAttribute('viewBox', `${MAP.vb.x} ${MAP.vb.y} ${MAP.vb.w} ${MAP.vb.h}`);
-    } else if(pts.size === 2){
-      const [a,b] = [...pts.values()]; const d = Math.hypot(a[0]-b[0], a[1]-b[1]);
-      const c = toWorld((a[0]+b[0])/2, (a[1]+b[1])/2);
-      if(last) zoom(last/d, c[0], c[1]);
-      last = d; moved = 99;
-    }
-  });
-  const end = e => {
-    if(pts.size === 1 && moved < 8 && pts.has(e.pointerId)){
-      const [wx, wy] = toWorld(e.clientX, e.clientY); const cx = Math.floor(wx), cy = Math.floor(wy);
-      const list = mapMonsters(); const active = new Set(list.flatMap(m => m.sa||[]));
-      const here = (cellIndex().get(cx+','+cy) || []).filter(s => active.has(s));
-      if(here.length){ MAP.selSub = here[0]; MAP.selCell = [cx,cy]; renderMap(); }
-      else { MAP.selCell = [cx,cy]; toast(`Case [${cx},${cy}]`); MAP.selSub=null; renderMap(); }
-    }
-    pts.delete(e.pointerId); if(pts.size < 2) last = null;
-  };
-  svg.addEventListener('pointerup', end); svg.addEventListener('pointercancel', e => { pts.delete(e.pointerId); last = null; });
-  svg.addEventListener('wheel', e => { e.preventDefault(); const c = toWorld(e.clientX, e.clientY); zoom(e.deltaY > 0 ? 1.15 : 1/1.15, c[0], c[1]); }, {passive:false});
-})();
-
-// open the current step by default the first time
 setHeaderVar();
 renderAll();
 setHeaderVar();
