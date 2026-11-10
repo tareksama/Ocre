@@ -191,6 +191,7 @@ dialog label{font-size:13px;color:var(--mute)}
       <select class="f" id="fState">
         <option value="todo">À capturer</option>
         <option value="got">Capturés</option>
+        <option value="dup">En double (2 ou +)</option>
         <option value="">Tous</option>
       </select>
       <select class="f" id="fStep"><option value="">Toutes les étapes</option></select>
@@ -446,6 +447,7 @@ function renderSearch(){
     const got = st.caught.has(m.i);
     if(fs === 'todo' && got) return false;
     if(fs === 'got' && !got) return false;
+    if(fs === 'dup' && (P().qty[m.i]||0) < 2) return false;
     if(q){
       const hay = norm(m.n + ' ' + (m.b||'') + ' ' + (m.z||[]).join(' '));
       if(!q.split(/\s+/).every(w => hay.includes(w))) return false;
