@@ -295,9 +295,20 @@ function metaLine(m, withStep){
   return (withStep ? `<span class="sbadge">É${m.s}</span>` : '') + parts.join(' · ');
 }
 
+const OFFICIAL_IMG = id => `https://static.ankama.com/dofus-touch/www/game/monsters/200/${id}.w200h.png`;
+function avatarErr(img){
+  // image locale absente -> image officielle Dofus Touch (en ligne) -> initiale
+  const off = img.dataset.off;
+  if(off && img.src !== off){ img.src = off; img.dataset.off = ''; return; }
+  img.remove();
+}
 function avatar(m){
-  if(m.img) return `<div class="av"><img src="img/${m.img}.webp" alt="" loading="lazy" onerror="this.remove()">${m.imgb?'<span class="ab">ARCHI</span>':''}</div>`;
-  return `<div class="av">${esc((m.n||'?').charAt(0))}</div>`;
+  const init = esc((m.n||'?').charAt(0));
+  const local = m.img ? ((window.OCRE_IMG && OCRE_IMG[m.img]) || `img/${m.img}.webp`) : '';
+  const off = (m.g && !window.OCRE_IMG) ? OFFICIAL_IMG(m.g) : '';
+  const src = local || off;
+  if(!src) return `<div class="av">${init}</div>`;
+  return `<div class="av"><span style="position:absolute">${init}</span><img src="${src}" data-off="${local ? off : ''}" alt="" loading="lazy" style="position:relative;background:#120d08;border-radius:8px" onerror="avatarErr(this)"></div>`;
 }
 function rowHTML(m, st, withStep){
   const got = st.caught.has(m.i), hid = st.hidden.has(m.i);

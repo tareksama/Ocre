@@ -21,7 +21,8 @@ sans effacer ta progression.
 |---|---|
 | `web/index.html` | L'appli elle-même (HTML/JS). Fonctionne aussi dans un navigateur. |
 | `web/data.js` | Données : monstres des 35 étapes, sous-zones de chasse et contour de la carte du monde. |
-| `web/img/` | Images des monstres (WebP). |
+| `web/img/` | Images des monstres (WebP), issues de l'encyclopédie officielle Dofus Touch. |
+| `web/world.jpg` | Carte du monde de Dofus Touch (assemblée à partir des tuiles du jeu). |
 | `android/` | Projet Android minimal qui affiche `web/index.html` en plein écran (WebView). |
 | `.github/workflows/android.yml` | Construction de l'APK et publication de la release. |
 
@@ -35,7 +36,8 @@ désinstallation).
 
 ## Données
 
-Images des monstres issues de [MinZe25/dofus-ocre-tracker](https://github.com/MinZe25/dofus-ocre-tracker) (Dofus Touch).
+Images des monstres : encyclopédie officielle Dofus Touch (static.ankama.com), via [MinZe25/dofus-ocre-tracker](https://github.com/MinZe25/dofus-ocre-tracker). Les images manquantes sont chargées en direct depuis le site officiel quand le téléphone est connecté.
+Carte du monde : tuiles du jeu Dofus Touch, via [yovanoc/DOFUSTouchMap](https://github.com/yovanoc/DOFUSTouchMap).
 Sous-zones et coordonnées de la carte extraites des fichiers du jeu via [bot4dofus/Datafus](https://github.com/bot4dofus/Datafus).
 
 Liste des étapes issue des outils communautaires
