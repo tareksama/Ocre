@@ -4,5 +4,5 @@
 window.OCRE_CONFIG = {
   supabaseUrl: 'https://jjrqcdsfufuyngbisogm.supabase.co',
   supabaseAnonKey: 'sb_publishable_04OiuRw7M4OgFs_0E6BrJg_TrZzLSUT',
-  siteUrl: ''
+  siteUrl: 'https://tareksama.github.io/Ocre/'
 };
