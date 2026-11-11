@@ -36,7 +36,7 @@ désinstallation).
 ## Données
 
 Images des monstres : encyclopédie officielle Dofus Touch (static.ankama.com), via [MinZe25/dofus-ocre-tracker](https://github.com/MinZe25/dofus-ocre-tracker). Les images manquantes sont chargées en direct depuis le site officiel quand le téléphone est connecté.
-Zones d'apparition complétées avec les guides [ponzadivizion](https://ponzadivizion.wordpress.com/liste-ocre/), [JeuxOnLine](https://dofus.jeuxonline.info/article/13761/sanctuaire-donjon-dragoeufs) et [papycha](https://papycha.fr/donjon-sanctuaire-des-ames-egarees/) ; zones extraites des fichiers du jeu via [bot4dofus/Datafus](https://github.com/bot4dofus/Datafus).
+Zones d'apparition : données du jeu Dofus Touch (version 2.31) via [fafifox/touch-datas](https://github.com/fafifox/touch-datas) ; pour les monstres ajoutés depuis, guides [ponzadivizion](https://ponzadivizion.wordpress.com/liste-ocre/), [JeuxOnLine](https://dofus.jeuxonline.info/article/13761/sanctuaire-donjon-dragoeufs) et [papycha](https://papycha.fr/donjon-sanctuaire-des-ames-egarees/).
 
 Liste des étapes et images (version Dofus Touch) : outil de suivi [axiazi.fr](https://axiazi.fr/dofus-touch/leternelle-moisson-dofus-ocre/).
 
