@@ -48,3 +48,16 @@ qu'Otomaï demande sur Dofus Touch, utilise le **mode édition** de l'appli.
 > Note : la clé de signature (`android/app/ocre.keystore`) est dans le dépôt pour que
 > les mises à jour s'installent sans effacer les données. C'est suffisant pour un usage
 > perso ; ne publie pas l'appli sur le Play Store avec cette clé.
+
+## Échanges d'archimonstres (comptes en ligne)
+
+Onglet **Échanges** : compte (pseudo, e-mail, mot de passe), plusieurs persos par serveur, liste des archis proposés et recherchés, recherche des joueurs du même serveur qui ont ce que tu cherches ou qui cherchent ce que tu proposes.
+
+Base de données : [Supabase](https://supabase.com) (offre gratuite).
+
+1. Crée un projet Supabase.
+2. **SQL Editor → New query** : colle le contenu de [`supabase/schema.sql`](supabase/schema.sql) puis **Run**.
+3. **Authentication → Sign In / Providers → Email** : désactive **Confirm email** (le serveur d'e-mails par défaut de Supabase n'envoie qu'aux membres de l'équipe du projet), ou configure un SMTP personnalisé.
+4. **Project Settings → API** : copie l'URL du projet et la clé `anon` `public` dans [`web/config.js`](web/config.js).
+
+La clé `anon` est publique par nature : la sécurité repose sur les règles RLS du script (chacun ne peut modifier que ses persos et ses listes). Ne mets jamais le mot de passe de la base ni la clé `service_role` dans l'appli.

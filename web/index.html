@@ -152,6 +152,54 @@ dialog input,dialog select{width:100%;background:#120d08;border:1px solid var(--
 dialog label{font-size:13px;color:var(--mute)}
 .dact{display:flex;gap:8px;justify-content:flex-end}
 .note{font-size:12px;color:var(--faint);margin-top:8px}
+
+.tp{display:flex;gap:5px;margin-top:6px}
+.tb{background:#120d08;border:1px solid var(--line);border-radius:99px;padding:4px 9px;font-size:12px;color:var(--mute);line-height:1.2;white-space:nowrap}
+.tb.on.o{background:#203418;border-color:#4f7a37;color:#cfeebc}
+.tb.on.w{background:#2a2040;border-color:#6a5590;color:#d9c8ff}
+.thint{display:block;width:100%;text-align:left;background:#211a2e;border:0;border-bottom:1px solid var(--line);color:#d9c8ff;font-size:13px;padding:9px 12px}
+.seg{display:flex;background:#120d08;border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin-bottom:12px}
+.seg button{flex:1;background:none;border:0;border-radius:9px;padding:8px 4px;font-size:13px;color:var(--mute)}
+.seg button.on{background:var(--panel2);color:var(--ink);font-weight:650;box-shadow:0 1px 4px #0006}
+.seg.small button{font-size:12px;padding:7px 3px}
+.card label,.tsel label{font-size:13px;color:var(--mute)}
+.card input:not([type=file]),.tsel input{width:100%;background:#120d08;border:1px solid var(--line);border-radius:10px;padding:10px;margin:4px 0 10px;outline:none}
+.card input:focus,.tsel input:focus{border-color:var(--ocre)}
+.pw{position:relative}.pw input{padding-right:46px!important}.pw button{position:absolute;right:4px;top:8px;background:none;border:0;padding:6px 9px;font-size:15px}
+.wide{width:100%}
+.link{background:none;border:0;color:var(--ocre2);font-size:13px;padding:12px 0 0;text-decoration:underline}
+.tmsg{font-size:13px;margin:0 0 10px;color:#ff9d8a;min-height:1px}.tmsg.ok{color:var(--ok)}
+.acct{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--mute);font-size:13px}.acct b{color:var(--ink)}.acct .mini{margin-left:auto}
+.chars{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;margin-bottom:4px;scrollbar-width:none}.chars::-webkit-scrollbar{display:none}
+.cc{flex:none;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 12px;text-align:left;line-height:1.25}
+.cc b{display:block;font-size:14px}.cc small{color:var(--mute);font-size:11px}
+.cc.on{background:#4a3613;border-color:var(--ocre2)}
+.cc.add{color:var(--ocre2);border-style:dashed}
+.cline{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mute);margin:0 0 12px}.cline span{flex:1}.cline b{color:var(--ink)}
+.lh{display:flex;align-items:center;gap:8px}.lh h2{margin:0;flex:1}
+.cnt{background:var(--panel2);border-radius:99px;padding:1px 8px;font-size:12px;color:var(--mute);margin-left:6px;font-weight:600}
+.chipz{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.ac{display:inline-flex;align-items:center;background:#120d08;border:1px solid var(--line);border-radius:99px;max-width:100%}
+.ac.offer{border-color:#3f6230}.ac.want{border-color:#5d4785}
+.acb{display:flex;align-items:center;gap:6px;background:none;border:0;padding:3px 10px 3px 3px;font-size:13px;min-width:0;max-width:100%}
+.ac .x+.acb,.ac .acb:has(+.x){padding-right:2px}
+.acb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th{width:26px;height:26px;border-radius:50%;background:#1d160e;object-fit:contain;flex:none;display:inline-block}
+.th.big{width:40px;height:40px;border-radius:8px;background:none}
+.ac .x{background:none;border:0;color:var(--faint);font-size:18px;padding:0 10px 0 6px;line-height:1;align-self:stretch}
+.qa{display:flex;gap:6px;flex-wrap:wrap}
+.mini:disabled{opacity:.4}
+.arow{display:flex;align-items:center;gap:11px;padding:9px 12px;border-bottom:1px solid #2f2518;width:100%;text-align:left;background:none;border-left:0;border-right:0;border-top:0}
+.arow:last-child{border-bottom:0}
+.arow.pick .th{width:34px;height:34px;border-radius:8px}
+.mt .mh{display:flex;gap:8px;align-items:flex-start}.mt .mh>div{flex:1;min-width:0}
+.pn{font-size:16px}
+.mut{display:inline-block;font-size:11px;font-weight:700;background:#203418;color:#cfeebc;border:1px solid #4f7a37;border-radius:99px;padding:1px 8px;margin-left:8px;vertical-align:2px}
+.ms{font-size:11px;font-weight:700;color:var(--mute);margin-top:12px;text-transform:uppercase;letter-spacing:.04em}
+.ms.o{color:var(--ok)}.ms.w{color:var(--archi)}
+.who{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #2f2518}.who:last-child{border-bottom:0}.who>div{flex:1;min-width:0}
+.tsel{display:flex;align-items:center;gap:10px}.tsel input{flex:1;margin:0 0 10px;padding:8px 10px}.tsel label{margin-bottom:10px}.tsel .mini{margin-bottom:10px;padding:7px 12px;font-size:15px}
+#tAddRes,#tWhoRes{margin:-4px 0 12px;max-height:60vh;overflow:auto}
 </style>
 </head>
 <body>
@@ -205,6 +253,10 @@ dialog label{font-size:13px;color:var(--mute)}
     <div class="card"><h2>Zones avec le plus d'âmes restantes</h2><p>Touche une zone pour voir les monstres à y capturer.</p><div id="statsZones"></div></div>
   </section>
 
+  <section class="view" id="v-trade">
+    <div id="tradeBox"></div>
+  </section>
+
   <section class="view" id="v-settings">
     <div class="card">
       <h2>Personnages</h2>
@@ -213,7 +265,7 @@ dialog label{font-size:13px;color:var(--mute)}
     </div>
     <div class="card">
       <h2>Sauvegarde</h2>
-      <p>Ta progression est enregistrée sur ce téléphone, dans ce navigateur. Copie régulièrement ton code de sauvegarde (par exemple dans Google Keep ou tes notes) pour ne rien perdre si les données du navigateur sont effacées.</p>
+      <p>Ta progression de quête est enregistrée sur ce téléphone, dans ce navigateur (les listes d'échange, elles, sont en ligne avec ton compte). Copie régulièrement ton code de sauvegarde (par exemple dans Google Keep ou tes notes) pour ne rien perdre si les données du navigateur sont effacées.</p>
       <textarea id="backup" readonly></textarea>
       <div class="sactions" style="background:none;padding:8px 0 0">
         <button class="btn pri" id="copyBackup">Copier le code</button>
@@ -242,12 +294,16 @@ dialog label{font-size:13px;color:var(--mute)}
   <button class="on" data-v="steps"><span>☰</span>Étapes</button>
   <button data-v="search"><span>⌕</span>Recherche</button>
   <button data-v="stats"><span>◔</span>Stats</button>
+  <button data-v="trade"><span>⇄</span>Échanges</button>
   <button data-v="settings"><span>⚙</span>Réglages</button>
 </nav>
 
+<datalist id="tServers"></datalist>
 <dialog id="dlg"><form method="dialog" id="dlgForm"></form></dialog>
 <div class="toast" id="toast"></div>
 
+<script src="config.js"></script>
+<script src="vendor/supabase.js"></script>
 <script src="data.js"></script>
 <script>
 const BASE = (window.OCRE_DATA||{}).monsters || [];
@@ -350,7 +406,7 @@ function rowHTML(m, st, withStep){
   const qty = `<div class="qty ${q?'':'z'} ${q>1?'dup':''}"><button data-dec="${m.i}" aria-label="Retirer une âme">−</button><span>${q}</span><button data-inc="${m.i}" aria-label="Ajouter une âme">+</button></div>`;
   return `<div class="row ${got?'got':''} ${hid?'hid':''}" data-id="${m.i}">
     ${avatar(m)}
-    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div></div>${qty}${extra}</div>`;
+    <div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta">${metaLine(m, withStep)}</div>${tradePills(m)}</div>${qty}${extra}</div>`;
 }
 
 let lastSel = null;
@@ -424,6 +480,7 @@ function renderSteps(anim){
       </div>
       <button class="nav" id="nextStep" ${idx >= steps.length-1 ? 'disabled' : ''} aria-label="Étape suivante">›</button>
     </div>
+    ${t === 'a' && T.sb && T.ready && !tChar() ? `<button class="thint" data-gotrade>⇄ ${T.user ? 'Ajoute un perso' : 'Connecte-toi'} dans Échanges pour proposer ou rechercher ces archis ›</button>` : ''}
     ${rows}
     <div class="sactions">
       ${done ? `<button class="btn" data-unvalid="${sel}">Annuler la validation</button>` : `<button class="btn pri" data-valid="${sel}">Étape validée chez Otomaï</button>`}
@@ -493,7 +550,7 @@ function exportCode(){
   return JSON.stringify({app:'ocre-touch', v:1, date:new Date().toISOString().slice(0,10), profiles:S.profiles});
 }
 
-function renderAll(){ renderHeader(); renderSteps(); if(curView==='search') renderSearch(); if(curView==='stats') renderStats(); if(curView==='settings') renderSettings(); }
+function renderAll(){ renderHeader(); renderSteps(); if(curView==='search') renderSearch(); if(curView==='stats') renderStats(); if(curView==='trade') renderTrade(); if(curView==='settings') renderSettings(); }
 
 /* --- Actions --- */
 function qtyOf(id){ return P().qty[id] || 0; }
@@ -512,8 +569,10 @@ function toggleCaught(id){
 function toggleIn(arr, v){ const i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
 
 function onListClick(e){
-  const t = e.target.closest('[data-inc],[data-dec],[data-go],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-none],.row');
+  const t = e.target.closest('[data-offer],[data-want],[data-gotrade],[data-inc],[data-dec],[data-go],[data-toggle],[data-valid],[data-unvalid],[data-all],[data-none],.row');
   if(!t) return;
+  if(t.dataset.offer || t.dataset.want){ tToggle(t.dataset.offer ? 'offer' : 'want', t.dataset.offer || t.dataset.want); return; }
+  if('gotrade' in t.dataset){ goView('trade'); return; }
   const p = P();
   const idOf = v => isNaN(v) ? v : Number(v);
   if(t.dataset.inc || t.dataset.dec){
@@ -661,7 +720,439 @@ $('#resetProfile').onclick = () => confirmDialog(`Remettre « ${P().name} » à 
   const n = P().name; S.profiles[S.cur] = newProfile(n); save(); renderAll(); toast('Personnage remis à zéro');
 });
 
+/* ===================== Échanges d'archimonstres (comptes en ligne) ===================== */
+const CFG = window.OCRE_CONFIG || {};
+const ARCHIS = BASE.filter(m => m.t === 'a').sort((a,b) => a.s - b.s || a.n.localeCompare(b.n, 'fr'));
+const ARCHI = Object.fromEntries(ARCHIS.map(m => [m.i, m]));
+const DEFAULT_SERVERS = ['Tiliwan 1', 'Tiliwan 2'];
+const TKEY = 'dofusOcreTouch.trade';
+const T = {sb:null, ready:false, user:null, me:null, chars:[], lists:{}, cur:null, tab:'lists', auth:'login',
+  matches:null, mLoading:false, mFilter:'all', mServer:'', who:null, whoArchi:null, whoServer:'', servers:[], msg:''};
 
+try { const o = JSON.parse(localStorage.getItem(TKEY) || 'null'); if(o){ T.cur = o.cur || null; T.tab = o.tab || 'lists'; } } catch(e){}
+function tSaveCache(){ try { localStorage.setItem(TKEY, JSON.stringify({cur:T.cur, tab:T.tab})); } catch(e){} }
+function tList(id){ return T.lists[id] || (T.lists[id] = {offer:new Set(), want:new Set()}); }
+function tChar(){ return T.chars.find(c => c.id === T.cur) || null; }
+function tServer(){ const c = tChar(); return c ? c.server : ''; }
+
+function tErr(e){
+  const m = String((e && (e.message || e.error_description || e.msg)) || e || 'Erreur');
+  if(/Invalid login credentials/i.test(m)) return 'E-mail ou mot de passe incorrect';
+  if(/Email not confirmed/i.test(m)) return "Confirme d'abord ton e-mail (regarde aussi dans les spams)";
+  if(/already registered|already been registered|already exists/i.test(m)) return 'Un compte existe déjà avec cet e-mail';
+  if(/Password should|at least 6|weak/i.test(m)) return 'Mot de passe trop faible : 6 caractères minimum';
+  if(/rate limit|too many|security purposes/i.test(m)) return "Trop d'essais : réessaie dans quelques minutes";
+  if(/Database error saving new user/i.test(m)) return 'Ce pseudo est déjà pris';
+  if(/not authorized|Error sending/i.test(m)) return "L'envoi d'e-mails n'est pas configuré sur la base de l'appli";
+  if(/invalid.*email|valid email|validate email/i.test(m)) return 'Adresse e-mail invalide';
+  if(/Failed to fetch|NetworkError|Load failed|network|fetch/i.test(m)) return 'Connexion impossible : vérifie internet (ou la base Supabase est en pause)';
+  if(/characters_owner_server_name|duplicate key/i.test(m)) return 'Tu as déjà ce personnage sur ce serveur';
+  if(/Maximum 20/i.test(m)) return 'Maximum 20 personnages par compte';
+  if(/JWT|refresh token|session/i.test(m)) return 'Session expirée : reconnecte-toi';
+  return m;
+}
+function siteUrl(){
+  if(CFG.siteUrl) return CFG.siteUrl;
+  if(/^https?:$/.test(location.protocol) && location.hostname !== 'appassets.androidplatform.net') return location.origin + location.pathname;
+  return undefined;
+}
+function ago(d){
+  if(!d) return '';
+  const s = (Date.now() - new Date(d).getTime()) / 1000;
+  if(s < 3600) return "actif il y a moins d'une heure";
+  if(s < 86400) return `actif il y a ${Math.floor(s/3600)} h`;
+  const j = Math.floor(s/86400);
+  return j < 60 ? `actif il y a ${j} jour${j>1?'s':''}` : `actif il y a ${Math.floor(j/30)} mois`;
+}
+function thumb(m){
+  const src = m && m.img ? ((window.OCRE_IMG && OCRE_IMG[m.img]) || `img/${m.img}.webp`) : '';
+  return src ? `<img class="th" src="${src}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : `<span class="th"></span>`;
+}
+function tRefresh(){ renderAll(); }
+
+/* ---------- connexion ---------- */
+function tInit(){
+  if(!CFG.supabaseUrl || !CFG.supabaseAnonKey || !window.supabase){ T.ready = true; return; }
+  try {
+    T.sb = supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey,
+      {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, storageKey:'ocre-auth'}});
+  } catch(e){ T.sb = null; T.ready = true; return; }
+  T.sb.auth.onAuthStateChange((ev, session) => {
+    const uid = session && session.user ? session.user.id : null;
+    const changed = uid !== (T.user ? T.user.id : null);
+    T.user = session ? session.user : null;
+    if(ev === 'PASSWORD_RECOVERY') setTimeout(newPasswordDialog, 0);
+    if(changed) setTimeout(tLoadAll, 0);
+    else if(!T.ready){ T.ready = true; setTimeout(tRefresh, 0); }
+  });
+}
+async function tLoadAll(){
+  if(!T.user){ Object.assign(T, {me:null, chars:[], lists:{}, matches:null, who:null, ready:true}); tRefresh(); return; }
+  try {
+    const uid = T.user.id;
+    const [p, c] = await Promise.all([
+      T.sb.from('profiles').select('id,username').eq('id', uid).maybeSingle(),
+      T.sb.from('characters').select('id,name,server,updated_at').eq('owner', uid).order('created_at')
+    ]);
+    if(p.error) throw p.error; if(c.error) throw c.error;
+    T.me = p.data || {id:uid, username:(T.user.user_metadata || {}).username || '?'};
+    T.chars = c.data || [];
+    const lists = await Promise.all(T.chars.map(ch => T.sb.from('character_archis').select('archi_id,kind').eq('character_id', ch.id)));
+    T.lists = {};
+    lists.forEach((l, k) => { if(l.error) throw l.error; for(const r of l.data) tList(T.chars[k].id)[r.kind].add(r.archi_id); });
+    if(!tChar()) T.cur = T.chars.length ? T.chars[0].id : null;
+    T.matches = null; T.who = null; T.msg = '';
+  } catch(e){ T.msg = tErr(e); }
+  T.ready = true; tSaveCache(); tRefresh();
+  tLoadServers();
+}
+async function tLoadServers(){
+  try { const r = await T.sb.rpc('trade_servers'); if(!r.error) T.servers = r.data.map(x => x.server); } catch(e){}
+  const all = [...new Set([...T.chars.map(c => c.server), ...T.servers, ...DEFAULT_SERVERS].map(s => s.trim()))];
+  const seen = new Set();
+  $('#tServers').innerHTML = all.filter(s => { const k = s.toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; })
+    .map(s => `<option value="${esc(s)}">`).join('');
+}
+function canonServer(s){
+  s = s.trim().replace(/\s+/g, ' ');
+  const known = [...DEFAULT_SERVERS, ...T.chars.map(c => c.server), ...T.servers].find(x => x.toLowerCase() === s.toLowerCase());
+  return known || s;
+}
+
+/* ---------- listes ---------- */
+async function tToggle(kind, id){
+  const c = tChar();
+  if(!c){ goView('trade'); toast(T.user ? "Crée d'abord un personnage" : 'Connecte-toi pour échanger'); return; }
+  id = Number(id);
+  const L = tList(c.id), other = kind === 'offer' ? 'want' : 'offer';
+  const adding = !L[kind].has(id), hadOther = L[other].has(id);
+  if(adding){ L[kind].add(id); L[other].delete(id); } else L[kind].delete(id);
+  T.matches = null; tRefresh();
+  const m = ARCHI[id];
+  try {
+    if(adding){
+      const r = await T.sb.from('character_archis').upsert({character_id:c.id, archi_id:id, kind}, {onConflict:'character_id,kind,archi_id', ignoreDuplicates:true});
+      if(r.error) throw r.error;
+      if(hadOther){ const d = await T.sb.from('character_archis').delete().eq('character_id', c.id).eq('archi_id', id).eq('kind', other); if(d.error) throw d.error; }
+      toast(`${kind === 'offer' ? 'Proposé' : 'Recherché'} par ${c.name}`);
+    } else {
+      const d = await T.sb.from('character_archis').delete().eq('character_id', c.id).eq('archi_id', id).eq('kind', kind);
+      if(d.error) throw d.error;
+      toast(`${m ? m.n : 'Archi'} retiré`);
+    }
+  } catch(e){
+    if(adding){ L[kind].delete(id); if(hadOther) L[other].add(id); } else L[kind].add(id);
+    toast(tErr(e)); tRefresh();
+  }
+}
+function fillCandidates(kind){
+  const c = tChar(); if(!c) return [];
+  const L = tList(c.id);
+  return ARCHIS.filter(m => kind === 'offer' ? qtyOf(m.i) >= 2 : qtyOf(m.i) === 0).filter(m => !L[kind].has(m.i)).map(m => m.i);
+}
+async function tFill(kind){
+  const c = tChar(); const ids = fillCandidates(kind); if(!c || !ids.length) return;
+  const L = tList(c.id), other = kind === 'offer' ? 'want' : 'offer';
+  const moved = ids.filter(id => L[other].has(id));
+  try {
+    const r = await T.sb.from('character_archis').upsert(ids.map(id => ({character_id:c.id, archi_id:id, kind})), {onConflict:'character_id,kind,archi_id', ignoreDuplicates:true});
+    if(r.error) throw r.error;
+    if(moved.length){ const d = await T.sb.from('character_archis').delete().eq('character_id', c.id).eq('kind', other).in('archi_id', moved); if(d.error) throw d.error; }
+    ids.forEach(id => { L[kind].add(id); L[other].delete(id); });
+    T.matches = null; tRefresh(); toast(`${ids.length} archi${ids.length>1?'s':''} ajouté${ids.length>1?'s':''}`);
+  } catch(e){ toast(tErr(e)); }
+}
+function tClear(kind){
+  const c = tChar(); if(!c) return;
+  const L = tList(c.id); const n = L[kind].size; if(!n) return;
+  confirmDialog(`Vider la liste « ${kind === 'offer' ? 'Je propose' : 'Je recherche'} » de ${c.name} (${n} archi${n>1?'s':''}) ?`, async () => {
+    try {
+      const d = await T.sb.from('character_archis').delete().eq('character_id', c.id).eq('kind', kind);
+      if(d.error) throw d.error;
+      L[kind].clear(); T.matches = null; tRefresh(); toast('Liste vidée');
+    } catch(e){ toast(tErr(e)); }
+  });
+}
+
+/* ---------- recherches ---------- */
+async function tLoadMatches(){
+  const c = tChar(); if(!c) return;
+  T.mLoading = true; renderTrade();
+  try {
+    const r = await T.sb.rpc('trade_matches', {p_char:c.id, p_server:T.mServer || null});
+    if(r.error) throw r.error;
+    const g = new Map();
+    for(const x of r.data){
+      if(!g.has(x.character_id)) g.set(x.character_id, {id:x.character_id, name:x.name, server:x.server, username:x.username, at:x.updated_at, offer:[], want:[]});
+      g.get(x.character_id)[x.kind].push(x.archi_id);
+    }
+    T.matches = [...g.values()].sort((a,b) => ((b.offer.length && b.want.length) - (a.offer.length && a.want.length)) || (b.offer.length + b.want.length - a.offer.length - a.want.length));
+    T.matchesFor = c.id;
+  } catch(e){ T.matches = null; toast(tErr(e)); }
+  T.mLoading = false; renderTrade();
+}
+async function tLoadWho(){
+  if(!T.whoArchi) return;
+  const server = canonServer(T.whoServer || tServer());
+  T.who = 'loading'; renderTrade();
+  try {
+    const r = await T.sb.rpc('who_has', {p_server:server, p_archi:T.whoArchi});
+    if(r.error) throw r.error;
+    T.who = r.data;
+  } catch(e){ T.who = null; toast(tErr(e)); }
+  renderTrade();
+}
+function searchArchis(q, max){
+  q = norm(q.trim()); if(!q) return [];
+  const ws = q.split(/\s+/);
+  return ARCHIS.filter(m => { const h = norm(`${m.n} ${m.b || ''} e${m.s} etape ${m.s}`); return ws.every(w => h.includes(w)); }).slice(0, max || 30);
+}
+async function copyText(v){
+  try { await navigator.clipboard.writeText(v); return true; }
+  catch(e){
+    const t = document.createElement('textarea'); t.value = v; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch(_){} t.remove(); return ok;
+  }
+}
+
+/* ---------- rendu ---------- */
+function tradePills(m){
+  if(!m || m.t !== 'a' || !T.cur || !tChar()) return '';
+  const L = tList(T.cur), o = L.offer.has(m.i), w = L.want.has(m.i);
+  return `<div class="tp"><button class="tb ${o?'on o':''}" data-offer="${m.i}">${o?'✓ Proposé':'⇄ Proposer'}</button><button class="tb ${w?'on w':''}" data-want="${m.i}">${w?'✓ Recherché':'🔍 Rechercher'}</button></div>`;
+}
+function archiChip(id, kind, removable){
+  const m = ARCHI[id]; if(!m) return '';
+  return `<span class="ac ${kind}"><button class="acb" data-who="${id}" title="Qui le propose ou le recherche ?">${thumb(m)}<span>${esc(m.n)}</span></button>${removable ? `<button class="x" data-rm="${kind}:${id}" aria-label="Retirer ${esc(m.n)}">×</button>` : ''}</span>`;
+}
+function sortIds(set){ return [...set].filter(id => ARCHI[id]).sort((a,b) => ARCHI[a].s - ARCHI[b].s || ARCHI[a].n.localeCompare(ARCHI[b].n, 'fr')); }
+function addRowHTML(m){
+  const q = qtyOf(m.i);
+  return `<div class="arow"><div class="av">${thumb(m).replace('class="th"', 'class="th big"')}</div><div class="rt"><div class="nm">${esc(m.n)}</div>
+    <div class="meta"><span class="sbadge">É${m.s}</span>${esc(m.b || '')}${q ? ` · <b>${q} en stock</b>` : ''}</div>${tradePills(m)}</div></div>`;
+}
+
+function renderTrade(){
+  const el = $('#tradeBox'); if(!el) return;
+  if(!T.sb){
+    el.innerHTML = `<div class="card"><h2>Échanges en ligne</h2><p>${window.OCRE_IMG ? "Les échanges en ligne ne fonctionnent pas dans cet aperçu claude.ai (connexion à internet bloquée). Utilise l'appli Android pour créer ton compte et tes listes d'échange." : "Cette fonction a besoin de la base de données en ligne (Supabase), qui n'est pas encore configurée dans cette version de l'appli."}</p></div>`;
+    return;
+  }
+  if(!T.ready){ el.innerHTML = `<div class="empty">Connexion…</div>`; return; }
+  if(!T.user){ el.innerHTML = authHTML(); return; }
+  const head = `<div class="acct"><span>👤 Connecté : <b>${esc(T.me ? T.me.username : '…')}</b></span><button class="mini" data-logout>Déconnexion</button></div>` +
+    (T.msg ? `<div class="card"><p class="tmsg">${esc(T.msg)}</p><button class="btn" data-reload>Réessayer</button></div>` : '');
+  if(!T.chars.length){
+    el.innerHTML = head + `<div class="card"><h2>Ajoute ton premier personnage</h2><p>Indique le nom exact de ton perso et son serveur : les autres joueurs pourront te contacter en jeu.</p><button class="btn pri" data-addchar>＋ Ajouter un personnage</button></div>`;
+    return;
+  }
+  const c = tChar(); const L = tList(c.id);
+  const chars = `<div class="chars">${T.chars.map(x => { const l = tList(x.id); return `<button class="cc ${x.id===T.cur?'on':''}" data-char="${x.id}"><b>${esc(x.name)}</b><small>${esc(x.server)} · ${l.offer.size} proposés · ${l.want.size} recherchés</small></button>`; }).join('')}<button class="cc add" data-addchar>＋ Perso</button></div>
+    <div class="cline"><span>Serveur <b>${esc(c.server)}</b></span><button class="mini" data-editchar>Modifier</button><button class="mini" data-delchar>Supprimer</button></div>`;
+  const nm = T.matches && T.matchesFor === c.id ? T.matches.length : null;
+  const tabs = `<div class="seg"><button data-ttab="lists" class="${T.tab==='lists'?'on':''}">Mes listes</button><button data-ttab="matches" class="${T.tab==='matches'?'on':''}">Échanges${nm !== null ? ` (${nm})` : ''}</button><button data-ttab="who" class="${T.tab==='who'?'on':''}">Chercher</button></div>`;
+  let body = '';
+  if(T.tab === 'lists'){
+    const fo = fillCandidates('offer').length, fw = fillCandidates('want').length;
+    const list = (kind, title, icon, fill, fillLabel) => {
+      const ids = sortIds(L[kind]);
+      return `<div class="card lst"><div class="lh"><h2>${icon} ${title}<span class="cnt">${ids.length}</span></h2></div>
+        <div class="chipz">${ids.length ? ids.map(id => archiChip(id, kind, true)).join('') : `<span class="note">Aucun archi pour l'instant. Utilise la barre de recherche ci-dessus ou les boutons des étapes.</span>`}</div>
+        <div class="qa"><button class="mini" data-fill="${kind}" ${fill ? '' : 'disabled'}>＋ ${fillLabel} (${fill})</button><button class="mini" data-clear="${kind}" ${ids.length ? '' : 'disabled'}>Vider</button></div></div>`;
+    };
+    body = `<input class="search" id="tAdd" type="search" placeholder="Ajouter un archi : nom, monstre de base ou étape (e20)…" autocomplete="off">
+      <div class="list" id="tAddRes" hidden></div>
+      ${list('offer', 'Je propose', '⇄', fo, 'Mes archis en double')}
+      ${list('want', 'Je recherche', '🔍', fw, 'Mes archis manquants')}
+      <p class="note">Les boutons « Mes archis en double / manquants » utilisent la progression de « ${esc(P().name)} ». Touche un archi pour voir qui le propose ou le recherche.</p>`;
+  } else if(T.tab === 'matches'){
+    const server = T.mServer || c.server;
+    let res;
+    if(!L.offer.size && !L.want.size) res = `<div class="empty">Ajoute d'abord des archis dans « Mes listes ».</div>`;
+    else if(T.mLoading || !T.matches || T.matchesFor !== c.id) res = `<div class="empty">Recherche…</div>`;
+    else {
+      const f = T.mFilter;
+      const list = T.matches.filter(g => f === 'all' || g[f].length);
+      res = list.length ? list.map(g => {
+        const mutual = g.offer.length && g.want.length;
+        const sec = (kind, label) => (f === 'all' || f === kind) && g[kind].length ? `<div class="ms ${kind === 'offer' ? 'o' : 'w'}">${label} (${g[kind].length})</div><div class="chipz">${sortIds(new Set(g[kind])).map(id => archiChip(id, kind, false)).join('')}</div>` : '';
+        return `<div class="card mt"><div class="mh"><div><b class="pn">${esc(g.name)}</b>${mutual ? '<span class="mut">⇄ Échange possible</span>' : ''}<div class="note">Compte ${esc(g.username)} · ${esc(g.server)} · ${ago(g.at)}</div></div><button class="mini" data-copy="${esc(g.name)}">Copier /w</button></div>
+          ${sec('offer', 'Propose ce que tu recherches')}${sec('want', 'Recherche ce que tu proposes')}</div>`;
+      }).join('') : `<div class="empty">Personne sur ${esc(server)} pour l'instant.<br>Reviens plus tard, de nouveaux joueurs ajoutent leurs listes.</div>`;
+    }
+    body = `<div class="tsel"><label>Serveur</label><input id="tMServer" list="tServers" value="${esc(server)}" autocomplete="off"><button class="mini" data-refresh>↻</button></div>
+      <div class="seg small"><button data-mf="all" class="${T.mFilter==='all'?'on':''}">Tout</button><button data-mf="offer" class="${T.mFilter==='offer'?'on':''}">Ils ont ce que je cherche</button><button data-mf="want" class="${T.mFilter==='want'?'on':''}">Ils veulent ce que j'ai</button></div>${res}`;
+  } else {
+    const m = ARCHI[T.whoArchi];
+    let res = '';
+    if(m){
+      res = `<div class="card"><div class="arow" style="padding:0 0 8px;border:0"><div class="av">${thumb(m).replace('class="th"', 'class="th big"')}</div><div class="rt"><div class="nm">${esc(m.n)}</div><div class="meta"><span class="sbadge">É${m.s}</span>${esc(m.b || '')}</div>${tradePills(m)}</div></div>`;
+      if(T.who === 'loading' || T.who === null) res += `<div class="empty">Recherche…</div>`;
+      else {
+        const block = (kind, label) => {
+          const l = T.who.filter(x => x.kind === kind);
+          return `<div class="ms ${kind==='offer'?'o':'w'}">${label} (${l.length})</div>` + (l.length ? l.map(x => `<div class="who"><div><b>${esc(x.name)}</b>${x.mine ? ' <span class="note">(toi)</span>' : ''}<div class="note">Compte ${esc(x.username)} · ${ago(x.updated_at)}</div></div>${x.mine ? '' : `<button class="mini" data-copy="${esc(x.name)}">Copier /w</button>`}</div>`).join('') : `<div class="note" style="padding:6px 0">Personne pour l'instant.</div>`);
+        };
+        res += block('offer', 'Le proposent') + block('want', 'Le recherchent');
+      }
+      res += `</div>`;
+    }
+    body = `<div class="tsel"><label>Serveur</label><input id="tWServer" list="tServers" value="${esc(T.whoServer || c.server)}" autocomplete="off"></div>
+      <input class="search" id="tWho" type="search" placeholder="Quel archi cherches-tu ?" autocomplete="off">
+      <div class="list" id="tWhoRes" hidden></div>${res || `<div class="empty">Tape le nom d'un archi pour voir qui le propose ou le recherche sur ce serveur.</div>`}`;
+  }
+  // conserve la saisie en cours
+  const keep = {}; ['tAdd','tWho'].forEach(id => { const i = $('#'+id); if(i) keep[id] = [i.value, document.activeElement === i]; });
+  el.innerHTML = head + chars + tabs + body;
+  for(const [id,[v,f]] of Object.entries(keep)){ const i = $('#'+id); if(i){ i.value = v; if(v) renderPick(id); if(f){ i.focus(); } } }
+  if(T.tab === 'matches' && !T.mLoading && (L.offer.size || L.want.size) && (!T.matches || T.matchesFor !== c.id)) tLoadMatches();
+}
+function renderPick(id){
+  const i = $('#'+id), box = $(id === 'tAdd' ? '#tAddRes' : '#tWhoRes'); if(!i || !box) return;
+  const list = searchArchis(i.value, id === 'tAdd' ? 30 : 12);
+  box.hidden = !i.value.trim();
+  if(id === 'tAdd') box.innerHTML = list.length ? list.map(addRowHTML).join('') : `<div class="empty">Aucun archi trouvé</div>`;
+  else box.innerHTML = list.length ? list.map(m => `<button class="arow pick" data-pick="${m.i}">${thumb(m)}<span class="rt"><span class="nm">${esc(m.n)}</span> <span class="meta">É${m.s} · ${esc(m.b || '')}</span></span></button>`).join('') : `<div class="empty">Aucun archi trouvé</div>`;
+}
+
+function authHTML(){
+  const su = T.auth === 'signup';
+  return `<div class="card auth">
+    <div class="seg"><button data-auth="login" class="${su?'':'on'}">Connexion</button><button data-auth="signup" class="${su?'on':''}">Créer un compte</button></div>
+    <form id="authForm" novalidate>
+      ${su ? `<label for="aUser">Pseudo</label><input id="aUser" autocomplete="username" maxlength="20" placeholder="3 à 20 caractères, sans espace">` : ''}
+      <label for="aMail">E-mail</label><input id="aMail" type="email" autocomplete="email" inputmode="email" placeholder="toi@exemple.com">
+      <label for="aPass">Mot de passe</label><div class="pw"><input id="aPass" type="password" autocomplete="${su?'new-password':'current-password'}" placeholder="${su?'6 caractères minimum':''}"><button type="button" data-showpw aria-label="Afficher le mot de passe">👁</button></div>
+      <p class="tmsg" id="tMsg"></p>
+      <button class="btn pri wide" type="submit">${su ? 'Créer mon compte' : 'Se connecter'}</button>
+      ${su ? '' : `<button type="button" class="link" data-forgot>Mot de passe oublié ?</button>`}
+    </form>
+    <p class="note">Un compte te permet de publier les archis que tu proposes et ceux que tu recherches, et de trouver d'autres joueurs pour échanger. Les autres joueurs voient seulement ton pseudo et tes persos, jamais ton e-mail. Ta progression de quête reste sur ce téléphone.</p>
+  </div>`;
+}
+function tMsg(t, ok){ const m = $('#tMsg'); if(m){ m.textContent = t; m.classList.toggle('ok', !!ok); } }
+
+async function onAuthSubmit(e){
+  e.preventDefault();
+  const su = T.auth === 'signup';
+  const mail = $('#aMail').value.trim(), pass = $('#aPass').value;
+  const btn = e.target.querySelector('[type=submit]');
+  if(!/^\S+@\S+\.\S+$/.test(mail)) return tMsg('Adresse e-mail invalide');
+  if(pass.length < 6) return tMsg('Mot de passe : 6 caractères minimum');
+  btn.disabled = true;
+  try {
+    if(su){
+      const user = $('#aUser').value.trim();
+      if(!/^[^\s@<>"'/\\]{3,20}$/.test(user)) { tMsg('Pseudo : 3 à 20 caractères, sans espace ni @ < > " \' / \\'); return; }
+      tMsg('Création du compte…', true);
+      const av = await T.sb.rpc('username_available', {u:user});
+      if(av.error) throw av.error;
+      if(!av.data){ tMsg('Ce pseudo est déjà pris'); return; }
+      const r = await T.sb.auth.signUp({email:mail, password:pass, options:{data:{username:user}, emailRedirectTo:siteUrl()}});
+      if(r.error) throw r.error;
+      if(r.data.user && Array.isArray(r.data.user.identities) && !r.data.user.identities.length){ tMsg('Un compte existe déjà avec cet e-mail'); return; }
+      if(!r.data.session){ T.auth = 'login'; renderTrade(); $('#aMail').value = mail; tMsg('Compte créé ! Ouvre le lien reçu par e-mail pour le confirmer, puis connecte-toi.', true); return; }
+      toast('Compte créé ✓');
+    } else {
+      tMsg('Connexion…', true);
+      const r = await T.sb.auth.signInWithPassword({email:mail, password:pass});
+      if(r.error) throw r.error;
+      toast('Connecté ✓');
+    }
+  } catch(err){ tMsg(tErr(err)); }
+  finally { if(btn.isConnected) btn.disabled = false; }
+}
+
+function charDialog(c){
+  const f = $('#dlgForm');
+  f.innerHTML = `<h2 style="margin:0 0 10px;font-size:16px">${c ? 'Modifier le personnage' : 'Nouveau personnage'}</h2>
+    <label>Nom du personnage (exactement comme en jeu)</label><input id="cN" maxlength="30" value="${esc(c ? c.name : '')}" autocomplete="off">
+    <label>Serveur</label><input id="cS" list="tServers" maxlength="30" value="${esc(c ? c.server : (tServer() || ''))}" autocomplete="off" placeholder="Ex. : Tiliwan 1">
+    <p class="note" style="margin-top:0">Les échanges sont proposés entre persos du même serveur. Les autres joueurs te contacteront en jeu avec /w ${esc(c ? c.name : 'TonPerso')}.</p>
+    <div class="dact"><button class="btn" value="cancel" formnovalidate>Annuler</button><button class="btn pri" value="ok">${c ? 'Enregistrer' : 'Ajouter'}</button></div>`;
+  const d = $('#dlg');
+  d.onclose = async () => {
+    if(d.returnValue !== 'ok') return;
+    const name = $('#cN').value.trim().replace(/\s+/g, ' '), server = canonServer($('#cS').value);
+    if(name.length < 2 || server.length < 2){ toast('Nom et serveur obligatoires'); return; }
+    try {
+      if(c){
+        const r = await T.sb.from('characters').update({name, server}).eq('id', c.id).select('id,name,server,updated_at').single();
+        if(r.error) throw r.error; Object.assign(c, r.data); toast('Personnage modifié');
+      } else {
+        const r = await T.sb.from('characters').insert({name, server}).select('id,name,server,updated_at').single();
+        if(r.error) throw r.error; T.chars.push(r.data); T.cur = r.data.id; T.tab = 'lists'; toast('Personnage ajouté ✓');
+      }
+      T.matches = null; T.who = null; tSaveCache(); tRefresh(); tLoadServers();
+    } catch(e){ toast(tErr(e)); }
+  };
+  d.returnValue = ''; d.showModal(); if(!c) setTimeout(() => $('#cN').focus(), 50);
+}
+function newPasswordDialog(){
+  const f = $('#dlgForm');
+  f.innerHTML = `<h2 style="margin:0 0 10px;font-size:16px">Nouveau mot de passe</h2><input id="npw" type="password" autocomplete="new-password" placeholder="6 caractères minimum">
+    <div class="dact"><button class="btn" value="cancel">Annuler</button><button class="btn pri" value="ok">Enregistrer</button></div>`;
+  const d = $('#dlg');
+  d.onclose = async () => {
+    if(d.returnValue !== 'ok') return;
+    const r = await T.sb.auth.updateUser({password:$('#npw').value});
+    toast(r.error ? tErr(r.error) : 'Mot de passe changé ✓');
+  };
+  d.returnValue = ''; d.showModal();
+}
+
+/* ---------- événements ---------- */
+function tWire(){
+  const box = $('#tradeBox');
+  box.addEventListener('submit', e => { if(e.target.id === 'authForm') onAuthSubmit(e); });
+  box.addEventListener('input', e => {
+    if(e.target.id === 'tAdd' || e.target.id === 'tWho') renderPick(e.target.id);
+  });
+  box.addEventListener('change', e => {
+    if(e.target.id === 'tMServer'){ T.mServer = canonServer(e.target.value) === tServer() ? '' : canonServer(e.target.value); T.matches = null; renderTrade(); }
+    if(e.target.id === 'tWServer'){ T.whoServer = canonServer(e.target.value); if(T.whoArchi) tLoadWho(); }
+  });
+  box.addEventListener('click', async e => {
+    const t = e.target.closest('button'); if(!t || !box.contains(t)) return;
+    const d = t.dataset;
+    if(d.auth){ T.auth = d.auth; renderTrade(); return; }
+    if('showpw' in d){ const i = $('#aPass'); i.type = i.type === 'password' ? 'text' : 'password'; return; }
+    if('forgot' in d){
+      const mail = $('#aMail').value.trim();
+      if(!/^\S+@\S+\.\S+$/.test(mail)) return tMsg("Entre d'abord ton e-mail ci-dessus");
+      const r = await T.sb.auth.resetPasswordForEmail(mail, {redirectTo:siteUrl()});
+      tMsg(r.error ? tErr(r.error) : 'Si un compte existe, un e-mail de réinitialisation a été envoyé.', !r.error); return;
+    }
+    if('logout' in d){ confirmDialog('Se déconnecter ? Tes listes restent enregistrées en ligne.', () => T.sb.auth.signOut().then(() => toast('Déconnecté'))); return; }
+    if('reload' in d){ tLoadAll(); return; }
+    if('addchar' in d){ charDialog(null); return; }
+    if('editchar' in d){ charDialog(tChar()); return; }
+    if('delchar' in d){
+      const c = tChar();
+      confirmDialog(`Supprimer ${c.name} (${c.server}) et ses listes d'échange ?`, async () => {
+        const r = await T.sb.from('characters').delete().eq('id', c.id);
+        if(r.error) return toast(tErr(r.error));
+        T.chars = T.chars.filter(x => x.id !== c.id); delete T.lists[c.id];
+        T.cur = T.chars.length ? T.chars[0].id : null; T.matches = null; T.who = null; tSaveCache(); tRefresh(); toast('Personnage supprimé');
+      });
+      return;
+    }
+    if(d.char){ T.cur = d.char; T.matches = null; T.who = null; T.mServer = ''; T.whoServer = ''; tSaveCache(); tRefresh(); return; }
+    if(d.ttab){ T.tab = d.ttab; tSaveCache(); renderTrade(); return; }
+    if(d.mf){ T.mFilter = d.mf; renderTrade(); return; }
+    if('refresh' in d){ T.matches = null; tLoadMatches(); return; }
+    if(d.offer || d.want){ tToggle(d.offer ? 'offer' : 'want', d.offer || d.want); return; }
+    if(d.rm){ const [k, id] = d.rm.split(':'); tToggle(k, id); return; }
+    if(d.fill){ tFill(d.fill); return; }
+    if(d.clear){ tClear(d.clear); return; }
+    if(d.who){ T.tab = 'who'; T.whoArchi = Number(d.who); T.whoServer = T.mServer || ''; tSaveCache(); window.scrollTo(0,0); const i = $('#tWho'); if(i) i.value = ''; tLoadWho(); return; }
+    if(d.pick){ T.whoArchi = Number(d.pick); const i = $('#tWho'); if(i){ i.value = ''; i.blur(); } tLoadWho(); return; }
+    if(d.copy){ const ok = await copyText(`/w ${d.copy} `); toast(ok ? `Copié : /w ${d.copy}` : `Écris en jeu : /w ${d.copy}`); return; }
+  });
+}
+
+tInit();
+tWire();
 setHeaderVar();
 renderAll();
 setHeaderVar();
