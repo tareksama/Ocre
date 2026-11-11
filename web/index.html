@@ -198,7 +198,9 @@ dialog label{font-size:13px;color:var(--mute)}
 .ms{font-size:11px;font-weight:700;color:var(--mute);margin-top:12px;text-transform:uppercase;letter-spacing:.04em}
 .ms.o{color:var(--ok)}.ms.w{color:var(--archi)}
 .who{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #2f2518}.who:last-child{border-bottom:0}.who>div{flex:1;min-width:0}
-.tsel{display:flex;align-items:center;gap:10px}.tsel input{flex:1;margin:0 0 10px;padding:8px 10px}.tsel label{margin-bottom:10px}.tsel .mini{margin-bottom:10px;padding:7px 12px;font-size:15px}
+.tsel{display:flex;align-items:center;gap:10px}
+.ssel,dialog select.ssel{flex:1;width:100%;background:#120d08;border:1px solid var(--line);border-radius:10px;padding:9px 10px;margin:4px 0 10px;font-size:15px}
+.tsel .ssel{margin:0 0 10px}.tsel input{flex:1;margin:0 0 10px;padding:8px 10px}.tsel label{margin-bottom:10px}.tsel .mini{margin-bottom:10px;padding:7px 12px;font-size:15px}
 #tAddRes,#tWhoRes{margin:-4px 0 12px;max-height:60vh;overflow:auto}
 </style>
 </head>
@@ -724,7 +726,12 @@ $('#resetProfile').onclick = () => confirmDialog(`Remettre « ${P().name} » à 
 const CFG = window.OCRE_CONFIG || {};
 const ARCHIS = BASE.filter(m => m.t === 'a').sort((a,b) => a.s - b.s || a.n.localeCompare(b.n, 'fr'));
 const ARCHI = Object.fromEntries(ARCHIS.map(m => [m.i, m]));
-const DEFAULT_SERVERS = ['Tiliwan 1', 'Tiliwan 2'];
+const SERVERS = [{n:'Blair', f:'🌐'}, {n:'Kelerog', f:'🇫🇷'}, {n:'Tiliwan', f:'🇫🇷'}, {n:'Talok', f:'🌐'}];
+const DEFAULT_SERVERS = SERVERS.map(x => x.n);
+function serverSelect(id, value){
+  const v = canonServer(value || '');
+  return `<select id="${id}" class="ssel">${v ? '' : '<option value="" selected disabled>Choisis ton serveur</option>'}${SERVERS.map(x => `<option value="${x.n}" ${x.n === v ? 'selected' : ''}>${x.f} ${x.n}</option>`).join('')}</select>`;
+}
 const TKEY = 'dofusOcreTouch.trade';
 const T = {sb:null, ready:false, user:null, me:null, chars:[], lists:{}, cur:null, tab:'lists', auth:'login',
   matches:null, mLoading:false, mFilter:'all', mServer:'', who:null, whoArchi:null, whoServer:'', servers:[], msg:''};
@@ -802,6 +809,10 @@ async function tLoadAll(){
     lists.forEach((l, k) => { if(l.error) throw l.error; for(const r of l.data) tList(T.chars[k].id)[r.kind].add(r.archi_id); });
     if(!tChar()) T.cur = T.chars.length ? T.chars[0].id : null;
     T.matches = null; T.who = null; T.msg = '';
+    for(const ch of T.chars){
+      const cs = canonServer(ch.server);
+      if(cs !== ch.server){ const r = await T.sb.from('characters').update({server:cs}).eq('id', ch.id); if(!r.error) ch.server = cs; }
+    }
   } catch(e){ T.msg = tErr(e); }
   T.ready = true; tSaveCache(); tRefresh();
   tLoadServers();
@@ -814,9 +825,9 @@ async function tLoadServers(){
     .map(s => `<option value="${esc(s)}">`).join('');
 }
 function canonServer(s){
-  s = s.trim().replace(/\s+/g, ' ');
-  const known = [...DEFAULT_SERVERS, ...T.chars.map(c => c.server), ...T.servers].find(x => x.toLowerCase() === s.toLowerCase());
-  return known || s;
+  s = String(s || '').trim().replace(/\s+/g, ' ');
+  const l = s.toLowerCase();
+  return DEFAULT_SERVERS.find(x => l === x.toLowerCase()) || DEFAULT_SERVERS.find(x => l.startsWith(x.toLowerCase())) || s;
 }
 
 /* ---------- listes ---------- */
@@ -948,7 +959,7 @@ function renderTrade(){
   }
   const c = tChar(); const L = tList(c.id);
   const chars = `<div class="chars">${T.chars.map(x => { const l = tList(x.id); return `<button class="cc ${x.id===T.cur?'on':''}" data-char="${x.id}"><b>${esc(x.name)}</b><small>${esc(x.server)} · ${l.offer.size} proposés · ${l.want.size} recherchés</small></button>`; }).join('')}<button class="cc add" data-addchar>＋ Perso</button></div>
-    <div class="cline"><span>Serveur <b>${esc(c.server)}</b></span><button class="mini" data-editchar>Modifier</button><button class="mini" data-delchar>Supprimer</button></div>`;
+    <div class="cline"><span>Serveur <b>${(SERVERS.find(x => x.n === c.server) || {f:''}).f} ${esc(c.server)}</b></span><button class="mini" data-editchar>Modifier</button><button class="mini" data-delchar>Supprimer</button></div>`;
   const nm = T.matches && T.matchesFor === c.id ? T.matches.length : null;
   const tabs = `<div class="seg"><button data-ttab="lists" class="${T.tab==='lists'?'on':''}">Mes listes</button><button data-ttab="matches" class="${T.tab==='matches'?'on':''}">Échanges${nm !== null ? ` (${nm})` : ''}</button><button data-ttab="who" class="${T.tab==='who'?'on':''}">Chercher</button></div>`;
   let body = '';
@@ -980,7 +991,7 @@ function renderTrade(){
           ${sec('offer', 'Propose ce que tu recherches')}${sec('want', 'Recherche ce que tu proposes')}</div>`;
       }).join('') : `<div class="empty">Personne sur ${esc(server)} pour l'instant.<br>Reviens plus tard, de nouveaux joueurs ajoutent leurs listes.</div>`;
     }
-    body = `<div class="tsel"><label>Serveur</label><input id="tMServer" list="tServers" value="${esc(server)}" autocomplete="off"><button class="mini" data-refresh>↻</button></div>
+    body = `<div class="tsel"><label>Serveur</label>${serverSelect('tMServer', server)}<button class="mini" data-refresh>↻</button></div>
       <div class="seg small"><button data-mf="all" class="${T.mFilter==='all'?'on':''}">Tout</button><button data-mf="offer" class="${T.mFilter==='offer'?'on':''}">Ils ont ce que je cherche</button><button data-mf="want" class="${T.mFilter==='want'?'on':''}">Ils veulent ce que j'ai</button></div>${res}`;
   } else {
     const m = ARCHI[T.whoArchi];
@@ -997,7 +1008,7 @@ function renderTrade(){
       }
       res += `</div>`;
     }
-    body = `<div class="tsel"><label>Serveur</label><input id="tWServer" list="tServers" value="${esc(T.whoServer || c.server)}" autocomplete="off"></div>
+    body = `<div class="tsel"><label>Serveur</label>${serverSelect('tWServer', T.whoServer || c.server)}</div>
       <input class="search" id="tWho" type="search" placeholder="Quel archi cherches-tu ?" autocomplete="off">
       <div class="list" id="tWhoRes" hidden></div>${res || `<div class="empty">Tape le nom d'un archi pour voir qui le propose ou le recherche sur ce serveur.</div>`}`;
   }
@@ -1067,14 +1078,14 @@ function charDialog(c){
   const f = $('#dlgForm');
   f.innerHTML = `<h2 style="margin:0 0 10px;font-size:16px">${c ? 'Modifier le personnage' : 'Nouveau personnage'}</h2>
     <label>Nom du personnage (exactement comme en jeu)</label><input id="cN" maxlength="30" value="${esc(c ? c.name : '')}" autocomplete="off">
-    <label>Serveur</label><input id="cS" list="tServers" maxlength="30" value="${esc(c ? c.server : (tServer() || ''))}" autocomplete="off" placeholder="Ex. : Tiliwan 1">
+    <label>Serveur</label>${serverSelect('cS', c ? c.server : tServer())}
     <p class="note" style="margin-top:0">Les échanges sont proposés entre persos du même serveur. Les autres joueurs te contacteront en jeu avec /w ${esc(c ? c.name : 'TonPerso')}.</p>
     <div class="dact"><button class="btn" value="cancel" formnovalidate>Annuler</button><button class="btn pri" value="ok">${c ? 'Enregistrer' : 'Ajouter'}</button></div>`;
   const d = $('#dlg');
   d.onclose = async () => {
     if(d.returnValue !== 'ok') return;
     const name = $('#cN').value.trim().replace(/\s+/g, ' '), server = canonServer($('#cS').value);
-    if(name.length < 2 || server.length < 2){ toast('Nom et serveur obligatoires'); return; }
+    if(name.length < 2 || !server){ toast(name.length < 2 ? 'Nom du personnage obligatoire' : 'Choisis le serveur'); return; }
     try {
       if(c){
         const r = await T.sb.from('characters').update({name, server}).eq('id', c.id).select('id,name,server,updated_at').single();
