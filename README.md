@@ -58,6 +58,12 @@ Base de données : [Supabase](https://supabase.com) (offre gratuite).
 1. Crée un projet Supabase.
 2. **SQL Editor → New query** : colle le contenu de [`supabase/schema.sql`](supabase/schema.sql) puis **Run**.
 3. **Authentication → Sign In / Providers → Email** : désactive **Confirm email** (le serveur d'e-mails par défaut de Supabase n'envoie qu'aux membres de l'équipe du projet), ou configure un SMTP personnalisé.
-4. **Project Settings → API** : copie l'URL du projet et la clé `anon` `public` dans [`web/config.js`](web/config.js).
+4. Si le script a été installé avant l'ajout de la suppression de compte, relance-le (il ajoute `delete_my_account`).
+5. **Project Settings → API** : copie l'URL du projet et la clé `anon` `public` dans [`web/config.js`](web/config.js).
 
 La clé `anon` est publique par nature : la sécurité repose sur les règles RLS du script (chacun ne peut modifier que ses persos et ses listes). Ne mets jamais le mot de passe de la base ni la clé `service_role` dans l'appli.
+
+## Google Play
+
+Chaque build produit aussi `ocre-quest.aab` (release `latest`) à envoyer dans Google Play Console.
+Politique de confidentialité et suppression de compte : https://tareksama.github.io/Ocre/confidentialite.html

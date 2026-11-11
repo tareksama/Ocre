@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#1b140c">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Suivi Dofus Ocre – Dofus Touch</title>
+<title>Ocre Quest – suivi de la quête du Dofus Ocre (Dofus Touch)</title>
 <style>
 :root{
   --bg:#17110b;--panel:#221a11;--panel2:#2c2216;--line:#3d3020;
@@ -167,6 +167,7 @@ dialog label{font-size:13px;color:var(--mute)}
 .card input:focus,.tsel input:focus{border-color:var(--ocre)}
 .pw{position:relative}.pw input{padding-right:46px!important}.pw button{position:absolute;right:4px;top:8px;background:none;border:0;padding:6px 9px;font-size:15px}
 .wide{width:100%}
+.delacc{text-align:center;margin:18px 0 4px}.delacc .link{color:var(--faint);font-size:12px}
 .link{background:none;border:0;color:var(--ocre2);font-size:13px;padding:12px 0 0;text-decoration:underline}
 .tmsg{font-size:13px;margin:0 0 10px;color:#ff9d8a;min-height:1px}.tmsg.ok{color:var(--ok)}
 .acct{display:flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--mute);font-size:13px}.acct b{color:var(--ink)}.acct .mini{margin-left:auto}
@@ -208,7 +209,7 @@ dialog label{font-size:13px;color:var(--mute)}
 <header>
   <div class="top">
     <div class="egg" aria-hidden="true"></div>
-    <h1>Dofus Ocre<small>L'éternelle moisson · Dofus Touch</small></h1>
+    <h1>Ocre Quest<small>L'éternelle moisson · Dofus Touch</small></h1>
     <select id="profileSel" aria-label="Personnage"></select>
   </div>
   <div class="global">
@@ -278,6 +279,11 @@ dialog label{font-size:13px;color:var(--mute)}
         <button class="btn" id="restoreBtn">Restaurer le code</button>
         <label class="btn" style="cursor:pointer">Ouvrir un fichier<input type="file" id="restoreFile" accept=".json,.txt,application/json,text/plain" hidden></label>
       </div>
+    </div>
+    <div class="card">
+      <h2>À propos</h2>
+      <p>Ocre Quest est une application de fan <b>non officielle</b>, gratuite, pour suivre la quête du Dofus Ocre dans Dofus Touch. Elle n'est ni affiliée, ni approuvée, ni soutenue par Ankama. Dofus et Dofus Touch sont des marques d'Ankama ; les noms et images du jeu appartiennent à leurs propriétaires.</p>
+      <p><a href="https://tareksama.github.io/Ocre/confidentialite.html" style="color:var(--ocre2)">Politique de confidentialité et suppression de compte</a></p>
     </div>
     <div class="card">
       <h2>Installer sur Android</h2>
@@ -954,7 +960,7 @@ function renderTrade(){
   const head = `<div class="acct"><span>👤 Connecté : <b>${esc(T.me ? T.me.username : '…')}</b></span><button class="mini" data-logout>Déconnexion</button></div>` +
     (T.msg ? `<div class="card"><p class="tmsg">${esc(T.msg)}</p><button class="btn" data-reload>Réessayer</button></div>` : '');
   if(!T.chars.length){
-    el.innerHTML = head + `<div class="card"><h2>Ajoute ton premier personnage</h2><p>Indique le nom exact de ton perso et son serveur : les autres joueurs pourront te contacter en jeu.</p><button class="btn pri" data-addchar>＋ Ajouter un personnage</button></div>`;
+    el.innerHTML = head + `<div class="card"><h2>Ajoute ton premier personnage</h2><p>Indique le nom exact de ton perso et son serveur : les autres joueurs pourront te contacter en jeu.</p><button class="btn pri" data-addchar>＋ Ajouter un personnage</button></div>` + delAccountHTML();
     return;
   }
   const c = tChar(); const L = tList(c.id);
@@ -1014,10 +1020,11 @@ function renderTrade(){
   }
   // conserve la saisie en cours
   const keep = {}; ['tAdd','tWho'].forEach(id => { const i = $('#'+id); if(i) keep[id] = [i.value, document.activeElement === i]; });
-  el.innerHTML = head + chars + tabs + body;
+  el.innerHTML = head + chars + tabs + body + delAccountHTML();
   for(const [id,[v,f]] of Object.entries(keep)){ const i = $('#'+id); if(i){ i.value = v; if(v) renderPick(id); if(f){ i.focus(); } } }
   if(T.tab === 'matches' && !T.mLoading && (L.offer.size || L.want.size) && (!T.matches || T.matchesFor !== c.id)) tLoadMatches();
 }
+function delAccountHTML(){ return `<div class="delacc"><button class="link" data-delaccount>Supprimer mon compte</button></div>`; }
 function renderPick(id){
   const i = $('#'+id), box = $(id === 'tAdd' ? '#tAddRes' : '#tWhoRes'); if(!i || !box) return;
   const list = searchArchis(i.value, id === 'tAdd' ? 30 : 12);
@@ -1136,6 +1143,16 @@ function tWire(){
     }
     if('logout' in d){ confirmDialog('Se déconnecter ? Tes listes restent enregistrées en ligne.', () => T.sb.auth.signOut().then(() => toast('Déconnecté'))); return; }
     if('reload' in d){ tLoadAll(); return; }
+    if('delaccount' in d){
+      confirmDialog(`Supprimer définitivement le compte « ${T.me ? T.me.username : ''} » ? Tes persos et tes listes d'échange seront effacés. Ta progression de quête (sur ce téléphone) n'est pas touchée.`, async () => {
+        const r = await T.sb.rpc('delete_my_account');
+        if(r.error) return toast(tErr(r.error));
+        await T.sb.auth.signOut().catch(() => {});
+        try { Object.keys(localStorage).filter(k => k.startsWith('ocre-auth')).forEach(k => localStorage.removeItem(k)); } catch(e){}
+        T.user = null; T.auth = 'login'; tLoadAll(); toast('Compte supprimé');
+      });
+      return;
+    }
     if('addchar' in d){ charDialog(null); return; }
     if('editchar' in d){ charDialog(tChar()); return; }
     if('delchar' in d){

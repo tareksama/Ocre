@@ -159,3 +159,14 @@ language sql stable set search_path = public as $$
 $$;
 revoke all on function public.trade_servers() from public;
 grant execute on function public.trade_servers() to authenticated;
+
+-- Suppression de MON compte (exigée par Google Play) : efface le compte,
+-- le profil, les persos et les listes (suppression en cascade).
+create or replace function public.delete_my_account()
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then raise exception 'Non connecté'; end if;
+  delete from auth.users where id = auth.uid();
+end $$;
+revoke all on function public.delete_my_account() from public;
+grant execute on function public.delete_my_account() to authenticated;

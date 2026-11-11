@@ -3,7 +3,11 @@ package com.tareksama.ocre;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.view.WindowInsets;
+import android.widget.FrameLayout;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -36,7 +40,25 @@ public class MainActivity extends Activity {
                 .build();
 
         webView = new WebView(this);
-        setContentView(webView);
+        // Android 15+ affiche l'appli bord à bord : on laisse la place
+        // à la barre d'état, à la barre de navigation et au clavier.
+        final FrameLayout root = new FrameLayout(this);
+        root.addView(webView, new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+        setContentView(root);
+        root.setOnApplyWindowInsetsListener((View v, WindowInsets in) -> {
+            int l, t, r, b;
+            if (Build.VERSION.SDK_INT >= 30) {
+                android.graphics.Insets bars = in.getInsets(WindowInsets.Type.systemBars()
+                        | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
+                l = bars.left; t = bars.top; r = bars.right; b = bars.bottom;
+            } else {
+                l = in.getSystemWindowInsetLeft(); t = in.getSystemWindowInsetTop();
+                r = in.getSystemWindowInsetRight(); b = in.getSystemWindowInsetBottom();
+            }
+            v.setPadding(l, t, r, b);
+            return in;
+        });
 
         WebSettings s = webView.getSettings();
         s.setJavaScriptEnabled(true);

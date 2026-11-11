@@ -1,4 +1,4 @@
-name: Construire l'APK Android
+name: Construire l'APK et l'AAB Android
 
 on:
   push:
@@ -21,24 +21,28 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.7'
+          gradle-version: '8.13'
 
-      - name: Compiler l'APK
-        run: gradle -p android assembleRelease --no-daemon
+      - name: Compiler l'APK (installation directe) et l'AAB (Google Play)
+        run: gradle -p android assembleRelease bundleRelease --no-daemon
 
-      - name: Renommer l'APK
-        run: cp android/app/build/outputs/apk/release/app-release.apk dofus-ocre.apk
+      - name: Renommer les fichiers
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk ocre-quest.apk
+          cp android/app/build/outputs/bundle/release/app-release.aab ocre-quest.aab
 
       - uses: actions/upload-artifact@v4
         with:
-          name: dofus-ocre-apk
-          path: dofus-ocre.apk
+          name: ocre-quest
+          path: |
+            ocre-quest.apk
+            ocre-quest.aab
 
       - name: Publier dans la release « latest »
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release delete latest --yes --cleanup-tag || true
-          gh release create latest dofus-ocre.apk \
-            --title "Dofus Ocre – dernière version" \
-            --notes "APK construit automatiquement depuis le commit ${GITHUB_SHA::7}. Télécharge dofus-ocre.apk depuis ton téléphone et installe-le."
+          gh release create latest ocre-quest.apk ocre-quest.aab \
+            --title "Ocre Quest – dernière version" \
+            --notes "Construit automatiquement depuis le commit ${GITHUB_SHA::7}. ocre-quest.apk : à installer directement sur le téléphone. ocre-quest.aab : à envoyer sur Google Play Console."
