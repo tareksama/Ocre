@@ -114,7 +114,7 @@ main{padding:12px 12px 90px;max-width:720px;margin:0 auto}
 .box{width:24px;height:24px;flex:none;border-radius:7px;border:2px solid #6b5a42;display:grid;place-items:center;font-size:15px;color:transparent;transition:.15s}
 .got .box{background:var(--ok);border-color:var(--ok);color:#13200c}
 .rt{flex:1;min-width:0}
-.nm{font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nm{font-weight:550;line-height:1.25}
 .meta{font-size:12px;color:var(--faint)}
 .meta>div:first-child:not(.zones){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zones{color:var(--mute);line-height:1.35;margin-top:1px}
@@ -232,7 +232,7 @@ dialog label{font-size:13px;color:var(--mute)}
     <div class="card">
       <h2>Données de la quête</h2>
       <p>35 étapes de la version Dofus Touch : 275 monstres (étapes 1 à 16), 47 boss (17 à 19), 257 archimonstres (20 à 34), puis le Kralamoure Géant.</p>
-      <p>Zones : ★ = zone de prédilection indiquée par le bestiaire du jeu. Un monstre a les mêmes zones que son archimonstre.</p>
+      <p>Zones : texte du bestiaire de Dofus Touch. Un monstre a les mêmes zones que son archimonstre.</p>
       <button class="btn danger" id="resetProfile">Remettre ce personnage à zéro</button>
     </div>
   </section>
@@ -322,9 +322,9 @@ function renderHeader(){
 function metaLine(m, withStep){
   const parts = [];
   if(m.b) parts.push('<b>' + esc(m.b) + '</b>');
-  if(m.l) parts.push('niv. ' + m.l);
+  if(m.l) parts.push('Niv. ' + m.l);
   const head = (withStep ? `<span class="sbadge">É${m.s}</span>` : '') + parts.join(' · ');
-  const zones = (m.z && m.z.length) ? `<div class="zones">📍 ${m.z.map(esc).join(' · ')}</div>` : `<div class="zones none">📍 Zone non renseignée</div>`;
+  const zones = m.zt ? `<div class="zones">${esc(m.zt)}</div>` : (m.z && m.z.length) ? `<div class="zones">📍 ${m.z.map(esc).join(' · ')}</div>` : `<div class="zones none">📍 Zone non renseignée</div>`;
   return (head ? `<div>${head}</div>` : '') + zones;
 }
 
@@ -450,7 +450,7 @@ function renderSearch(){
     if(fs === 'got' && !got) return false;
     if(fs === 'dup' && (P().qty[m.i]||0) < 2) return false;
     if(q){
-      const hay = norm(m.n + ' ' + (m.b||'') + ' ' + (m.z||[]).join(' '));
+      const hay = norm(m.n + ' ' + (m.b||'') + ' ' + (m.zt||'') + ' ' + (m.z||[]).join(' '));
       if(!q.split(/\s+/).every(w => hay.includes(w))) return false;
     }
     return true;
